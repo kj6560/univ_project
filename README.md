@@ -1,0 +1,1 @@
+Event Management application project
