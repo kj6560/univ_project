@@ -77,7 +77,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex flex-column align-items-center text-center">
-                            <img src="{{asset('uploads/users/profile_pics/'.$userPersonalDetails->image)}}" alt="Admin" class="rounded-circle" width="150">
+                            <img src="{{(!empty($userPersonalDetails->image))?asset('uploads/users/profile_pics/'.$userPersonalDetails->image):''}}" alt="Admin" class="rounded-circle" width="150">
                             <div class="mt-3">
                                 <h4>{{ucfirst($user->first_name)}} {{ucfirst($user->last_name)}}</h4>
                                 <br>
@@ -169,6 +169,7 @@
                     <div class="card-body">
                         <form action="/userUpdateEmergencyDetails" method="post">
                             @csrf
+                            <input type="text" class="form-control" name="user_id" value="{{$user->id}}" placeholder="First Name" hidden>
                             <div class="row">
                                 <div class="col-sm-3">
                                     <h6 class="mb-0">Blood Group</h6>
