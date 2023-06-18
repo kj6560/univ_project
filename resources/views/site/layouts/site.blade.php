@@ -179,6 +179,11 @@
                                     <li class="{{ Request::is('gallery') ? 'active' : '' }}"><a href="/gallery">Gallery</a></li>
                                     <li class="{{ Request::is('contactus') ? 'active' : '' }}"><a href="/contactus">Contact Us</a></li>
                                     @guest
+                                    
+                                    @else
+                                    <li><a href="/userProfile">Profile</a></li>
+                                    @endguest
+                                    @guest
                                     <li><a href="/login">Login</a></li>
                                     @else
                                     <li><a href="/logout">Logout</a></li>

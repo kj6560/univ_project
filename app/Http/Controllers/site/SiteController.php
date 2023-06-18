@@ -4,11 +4,14 @@ namespace App\Http\Controllers\site;
 
 use App\Http\Controllers\Controller;
 use App\Models\Email;
+use App\Models\EmergencyContactDetails;
 use App\Models\Event;
 use App\Models\EventGallery;
 use App\Models\EventUsers;
 use App\Models\Team;
 use App\Models\User;
+use App\Models\UserAddressDetails;
+use App\Models\UserPersonalDetails;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
@@ -37,7 +40,7 @@ class SiteController extends Controller
                 if (Auth::user()->user_role == 1) {
                     return redirect('/dashboard');
                 } else {
-                    return redirect('/');
+                    return redirect('/userProfile');
                 }
             } else {
                 return back()->withErrors([
@@ -469,6 +472,124 @@ class SiteController extends Controller
                             return redirect()->back()->with('error', 'There is some issue registration process. plz try again later.');
                         }
                     }
+                }
+            }
+        }
+    }
+    public function userProfile(Request $request)
+    {
+        $user = Auth::user();
+        $userPersonalDetails = UserPersonalDetails::where('user_id', $user->id)->first();
+        $userAddressDetails = UserAddressDetails::where('user_id', $user->id)->first();
+        $emergencyContactDetails = EmergencyContactDetails::where('user_id', $user->id)->first();
+        return view('site.userProfile', ['user' => $user, 'userPersonalDetails' => $userPersonalDetails, 'userAddressDetails' => $userAddressDetails, 'emergencyContactDetails' => $emergencyContactDetails]);
+    }
+
+    public function updateContactDetails(Request $request)
+    {
+        $data = $request->all();
+        if ($data) {
+            $user = User::find($data['user_id']);
+            if ($user) {
+                $user->first_name = $data['first_name'];
+                $user->last_name = $data['last_name'];
+                $user->number = $data['number'];
+                $user_saved = $user->save();
+                $user_address_details = UserAddressDetails::where('user_id', $user->id)->first();
+                if (empty($user_address_details)) {
+                    $user_address_details = new UserAddressDetails();
+                    $user_address_details->user_id = $user->id;
+                }
+                $user_address_details->address_line1 = $data['address_line1'];
+                $user_address_details->city = $data['city'];
+                $user_address_details->state = $data['state'];
+                $user_address_details->pincode = $data['pincode'];
+                $address_saved = $user_address_details->save();
+                if ($user_saved && $address_saved) {
+                    return redirect()->back()->with('success', 'Profile updated successfully.');
+                } else {
+                    return redirect()->back()->with('error', 'Profile updation failed. Please try again');
+                }
+            }
+        }
+    }
+
+    public function userUpdateProfilePic(Request $request)
+    {
+        $data = $request->all();
+        if ($data) {
+            $user = User::find($data['user_id']);
+            if ($user) {
+                $user_personal_details = UserPersonalDetails::where('user_id', $user->id)->first();
+                if ($_FILES['file']['size'] > 0) {
+                    $upload = $this->uploadFile($_FILES['file'], "users/profile_pics");
+                    if (empty($upload['errors']) == true) {
+                        $user_personal_details->image = $upload['file_name'];
+                    } else {
+                        return redirect()->back()->with('error', $upload['errors']);
+                    }
+                }
+                $user_personal_details = $user_personal_details->save();
+                if ($user_personal_details) {
+                    return redirect()->back()->with('success', 'Profile updated successfully.');
+                } else {
+                    return redirect()->back()->with('error', 'Profile updation failed. Please try again');
+                }
+            }
+        }
+    }
+
+    public function userUpdatePersonalDetails(Request $request)
+    {
+        $data = $request->all();
+        if ($data) {
+            $user = User::find($data['user_id']);
+            if ($user) {
+                $user_personal_details = UserPersonalDetails::where('user_id', $user->id)->first();
+                if(empty($user_personal_details)){
+                    $user_personal_details = new UserPersonalDetails();
+                }
+                $user_personal_details->gender = $data['gender'];
+                $user_personal_details->height = $data['height'];
+                $user_personal_details->weight = $data['weight'];
+                $user_personal_details->age = $data['age'];
+                if ($_FILES['doc_image']['size'] > 0) {
+                    $upload = $this->uploadFile($_FILES['doc_image'], "users/docs/images");
+                    if (empty($upload['errors']) == true) {
+                        $user_personal_details->user_doc = $upload['file_name'];
+                    } else {
+                        return redirect()->back()->with('error', $upload['errors']);
+                    }
+                }
+                $user_personal_details = $user_personal_details->save();
+                if ($user_personal_details) {
+                    return redirect()->back()->with('success', 'Profile updated successfully.');
+                } else {
+                    return redirect()->back()->with('error', 'Profile updation failed. Please try again');
+                }
+            }
+        }
+    }
+
+    public function userUpdateEmergencyDetails(Request $request)
+    {
+        $data = $request->all();
+        if ($data) {
+            $user = User::find($data['user_id']);
+            if ($user) {
+                $emergencyContactDetails = EmergencyContactDetails::where('user_id', $user->id)->first();
+                if(empty($emergencyContactDetails)){
+                    $emergencyContactDetails = new EmergencyContactDetails();
+                    $emergencyContactDetails->user_id = $user->id;
+                }
+                $emergencyContactDetails->blood_group = $data['blood_group'];
+                $emergencyContactDetails->emergency_contact_name = $data['emergency_contact_name'];
+                $emergencyContactDetails->emergency_contact_number = $data['emergency_contact_number'];
+                $emergency_saved = $emergencyContactDetails->save();
+                if ($emergency_saved) {
+                    return redirect()->back()->with('success', 'Profile updated successfully.');
+                } else {
+                    return redirect()->back()->with('error', 'Profile updation failed. Please try again');
                 }
             }
         }

@@ -50,3 +50,17 @@ Route::get('/dashboard/downloadEventUsers', [AdminController::class, 'downloadEv
 Route::get('/dashboard/eventGallery', [AdminController::class, 'eventGallery'])->middleware('auth:web')->name('eventGallery');
 
 Route::get('/dashboard/eventGalleryUploads', [AdminController::class, 'eventGalleryUploads'])->middleware('auth:web')->name('eventGalleryUploads');
+
+//Email Templates
+
+Route::get('/dashboard/emailTemplates', [AdminController::class, 'emailTemplates'])->middleware('auth:web')->name('emailTemplates');
+Route::get('/dashboard/createEmailTemplates', [AdminController::class, 'createEmailTemplates'])->middleware('auth:web')->name('createEmailTemplates');
+Route::post('/dashboard/storeEmailTemplates', [AdminController::class, 'storeEmailTemplates'])->middleware('auth:web')->name('storeEmailTemplates');
+
+//users 
+
+Route::get('/userProfile', [SiteController::class, 'userProfile'])->middleware('auth:web')->name('userProfile');
+Route::post('/userUpdateContactDetails', [SiteController::class, 'updateContactDetails'])->middleware('auth:web')->name('userUpdateContactDetails');
+Route::post('/userUpdatePersonalDetails', [SiteController::class, 'userUpdatePersonalDetails'])->middleware('auth:web')->name('userUpdatePersonalDetails');
+Route::post('/userUpdateEmergencyDetails', [SiteController::class, 'userUpdateEmergencyDetails'])->middleware('auth:web')->name('userUpdateEmergencyDetails');
+Route::post('/userUpdateProfilePic', [SiteController::class, 'userUpdateProfilePic'])->middleware('auth:web')->name('userUpdateProfilePic');
