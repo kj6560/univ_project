@@ -341,7 +341,7 @@ class SiteController extends Controller
                     $email_sender_name = env("EMAIL_SENDER_NAME", "UNIV SPORTA");
                     $email = $post['email'];
                     $message = "
-                    Dear Abhishek Issar,<br><br>
+                    Dear $user_name,<br><br>
 
                     Thank You for registering for IOA’S BHARAT IN PARIS and be a part of India's Olympic Movement.<br><br>
 
