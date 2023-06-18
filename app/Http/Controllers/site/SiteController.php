@@ -554,7 +554,7 @@ class SiteController extends Controller
                     $user_personal_details = new UserPersonalDetails();
                     $user_personal_details->user_id = $user->id;
                 }
-                $user_personal_details->gender = !empty($data['gender']) ? $data['gender'] : 1;
+                $user_personal_details->gender = !empty($data['gender']) && $data['gender'] >0 ? $data['gender'] : 1;
                 $user_personal_details->height = $data['height'];
                 $user_personal_details->weight = $data['weight'];
                 $user_personal_details->age = $data['age'];
