@@ -521,6 +521,10 @@ class SiteController extends Controller
             $user = User::find($data['user_id']);
             if ($user) {
                 $user_personal_details = UserPersonalDetails::where('user_id', $user->id)->first();
+                if(empty($user_personal_details)){
+                    $user_personal_details = new UserPersonalDetails();
+
+                }
                 if ($_FILES['file']['size'] > 0) {
                     $upload = $this->uploadFile($_FILES['file'], "users/profile_pics");
                     if (empty($upload['errors']) == true) {
