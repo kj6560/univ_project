@@ -4,7 +4,7 @@
     <div class="content-wrapper">
         <!-- Responsive Table -->
         <div class="card">
-            <h5 class="card-header">Responsive Table</h5>
+            <h5 class="card-header">Event Gallery</h5>
             <div class="table-responsive text-nowrap">
                 <table class="table">
                     <thead>
@@ -13,15 +13,17 @@
                             <th>Event Name</th>
                             <th>Event Description</th>
                             <th>Event Image</th>
+                            <th>Image Name</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($events as $event)
+                        @foreach($gallery as $event)
                         <tr>
                             <th scope="row">{{$event->id}}</th>
                             <td>{{$event->event_name}}</td>
-                            <td>{{substr($event->event_objective,0,50)."..."}}</td>
+                            <td>{{substr($event->event_bio,0,50)."..."}}</td>
                             <td><img src="{{asset('uploads/events/images/'.$event->event_image)}}" height="50" width="50" alt="Avatar" class="rounded-circle" /></td>
+                            <td>{{$event->event_image}}</td>
                             <td>
                                 <div class="dropdown">
                                     <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
@@ -37,6 +39,9 @@
                         @endforeach
                     </tbody>
                 </table>
+                <div class="col-12">
+                {!! $gallery->links('pagination::bootstrap-4') !!}
+            </div>
             </div>
         </div>
         <!--/ Responsive Table -->

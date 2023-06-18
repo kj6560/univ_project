@@ -163,6 +163,27 @@
                         </ul>
                     </li>
 
+                    <li class="menu-item">
+                        <a href="javascript:void(0);" class="menu-link menu-toggle">
+                            <i class="menu-icon tf-icons bx bx-layout"></i>
+                            <div data-i18n="Layouts">Event Gallery</div>
+                        </a>
+
+                        <ul class="menu-sub">
+                            <li class="menu-item">
+                                <a href="/dashboard/eventGallery" class="menu-link">
+                                    <div data-i18n="Without menu">Event Gallery </div>
+                                </a>
+                            </li>
+                        </ul>
+                        <ul class="menu-sub">
+                            <li class="menu-item">
+                                <a href="/dashboard/uploadGallery" class="menu-link">
+                                    <div data-i18n="Without menu">Upload Gallery </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
 
                 </ul>
             </aside>

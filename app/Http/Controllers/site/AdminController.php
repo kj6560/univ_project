@@ -5,10 +5,12 @@ namespace App\Http\Controllers\site;
 use App\Exports\ExportEventUsers;
 use App\Http\Controllers\Controller;
 use App\Models\Event;
+use App\Models\EventGallery;
 use App\Models\Sports;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
+
 class AdminController extends Controller
 {
     //
@@ -146,12 +148,17 @@ class AdminController extends Controller
 
     public  function downloadEventUsers(Request $request)
     {
-        
+
         return self::downloadEventUsersData();
     }
     public static function downloadEventUsersData()
     {
-        
+
         return Excel::download(new ExportEventUsers, 'users.csv');
+    }
+    public function eventGallery(Request $request)
+    {
+        $eventGallery = EventGallery::join("events", "events.id","=","event_gallery.event_id")->paginate(10);
+        return view('site.admin.eventGallery', ['gallery' => $eventGallery]);
     }
 }

@@ -4,7 +4,7 @@
 <div class="content-wrapper">
     <!-- Responsive Table -->
     <div class="card">
-        <h5 class="card-header">Users Registered for Event</h5> <a href="/dashboard/downloadEventUsers" class="btn btn-primary" style="width: 200px;margin-left: 10px">Download</a>
+        <h5 class="card-header">Users Registered for Event (Total: {{$eventusers->total()}} users)</h5> <a href="/dashboard/downloadEventUsers" class="btn btn-primary" style="width: 200px;margin-left: 10px">Download</a>
         <div class="table-responsive text-nowrap">
             <table class="table">
                 <thead>

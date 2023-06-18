@@ -44,3 +44,9 @@ Route::get('/dashboard/deleteEvent/{id}', [AdminController::class, 'deleteEvent'
 
 Route::get('/dashboard/eventUsers', [AdminController::class, 'eventUsers'])->middleware('auth:web')->name('eventUsers');
 Route::get('/dashboard/downloadEventUsers', [AdminController::class, 'downloadEventUsers'])->middleware('auth:web')->name('downloadEventUsers');
+
+//event gallery
+
+Route::get('/dashboard/eventGallery', [AdminController::class, 'eventGallery'])->middleware('auth:web')->name('eventGallery');
+
+Route::get('/dashboard/eventGalleryUploads', [AdminController::class, 'eventGalleryUploads'])->middleware('auth:web')->name('eventGalleryUploads');
