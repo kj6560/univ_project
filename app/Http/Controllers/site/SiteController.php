@@ -353,7 +353,7 @@ class SiteController extends Controller
 
                     For event flow, route and other relevant details please click the link below and login to fill other important fields:<br><br>
 
-                    https://univsportatech.com/login
+                    https://univsportatech.com/login<br><br>
                     Note: Kindly carry a Government Approved ID Card (Aadhaar/Driving License/Pan Card) on 21st & 22nd June for uploading on your registered profile and on 23rd June ID verification.<br><br>
 
                     Thanking You<br><br>
