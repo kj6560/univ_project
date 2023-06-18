@@ -178,7 +178,7 @@
                         </ul>
                         <ul class="menu-sub">
                             <li class="menu-item">
-                                <a href="/dashboard/uploadGallery" class="menu-link">
+                                <a href="/dashboard/eventGalleryUploads" class="menu-link">
                                     <div data-i18n="Without menu">Upload Gallery </div>
                                 </a>
                             </li>
