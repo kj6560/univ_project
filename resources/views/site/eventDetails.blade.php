@@ -4,12 +4,12 @@
 
 $user = Auth::user();
 $user = !empty($user) ? $user : null;
-
+$event_details_header = $event->event_detail_header;
 @endphp
 
 <style>
     .page-title-event {
-        background: url("{{asset('/images/event-header.jpg')}}") center center no-repeat;
+        background: url("{{url('uploads/events/images/'.$event_details_header)}}") center center no-repeat;
     }
 </style>
 <section class="page-title page-title-event" id="page-title">
