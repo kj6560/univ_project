@@ -156,7 +156,7 @@ class AdminController extends Controller
 
         return Excel::download(new ExportEventUsers, 'users.csv');
     }
-    public function eventGallery(Request $request)
+    public function eventGalleryUploads(Request $request)
     {
         $eventGallery = EventGallery::join("events", "events.id","=","event_gallery.event_id")->paginate(10);
         return view('site.admin.eventGallery', ['gallery' => $eventGallery]);
