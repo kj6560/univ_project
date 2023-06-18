@@ -548,6 +548,7 @@ class SiteController extends Controller
                 $user_personal_details = UserPersonalDetails::where('user_id', $user->id)->first();
                 if(empty($user_personal_details)){
                     $user_personal_details = new UserPersonalDetails();
+                    $user_personal_details->user_id = $user->id;
                 }
                 $user_personal_details->gender = $data['gender'];
                 $user_personal_details->height = $data['height'];
