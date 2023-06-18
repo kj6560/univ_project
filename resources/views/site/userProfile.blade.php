@@ -168,6 +168,7 @@
                 <div class="card mb-3">
                     <div class="card-body">
                         <form action="/userUpdateEmergencyDetails" method="post">
+                            @csrf
                             <div class="row">
                                 <div class="col-sm-3">
                                     <h6 class="mb-0">Blood Group</h6>
