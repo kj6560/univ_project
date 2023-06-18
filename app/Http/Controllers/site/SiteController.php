@@ -523,7 +523,7 @@ class SiteController extends Controller
                 $user_personal_details = UserPersonalDetails::where('user_id', $user->id)->first();
                 if(empty($user_personal_details)){
                     $user_personal_details = new UserPersonalDetails();
-
+                    $user_personal_details->user_id = $user->id;
                 }
                 if ($_FILES['file']['size'] > 0) {
                     $upload = $this->uploadFile($_FILES['file'], "users/profile_pics");
@@ -554,7 +554,7 @@ class SiteController extends Controller
                     $user_personal_details = new UserPersonalDetails();
                     $user_personal_details->user_id = $user->id;
                 }
-                $user_personal_details->gender = $data['gender'];
+                $user_personal_details->gender = !empty($data['gender']) ? $data['gender'] : 1;
                 $user_personal_details->height = $data['height'];
                 $user_personal_details->weight = $data['weight'];
                 $user_personal_details->age = $data['age'];
