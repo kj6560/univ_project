@@ -97,19 +97,30 @@ class SiteController extends Controller
                     $email_sender_name = env("EMAIL_SENDER_NAME", "UNIV SPORTA");
                     $email = $data['email'];
                     $message = "
-                    <p>Dear $user_name,</p><br>
-                    <p>Thank you for registering with us! We are thrilled to welcome you to our community and appreciate your interest
-                    in our Univ.<br>Your registration has been successfully processed, and you are now a valued member of our platform.
-                    <br>We are committed to providing you with the best possible user experience, and we will work diligently to ensure 
-                    that you have access to all the resources you need.<br>Once again, thank you for registering with us.<br>We look forward 
-                    to serving you and providing you with a seamless user experience.</p>
-                    <p>Your Login Credentials are:<br>
-                    email: $email<br>
-                    password: $pass_plain<br>
-                    </p>
-                    <br>Best regards,
-                    <br>$email_sender_name <br>
-                    $site_name
+                    Dear User,
+
+                    WELCOME to UNIV SPORTATECH. 
+
+                    THANK YOU for registering with us! We are thrilled to welcome you to our community and appreciate your interest on UNIV Sportatech.
+
+                    Your registration has been successfully processed and you are now a valued member of our platform.
+
+                    ‘UNIV Sportatech’ is focussed on building the Sports, Gaming, Media & Entertainment ecosystems in close alignment with India’s policy outlook. Evangelising solutions with technology, UNIV Sportatech is dedicated to providing the highest level of service to State Government and the industry bringing strategic, commercial, innovative and investible solutions.
+
+                    We are committed to providing you with the best user experience and we will work diligently to ensure that you have access to all the resources you need.
+
+                    Once again, THANK YOU for registering with us.
+
+                    We look forward to serving you and providing you with a seamless user experience.
+
+                    Your Login Credentials are:
+                    email: $email
+                    password: $pass_plain
+
+                    LET’S PLAY!
+
+                    Best regards,
+                    ADMINISTRATOR
                     ";
                     $mailData = array("email" => $user->email, "first_name" => $user->first_name, "last_name" => $user->last_name, "subject" => $subject, "message" => $message);
 
@@ -435,7 +446,7 @@ class SiteController extends Controller
 
                             Your Login Credentials are:email: $email     password: $pass_plain<br><br>
 
-                            (Add login link)
+                            https://univsportatech.com/login<br><br>
                             Note: Kindly carry a Government Approved ID Card (Aadhaar/Driving License/Pan Card) on 21st & 22nd June for uploading on your registered profile and on 23rd June ID verification.<br><br>
 
                             Thanking You<br><br>
