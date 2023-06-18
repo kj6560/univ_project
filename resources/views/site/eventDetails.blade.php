@@ -6,6 +6,12 @@ $user = Auth::user();
 $user = !empty($user) ? $user : null;
 
 @endphp
+
+<style>
+    .page-title-event {
+        background: url("{{asset('/images/event-header.jpg')}}") center center no-repeat;
+    }
+</style>
 <section class="page-title page-title-event" id="page-title">
     <div class="container">
         <div class="content">

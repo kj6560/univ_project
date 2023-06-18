@@ -3,12 +3,6 @@
 -----------------------------------------*/
 
 
-
-.page-title-event {
-    background: url("{{asset('/images/event-header.jpg')}}") center center no-repeat;
-}
-
-
 .page-title-about {
     background: url("{{asset('/images/header.jpg')}}") center center no-repeat;
 }
