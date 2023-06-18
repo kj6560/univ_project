@@ -100,29 +100,31 @@ class SiteController extends Controller
                     $email_sender_name = env("EMAIL_SENDER_NAME", "UNIV SPORTA");
                     $email = $data['email'];
                     $message = "
-                    Dear User,
+                    Dear $user_name,<br><br>
 
-                    WELCOME to UNIV SPORTATECH. 
+                    WELCOME to UNIV SPORTATECH. <br><br>
 
-                    THANK YOU for registering with us! We are thrilled to welcome you to our community and appreciate your interest on UNIV Sportatech.
+                    THANK YOU for registering with us! We are thrilled to welcome you to our community and appreciate your interest on UNIV Sportatech.<br><br>
 
-                    Your registration has been successfully processed and you are now a valued member of our platform.
+                    Your registration has been successfully processed and you are now a valued member of our platform.<br><br>
 
-                    ‘UNIV Sportatech’ is focussed on building the Sports, Gaming, Media & Entertainment ecosystems in close alignment with India’s policy outlook. Evangelising solutions with technology, UNIV Sportatech is dedicated to providing the highest level of service to State Government and the industry bringing strategic, commercial, innovative and investible solutions.
+                    ‘UNIV Sportatech’ is focussed on building the Sports, Gaming, Media & Entertainment ecosystems in close alignment with India’s policy outlook. <br><br>
+                    Evangelising solutions with technology, UNIV Sportatech is dedicated to providing the highest level of service to State Government and the industry bringing strategic,<br><br>
+                     commercial, innovative and investible solutions.<br><br>
 
-                    We are committed to providing you with the best user experience and we will work diligently to ensure that you have access to all the resources you need.
+                    We are committed to providing you with the best user experience and we will work diligently to ensure that you have access to all the resources you need.<br><br>
 
-                    Once again, THANK YOU for registering with us.
+                    Once again, THANK YOU for registering with us.<br><br>
 
-                    We look forward to serving you and providing you with a seamless user experience.
+                    We look forward to serving you and providing you with a seamless user experience.<br><br>
 
-                    Your Login Credentials are:
-                    email: $email
-                    password: $pass_plain
+                    Your Login Credentials are:<br><br>
+                    email: $email<br>
+                    password: $pass_plain<br><br>
 
-                    LET’S PLAY!
+                    LET’S PLAY!<br><br>
 
-                    Best regards,
+                    Best regards,<br>
                     ADMINISTRATOR
                     ";
                     $mailData = array("email" => $user->email, "first_name" => $user->first_name, "last_name" => $user->last_name, "subject" => $subject, "message" => $message);
