@@ -70,6 +70,15 @@
                                 @endif
                                 <input type="file" name="image" placeholder="Select Event Main Image" id="inputImage" class="form-control">
                             </div>
+
+                            <div class="mb-3">
+                                <label for="formFile" class="form-label">Event Detail Header</label>
+                                @if( isset($event) && $event->event_detail_header)
+                                <img src="{{asset('uploads/events/images/'.$event->event_detail_header)}}" height="50" width="50" alt="Avatar" class="rounded-circle" />
+                                @endif
+                                <input type="file" name="event_detail_header" placeholder="Select Event Main Image" id="inputImage" class="form-control">
+                            </div>
+
                             <div class="mb-3 row">
                                 <label for="html5-search-input" class="col-md-2 col-form-label"></label>
                                 <div class="col-md-10">

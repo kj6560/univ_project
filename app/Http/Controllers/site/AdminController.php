@@ -111,18 +111,28 @@ class AdminController extends Controller
         $event->event_objective = $data['event_objective'];
         $event->event_category = $data['event_category'];
         $event->event_live_link = $data['event_live_link'];
-        if (!empty($_FILES['image'])) {
+        if ($_FILES['image']['size'] > 0) {
             $upload = $this->uploadFile($_FILES['image'], "events/images");
             if (empty($upload['errors']) == true) {
                 $event->event_image = $upload['file_name'];
-                if ($event->save()) {
-                    return redirect()->back()->with('success', 'event created successfully');
-                } else {
-                    return redirect()->back()->with('error', 'event creation failed');
-                }
             } else {
                 return redirect()->back()->with('error', $upload['errors']);
             }
+        }
+
+        if ($_FILES['event_detail_header']['size'] > 0) {
+            $upload_header = $this->uploadFile($_FILES['event_detail_header'], "events/images");
+            if (empty($upload_header['errors']) == true) {
+                $event->event_detail_header = $upload_header['file_name'];
+            } else {
+                return redirect()->back()->with('error', $upload_header['errors']);
+            }
+        }
+
+        if ($event->save()) {
+            return redirect()->back()->with('success', 'event created successfully');
+        } else {
+            return redirect()->back()->with('error', 'event creation failed');
         }
         return redirect()->back()->with('error', 'Some unhandled issue');
     }
