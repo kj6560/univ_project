@@ -114,7 +114,7 @@
                                 </div>
                                 <div class="col-sm-9 text-secondary">
                                     <select class="form-control" name="gender" required>
-                                        <option selected>Select Gender</option>
+                                        <option value="0">Select Gender</option>
                                         <option value="1" {{!empty($userPersonalDetails->gender) && $userPersonalDetails->gender==1?'selected':''}}>Male</option>
                                         <option value="2" {{!empty($userPersonalDetails->gender) && $userPersonalDetails->gender==2?'selected':''}}>Female</option>
                                         <option value="3" {{!empty($userPersonalDetails->gender) && $userPersonalDetails->gender==3?'selected':''}}>Other</option>
