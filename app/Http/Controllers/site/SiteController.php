@@ -207,7 +207,7 @@ class SiteController extends Controller
                 $mailData = array("email" => $email, "first_name" => $user->first_name, "last_name" => $user->last_name, "subject" => $subject, "message" => $message);
                 $sent = Email::sendEmail($mailData);
                 if ($sent) {
-                    return redirect()->back()->with('success', 'Email sent to your registered email id. please check your email and follow the instructions.');
+                    return redirect()->back()->with('success', 'Email sent to your registered email id. please check your email and follow the instructions.Plz check your spam or junk folder if not received in primary email.');
                 }
             } else {
                 echo "user not found";
