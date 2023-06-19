@@ -33,6 +33,7 @@
     <link rel="stylesheet" href="{{asset('admin/assets')}}/vendor/libs/apex-charts/apex-charts.css" />
 
     <script src="{{asset('admin/assets')}}/vendor/js/helpers.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest"></script>
 
     <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
@@ -180,6 +181,28 @@
                             <li class="menu-item">
                                 <a href="/dashboard/eventGalleryUploads" class="menu-link">
                                     <div data-i18n="Without menu">Upload Gallery </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="menu-item">
+                        <a href="javascript:void(0);" class="menu-link menu-toggle">
+                            <i class="menu-icon tf-icons bx bx-layout"></i>
+                            <div data-i18n="Layouts">Email Settings</div>
+                        </a>
+
+                        <ul class="menu-sub">
+                            <li class="menu-item">
+                                <a href="/dashboard/emailTemplates" class="menu-link">
+                                    <div data-i18n="Without menu">Email Templates </div>
+                                </a>
+                            </li>
+                        </ul>
+                        <ul class="menu-sub">
+                            <li class="menu-item">
+                                <a href="/dashboard/createEmailTemplates" class="menu-link">
+                                    <div data-i18n="Without menu">Create Template </div>
                                 </a>
                             </li>
                         </ul>

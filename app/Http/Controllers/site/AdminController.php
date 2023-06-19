@@ -4,6 +4,7 @@ namespace App\Http\Controllers\site;
 
 use App\Exports\ExportEventUsers;
 use App\Http\Controllers\Controller;
+use App\Models\EmailTemplates;
 use App\Models\Event;
 use App\Models\EventGallery;
 use App\Models\Sports;
@@ -151,6 +152,7 @@ class AdminController extends Controller
         $eventUsers = DB::table('event_users')
             ->Join("users", "users.id", "=", "event_users.user_id")
             ->Join("events", "events.id", "=", "event_users.event_id")
+            ->distinct()
             ->select("event_users.*", "users.first_name", "users.last_name", "users.number", "users.email", "events.event_name")
             ->paginate(10);
         return view('site.admin.eventUsers', ['eventusers' => $eventUsers]);
@@ -168,7 +170,22 @@ class AdminController extends Controller
     }
     public function eventGalleryUploads(Request $request)
     {
-        $eventGallery = EventGallery::join("events", "events.id","=","event_gallery.event_id")->paginate(10);
+        $eventGallery = EventGallery::join("events", "events.id", "=", "event_gallery.event_id")->paginate(10);
         return view('site.admin.eventGallery', ['gallery' => $eventGallery]);
+    }
+
+    public function emailTemplates(Request $request)
+    {
+        $templates = EmailTemplates::all();
+        return view('site.admin.emailTemplates', ['templates' => $templates]);
+    }
+
+    public function createEmailTemplates(Request $request){
+        $templates = EmailTemplates::all();
+        return view('site.admin.createEmailTemplates', ['templates' => $templates]);
+    }
+
+    public function storeEmailTemplates(Request $request){
+        print_r($request->all());
     }
 }
