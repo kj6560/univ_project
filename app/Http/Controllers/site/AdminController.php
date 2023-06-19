@@ -17,8 +17,7 @@ class AdminController extends Controller
 {
     public function _access(){
         $user = Auth::user();
-        if(intval($user->user_role) != 2){
-
+        if(intval($user->user_role) != 3){
             return false;
         }else{
             return true;
