@@ -37,7 +37,7 @@ class SiteController extends Controller
             $attemptData = array("email" => $data['email'], "password" => $data['password']);
             if (Auth::attempt($attemptData)) {
                 $request->session()->regenerate();
-                if (Auth::user()->user_role == 2) {
+                if (Auth::user()->user_role == 3) {
                     return redirect('/dashboard');
                 } else {
                     return redirect('/userProfile');
