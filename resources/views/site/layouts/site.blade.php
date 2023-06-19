@@ -111,7 +111,7 @@
                                     <li>
                                         <a href="tel:8744955443">
                                             <i class="fa fa-phone"></i>
-                                            +91 - 8744955443
+                                            {{env('SITE_NUMBER',"+91 98713 96956")}}
                                         </a>
                                     </li>
                                     <li>
@@ -216,7 +216,7 @@
                         <ul class="list-unstyled">
                             <li>New Delhi | India</li>
                             <li>info@univsportatech.in</li>
-                            <li>+91- 8744955443</li>
+                            <li>{{env('SITE_NUMBER',"+91 98713 96956")}}</li>
                         </ul>
                         <ul class="list-unstyled social-media">
                             <li><a href="https://twitter.com/univsportatech/"><i class="fa fa-twitter"></i></a></li>
