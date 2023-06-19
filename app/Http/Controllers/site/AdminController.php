@@ -18,24 +18,30 @@ class AdminController extends Controller
     public function _access(){
         $user = Auth::user();
         if(intval($user->user_role) != 2){
-            return redirect('/')->with('error', 'you are not authorized to access this page');
+            return false;
         }
     }
     //
     public function index(Request $request)
     {
-        $this->_access();
+        if(!$this->_access()){
+           return  redirect('/')->with('error', 'you are not authorized to access this page');
+        }
         return view('site.admin.index');
     }
     public function createCategory(Request $request)
     {
-        $this->_access();
+        if(!$this->_access()){
+           return  redirect('/')->with('error', 'you are not authorized to access this page');
+        }
         return view('site.admin.createCategory');
     }
 
     public function storeCategory(Request $request)
     {
-        $this->_access();
+        if(!$this->_access()){
+           return  redirect('/')->with('error', 'you are not authorized to access this page');
+        }
         $data = $request->all();
         if (!empty($data)) {
             $validatedData = $request->validate([
@@ -69,13 +75,17 @@ class AdminController extends Controller
     }
     public function categoryList(Request $request)
     {
-        $this->_access();
+        if(!$this->_access()){
+           return  redirect('/')->with('error', 'you are not authorized to access this page');
+        }
         $Sports = Sports::all();
         return view('site.admin.categoryList', ['categories' => $Sports]);
     }
     public function deleteCategory(Request $request, $id)
     {
-        $this->_access();
+        if(!$this->_access()){
+           return  redirect('/')->with('error', 'you are not authorized to access this page');
+        }
         $Sports = Sports::find($id);
         if (!empty($id) && Sports::destroy($id) && $this->deleteFile($Sports->icon, "category/images")) {
             return redirect()->back()->with('success', 'category deletion successfully');
@@ -86,14 +96,18 @@ class AdminController extends Controller
 
     public function eventsList(Request $request)
     {
-        $this->_access();
+        if(!$this->_access()){
+           return  redirect('/')->with('error', 'you are not authorized to access this page');
+        }
         $events = Event::all();
         return view('site.admin.eventsList', ['events' => $events]);
     }
 
     public function editEvents(Request $request, $id)
     {
-        $this->_access();
+        if(!$this->_access()){
+           return  redirect('/')->with('error', 'you are not authorized to access this page');
+        }
         if (!empty($id)) {
             $event = Event::find($id);
         } else {
@@ -105,14 +119,18 @@ class AdminController extends Controller
 
     public function createEvents(Request $request)
     {
-        $this->_access();
+        if(!$this->_access()){
+           return  redirect('/')->with('error', 'you are not authorized to access this page');
+        }
         $categories = Sports::all();
         return view('site.admin.createEvent', ['categories' => $categories]);
     }
 
     public function storeEvent(Request $request)
     {
-        $this->_access();
+        if(!$this->_access()){
+           return  redirect('/')->with('error', 'you are not authorized to access this page');
+        }
         $data = $request->all();
         if (!empty($data['event_id'])) {
             //update
@@ -155,7 +173,9 @@ class AdminController extends Controller
     }
     public function deleteEvent(Request $request, $id)
     {
-        $this->_access();
+        if(!$this->_access()){
+           return  redirect('/')->with('error', 'you are not authorized to access this page');
+        }
         $Event = Event::find($id);
         if (!empty($id) && Event::destroy($id) && $this->deleteFile($Event->event_image, "events/images")) {
             return redirect()->back()->with('success', 'event deletion successfully');
@@ -166,7 +186,9 @@ class AdminController extends Controller
 
     public function eventUsers(Request $request)
     {
-        $this->_access();
+        if(!$this->_access()){
+           return  redirect('/')->with('error', 'you are not authorized to access this page');
+        }
         $eventUsers = DB::table('event_users')
             ->Join("users", "users.id", "=", "event_users.user_id")
             ->Join("events", "events.id", "=", "event_users.event_id")
@@ -179,7 +201,9 @@ class AdminController extends Controller
 
     public  function downloadEventUsers(Request $request)
     {
-        $this->_access();
+        if(!$this->_access()){
+           return  redirect('/')->with('error', 'you are not authorized to access this page');
+        }
         return self::downloadEventUsersData();
     }
     public static function downloadEventUsersData()
@@ -189,26 +213,34 @@ class AdminController extends Controller
     }
     public function eventGalleryUploads(Request $request)
     {
-        $this->_access();
+        if(!$this->_access()){
+           return  redirect('/')->with('error', 'you are not authorized to access this page');
+        }
         $eventGallery = EventGallery::join("events", "events.id", "=", "event_gallery.event_id")->paginate(10);
         return view('site.admin.eventGallery', ['gallery' => $eventGallery]);
     }
 
     public function emailTemplates(Request $request)
     {
-        $this->_access();
+        if(!$this->_access()){
+           return  redirect('/')->with('error', 'you are not authorized to access this page');
+        }
         $templates = EmailTemplates::all();
         return view('site.admin.emailTemplates', ['templates' => $templates]);
     }
 
     public function createEmailTemplates(Request $request){
-        $this->_access();
+        if(!$this->_access()){
+           return  redirect('/')->with('error', 'you are not authorized to access this page');
+        }
         $templates = EmailTemplates::all();
         return view('site.admin.createEmailTemplates', ['templates' => $templates]);
     }
 
     public function storeEmailTemplates(Request $request){
-        $this->_access();
+        if(!$this->_access()){
+           return  redirect('/')->with('error', 'you are not authorized to access this page');
+        }
         print_r($request->all());
     }
 }
