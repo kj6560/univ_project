@@ -30,7 +30,7 @@
                                 </div>
                                 <div class="content-box">
                                     <h5>Phone Number</h5>
-                                    <p>+91 - 9818369490</p>
+                                    <p>+91 - {{env('SITE_NUMBER')}}</p>
                                 </div>
                             </div>
                         </div>
