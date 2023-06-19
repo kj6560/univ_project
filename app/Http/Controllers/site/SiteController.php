@@ -207,7 +207,7 @@ class SiteController extends Controller
                 $mailData = array("email" => $email, "first_name" => $user->first_name, "last_name" => $user->last_name, "subject" => $subject, "message" => $message);
                 $sent = Email::sendEmail($mailData);
                 if ($sent) {
-                    return redirect()->back()->with('success', 'Email sent to your registered email id. please check your email and follow the instructions.Plz check your spam or junk folder if not received in primary email.');
+                    return redirect()->back()->with('success', 'Email sent to your registered email id. please check your email and follow the instructions.Please check your spam or junk folder if not received in primary email.');
                 }
             } else {
                 echo "user not found";
@@ -283,7 +283,7 @@ class SiteController extends Controller
             $mailData = array("email" => $email, "first_name" => "subscriber", "last_name" => "", "subject" => $subject, "message" => $message);
             $sent = Email::sendEmail($mailData);
             if ($sent) {
-                return redirect()->back()->with('success', 'You have successfully subscribed to our updates email. Please check your email regularly and stay updated.');
+                return redirect()->back()->with('success', 'You have successfully subscribed to our updates email. Please check your email regularly and stay updated. Please check your spam or junk folder if not received in primary email.');
             } else {
                 return redirect()->back()->with('error', 'There is some issue with email. plz check your email id and try again.');
             }
