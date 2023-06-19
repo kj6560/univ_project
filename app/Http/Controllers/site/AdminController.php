@@ -154,6 +154,7 @@ class AdminController extends Controller
             ->Join("events", "events.id", "=", "event_users.event_id")
             ->distinct()
             ->select("event_users.*", "users.first_name", "users.last_name", "users.number", "users.email", "events.event_name")
+            ->orderBy('event_users.id', 'desc')
             ->paginate(10);
         return view('site.admin.eventUsers', ['eventusers' => $eventUsers]);
     }
