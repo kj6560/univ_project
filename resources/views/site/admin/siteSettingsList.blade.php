@@ -4,28 +4,30 @@
     <div class="content-wrapper">
         <!-- Responsive Table -->
         <div class="card">
-            <h5 class="card-header">Email Templates</h5>
+            <h5 class="card-header">Site Settings</h5>
+            <a href="/dashboard/createSettings" style="margin-left: 22px;">Create Settings</a>
             <div class="table-responsive text-nowrap">
                 <table class="table">
                     <thead>
                         <tr class="text-nowrap">
-                            <th>Template Name Id</th>
-                            <th>Template Data</th>
+                            <th>Settings Name</th>
+                            <th>Settings Value</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($templates as $template)
+                        @foreach($settings as $setting)
                         <tr>
-                            <td>{{$template->template_name}}</td>
-                            <td>{{$template->template_data}}</td>
+                            <td>{{$setting->site_key?$setting->site_key:''}}</td>
+                            <td>{{$setting->site_value?$setting->site_value:''}}</td>
+
                             <td>
                                 <div class="dropdown">
                                     <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
                                         <i class="bx bx-dots-vertical-rounded"></i>
                                     </button>
                                     <div class="dropdown-menu">
-                                        <a class="dropdown-item" href="/dashboard/editEmailTemplates/{{$template->id}}"><i class="bx bx-edit-alt me-2"></i> Edit</a>
-                                        <a class="dropdown-item" href="/dashboard/deleteEmailTemplates/{{$template->id}}"><i class="bx bx-trash me-2"></i> Delete</a>
+                                        <a class="dropdown-item" href="/dashboard/editSettings/{{$setting->id}}"><i class="bx bx-edit-alt me-2"></i> Edit</a>
+                                        <a class="dropdown-item" href="/dashboard/deleteSettings/{{$setting->id}}"><i class="bx bx-trash me-2"></i> Delete</a>
                                     </div>
                                 </div>
                             </td>

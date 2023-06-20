@@ -4,6 +4,7 @@ namespace App\Http\Controllers\site;
 
 use App\Http\Controllers\Controller;
 use App\Models\Email;
+use App\Models\EmailTemplates;
 use App\Models\EmergencyContactDetails;
 use App\Models\Event;
 use App\Models\EventGallery;
@@ -22,8 +23,9 @@ class SiteController extends Controller
 {
     public function index(Request $request)
     {
+        $events = Event::limit(2)->orderBy('id', 'DESC')->get();
 
-        return view('site.index', ['events' => Event::limit(2)->orderBy('id', 'DESC')->get()]);
+        return view('site.index', ['events' => $events, 'settings' => $this->getSettings()]);
     }
     public function login(Request $request)
     {
@@ -165,7 +167,6 @@ class SiteController extends Controller
     }
     public function forgot(Request $request)
     {
-
         return view('site.forgot');
     }
     public function forgotPasswordUser(Request $request)
@@ -181,29 +182,16 @@ class SiteController extends Controller
                 $link = env("APP_URL", "") . "/reset?t=" . $payload;
                 $subject = "Reset Your Password";
                 $site_phone = env("PHONE", "9599362404");
-                $site_name = env("SITE_NAME", "UNIV SPORTA");
-                $email_sender_name = env("EMAIL_SENDER_NAME", "UNIV SPORTA");
-                $message = "
-                <p>Dear $user_name,</p><br>
- 
-                <p>We have received a request to reset your password for your account on $site_name.
-                <br>To reset your password,please follow the instructions below:
-                <br>Click on $link.
-                <br>Enter new password
-                 
-                <br>If you did not make this request or believe someone else may have accessed your account, please contact us 
-                immediately at $site_phone. 
-                <br>We take the security of our users' accounts very seriously and will work with you to ensure your account remains 
-                secure.
-                                 
-                <br>Thank you for your attention to this matter, and please do not hesitate to contact us if you have any questions or 
-                concerns.</p>
-                 
-                <br>Best regards,
-                 
-                <br>$email_sender_name <br>
-                $site_name
-            ";
+                $site_name = env("SITE_NAME", "UNIV SPORTATECH");
+                $email_sender_name = env("EMAIL_SENDER_NAME", "UNIV SPORTATECH");
+                $template = EmailTemplates::where('template_name', 'forgot_password')->first();
+                $template_data = $template->template_data;
+                $template_data = str_replace("##user_name##", $user_name, $template_data);
+                $template_data = str_replace("##link##", $link, $template_data);
+                $template_data = str_replace("##site_phone##", $site_phone, $template_data);
+                $template_data = str_replace("##site_name##", $site_name, $template_data);
+                $template_data = str_replace("##email_sender_name##", $email_sender_name, $template_data);
+                $message = $template_data;
                 $mailData = array("email" => $email, "first_name" => $user->first_name, "last_name" => $user->last_name, "subject" => $subject, "message" => $message);
                 $sent = Email::sendEmail($mailData);
                 if ($sent) {
@@ -294,34 +282,38 @@ class SiteController extends Controller
 
     public function about(Request $request)
     {
-        return view('site.about', ['teams' => Team::get()]);
+        return view('site.about', ['teams' => Team::get(), 'settings' => $this->getSettings()]);
     }
 
     public function teamInfo(Request $request, $id)
     {
-        return view('site.teamInfo', ['teams' => Team::where('id', Crypt::decryptString($id))->first()]);
+        $teams = Team::where('id', Crypt::decryptString($id))->first();
+        return view('site.teamInfo', ['teams' => $teams, 'settings' => $this->getSettings()]);
     }
 
     public function event(Request $request)
     {
         $event_gallery_images = DB::table('event_gallery')->limit(30)->orderBy('id', 'desc')->get();
-        return view('site.event', ['events' => Event::orderBy('id', 'DESC')->get(), 'event_gallery' => $event_gallery_images]);
+        $events = Event::orderBy('id', 'DESC')->get();
+        return view('site.event', ['events' => $events, 'settings' => $this->getSettings(), 'event_gallery' => $event_gallery_images]);
     }
 
     public function eventDetails(Request $request, $id)
     {
-        return view('site.eventDetails', ['event' => Event::where('id', Crypt::decryptString($id))->first(), 'events' => Event::limit(3)->orderBy('id', 'DESC')->get()]);
+        $event = Event::where('id', Crypt::decryptString($id))->first();
+        $events = Event::limit(3)->orderBy('id', 'DESC')->get();
+        return view('site.eventDetails', ['event' => $event, 'settings' => $this->getSettings(), 'events' => $events]);
     }
 
     public function gallery(Request $request)
     {
         $gallery = EventGallery::join('events', 'event_gallery.event_id', '=', 'events.id')->select('events.event_name', 'event_gallery.*')->orderBy("events.id", "desc")->paginate(20);
-        return view('site.gallery', ['gallery' => $gallery]);
+        return view('site.gallery', ['gallery' => $gallery, 'settings' => $this->getSettings()]);
     }
 
     public function contactus(Request $request)
     {
-        return view('site.contactus');
+        return view('site.contactus', ['settings' => $this->getSettings()]);
     }
 
     public function registerNow(Request $request)
@@ -484,7 +476,7 @@ class SiteController extends Controller
         $userPersonalDetails = UserPersonalDetails::where('user_id', $user->id)->first();
         $userAddressDetails = UserAddressDetails::where('user_id', $user->id)->first();
         $emergencyContactDetails = EmergencyContactDetails::where('user_id', $user->id)->first();
-        return view('site.userProfile', ['user' => $user, 'userPersonalDetails' => $userPersonalDetails, 'userAddressDetails' => $userAddressDetails, 'emergencyContactDetails' => $emergencyContactDetails]);
+        return view('site.userProfile', ['user' => $user, 'settings' => $this->getSettings(), 'userPersonalDetails' => $userPersonalDetails, 'userAddressDetails' => $userAddressDetails, 'emergencyContactDetails' => $emergencyContactDetails]);
     }
 
     public function updateContactDetails(Request $request)
@@ -523,7 +515,7 @@ class SiteController extends Controller
             $user = User::find($data['user_id']);
             if ($user) {
                 $user_personal_details = UserPersonalDetails::where('user_id', $user->id)->first();
-                if(empty($user_personal_details)){
+                if (empty($user_personal_details)) {
                     $user_personal_details = new UserPersonalDetails();
                     $user_personal_details->user_id = $user->id;
                 }
@@ -552,11 +544,11 @@ class SiteController extends Controller
             $user = User::find($data['user_id']);
             if ($user) {
                 $user_personal_details = UserPersonalDetails::where('user_id', $user->id)->first();
-                if(empty($user_personal_details)){
+                if (empty($user_personal_details)) {
                     $user_personal_details = new UserPersonalDetails();
                     $user_personal_details->user_id = $user->id;
                 }
-                $user_personal_details->gender = !empty($data['gender']) && $data['gender'] >0 ? $data['gender'] : 1;
+                $user_personal_details->gender = !empty($data['gender']) && $data['gender'] > 0 ? $data['gender'] : 1;
                 $user_personal_details->height = $data['height'];
                 $user_personal_details->weight = $data['weight'];
                 $user_personal_details->age = $data['age'];
@@ -585,7 +577,7 @@ class SiteController extends Controller
             $user = User::find($data['user_id']);
             if ($user) {
                 $emergencyContactDetails = EmergencyContactDetails::where('user_id', $user->id)->first();
-                if(empty($emergencyContactDetails)){
+                if (empty($emergencyContactDetails)) {
                     $emergencyContactDetails = new EmergencyContactDetails();
                     $emergencyContactDetails->user_id = $user->id;
                 }

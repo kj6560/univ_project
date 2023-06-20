@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\SiteSettings;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -46,9 +47,38 @@ class Controller extends BaseController
             $response['errors'] = true;
             $response['success'] = true;
             return $response;
-        }else{
+        } else {
             echo "file doesn't exist";
         }
         return $response;
+    }
+
+    public function get_client_ip()
+    {
+        $ipaddress = '';
+        if (getenv('HTTP_CLIENT_IP'))
+            $ipaddress = getenv('HTTP_CLIENT_IP');
+        else if (getenv('HTTP_X_FORWARDED_FOR'))
+            $ipaddress = getenv('HTTP_X_FORWARDED_FOR');
+        else if (getenv('HTTP_X_FORWARDED'))
+            $ipaddress = getenv('HTTP_X_FORWARDED');
+        else if (getenv('HTTP_FORWARDED_FOR'))
+            $ipaddress = getenv('HTTP_FORWARDED_FOR');
+        else if (getenv('HTTP_FORWARDED'))
+            $ipaddress = getenv('HTTP_FORWARDED');
+        else if (getenv('REMOTE_ADDR'))
+            $ipaddress = getenv('REMOTE_ADDR');
+        else
+            $ipaddress = 'UNKNOWN';
+        return $ipaddress;
+    }
+
+    public function getSettings(){
+        $settings = SiteSettings::all();
+        $all_settings = array();
+        foreach($settings as $setting){
+            $all_settings[$setting['site_key']] = $setting['site_value'];
+        }
+        return $all_settings;
     }
 }

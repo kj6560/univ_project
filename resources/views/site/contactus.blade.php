@@ -1,11 +1,15 @@
 @extends('site.layouts.site')
 @section('content')
+@php 
+    $email = $settings['site_email'];
+    $number = $settings['site_number'];
+@endphp
 <section class="page-title page-title-contact" id="page-title">
     <div class="container">
         <div class="content">
             <h2>Contact Us</h2>
             <ul class="list-unstyled">
-                <li><a href="index.html">Home</a></li>
+                <li><a href="/">Home</a></li>
                 <li>Contact Us</li>
             </ul>
         </div>
@@ -30,7 +34,7 @@
                                 </div>
                                 <div class="content-box">
                                     <h5>Phone Number</h5>
-                                    <p>+91 - {{env('SITE_NUMBER')}}</p>
+                                    <p>{{$number}}</p>
                                 </div>
                             </div>
                         </div>
@@ -41,7 +45,7 @@
                                 </div>
                                 <div class="content-box">
                                     <h5>Email Address</h5>
-                                    <p>info@univsportatech.in</p>
+                                    <p>{{$email}}</p>
                                 </div>
                             </div>
                         </div>

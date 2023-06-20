@@ -78,6 +78,10 @@
     $success = Session::get('success');
     $error = Session::get('error');
     @endphp
+    @php
+    $email = $settings['site_email'];
+    $number = $settings['site_number'];
+    @endphp
     <!-- ========== Start Loading ========== -->
 
     <div class="loading">
@@ -105,13 +109,13 @@
                                     <li>
                                         <a href="mailto:info@univsportatech.in">
                                             <i class="fa fa-envelope"></i>
-                                            info@univsportatech.in
+                                            {{$email}}
                                         </a>
                                     </li>
                                     <li>
                                         <a href="tel:8744955443">
                                             <i class="fa fa-phone"></i>
-                                            {{env('SITE_NUMBER',"+91 98713 96956")}}
+                                            {{$number}}
                                         </a>
                                     </li>
                                     <li>
@@ -179,14 +183,14 @@
                                     <li class="{{ Request::is('gallery') ? 'active' : '' }}"><a href="/gallery">Gallery</a></li>
                                     <li class="{{ Request::is('contactus') ? 'active' : '' }}"><a href="/contactus">Contact Us</a></li>
                                     @guest
-                                    
+
                                     @else
                                     <li><a href="/userProfile">Profile</a></li>
                                     @endguest
                                     @guest
                                     <li><a href="/login">Login</a></li>
                                     @else
-                                    <li><a href="/logout">Logout</a></li>
+                                    <li><a href="/logout">({{Auth::user()->first_name." ".Auth::user()->last_name}})Logout</a></li>
                                     @endguest
                                 </ul>
                             </div>
@@ -215,8 +219,8 @@
                         </div>
                         <ul class="list-unstyled">
                             <li>New Delhi | India</li>
-                            <li>info@univsportatech.in</li>
-                            <li>{{env('SITE_NUMBER',"+91 98713 96956")}}</li>
+                            <li>{{$email}}</li>
+                            <li>{{$number}}</li>
                         </ul>
                         <ul class="list-unstyled social-media">
                             <li><a href="https://twitter.com/univsportatech/"><i class="fa fa-twitter"></i></a></li>

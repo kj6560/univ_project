@@ -55,6 +55,8 @@ Route::get('/dashboard/eventGalleryUploads', [AdminController::class, 'eventGall
 
 Route::get('/dashboard/emailTemplates', [AdminController::class, 'emailTemplates'])->middleware('auth:web')->name('emailTemplates');
 Route::get('/dashboard/createEmailTemplates', [AdminController::class, 'createEmailTemplates'])->middleware('auth:web')->name('createEmailTemplates');
+Route::get('/dashboard/editEmailTemplates/{id}', [AdminController::class, 'editEmailTemplates'])->middleware('auth:web')->name('editEmailTemplates');
+Route::get('/dashboard/deleteEmailTemplates/{id}', [AdminController::class, 'deleteEmailTemplates'])->middleware('auth:web')->name('deleteEmailTemplates');
 Route::post('/dashboard/storeEmailTemplates', [AdminController::class, 'storeEmailTemplates'])->middleware('auth:web')->name('storeEmailTemplates');
 
 //users 
@@ -64,3 +66,12 @@ Route::post('/userUpdateContactDetails', [SiteController::class, 'updateContactD
 Route::post('/userUpdatePersonalDetails', [SiteController::class, 'userUpdatePersonalDetails'])->middleware('auth:web')->name('userUpdatePersonalDetails');
 Route::post('/userUpdateEmergencyDetails', [SiteController::class, 'userUpdateEmergencyDetails'])->middleware('auth:web')->name('userUpdateEmergencyDetails');
 Route::post('/userUpdateProfilePic', [SiteController::class, 'userUpdateProfilePic'])->middleware('auth:web')->name('userUpdateProfilePic');
+
+
+//site settings
+
+Route::get('/dashboard/siteSettingsList', [AdminController::class, 'siteSettingsList'])->middleware('auth:web')->name('siteSettingsList');
+Route::get('/dashboard/createSettings', [AdminController::class, 'createSettings'])->middleware('auth:web')->name('createSettings');
+Route::post('/dashboard/storeSettings', [AdminController::class, 'storeSettings'])->middleware('auth:web')->name('storeSettings');
+Route::get('/dashboard/editSettings/{id}', [AdminController::class, 'editSettings'])->middleware('auth:web')->name('editSettings');
+Route::get('/dashboard/deleteSettings/{id}', [AdminController::class, 'deleteSettings'])->middleware('auth:web')->name('deleteSettings');

@@ -8,7 +8,7 @@
                 <form action="/dashboard/storeEmailTemplates" enctype="multipart/form-data" method="POST">
                     @csrf
                     @if(isset($template))
-                    <input type="hidden" name="template_id" value="{{$templates->id}}">
+                    <input type="hidden" name="id" value="{{$template->id}}">
                     @endif
                     <div class="card mb-4">
                         <h5 class="card-header">Create Events</h5>
@@ -23,7 +23,7 @@
                             <div class="mb-3 row">
                                 <label for="html5-text-input" class="col-md-2 col-form-label">Template Data</label>
                                 <div class="col-md-10" id="editorjs">
-                                    <input type="text" name="template_data" id="template_data" />
+                                    <textarea  name="template_data"  id="textarea" >{{!empty($template->template_data)?$template->template_data:''}}</textarea>
                                 </div>
                             </div>
 
@@ -40,12 +40,23 @@
         </div>
     </div>
 </div>
-<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+
 <script>
     tinymce.init({
-        selector: 'textarea#template_data', // Replace this CSS selector to match the placeholder element for TinyMCE
-        plugins: 'code table lists',
-        toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | indent outdent | bullist numlist | code | table'
+        selector: 'textarea',
+        plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed linkchecker a11ychecker tinymcespellchecker permanentpen powerpaste advtable advcode editimage tinycomments tableofcontents footnotes mergetags autocorrect typography inlinecss',
+        toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+        tinycomments_mode: 'embedded',
+        tinycomments_author: 'Author name',
+        mergetags_list: [{
+                value: 'First.Name',
+                title: 'First Name'
+            },
+            {
+                value: 'Email',
+                title: 'Email'
+            },
+        ]
     });
 </script>
 @stop
