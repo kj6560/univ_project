@@ -12,6 +12,7 @@
                         <tr class="text-nowrap">
                             <th>Event Name</th>
                             <th>Slider Image</th>
+                            <th>Image Name</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -19,7 +20,7 @@
                         <tr>
                             <td>{{$slider->event_name ? $slider->event_name : ''}}</td>
                             <td><img src="{{asset('uploads/events/images/'.$slider->image)}}" height="50" width="50" alt="Avatar" class="rounded-circle" /></td>
-
+                            <td>{{$slider->image?$slider->image:''}}</td>
                             <td>
                                 <div class="dropdown">
                                     <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
