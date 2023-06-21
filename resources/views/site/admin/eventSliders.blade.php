@@ -18,7 +18,7 @@
                         @foreach($sliders as $slider)
                         <tr>
                             <td>{{$slider->event_name ? $slider->event_name : ''}}</td>
-                            <td>{{$slider->slider_image?$slider->slider_image:''}}</td>
+                            <td><img src="{{asset('uploads/events/images/'.$slider->image)}}" height="50" width="50" alt="Avatar" class="rounded-circle" /></td>
 
                             <td>
                                 <div class="dropdown">
