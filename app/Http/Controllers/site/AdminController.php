@@ -420,4 +420,20 @@ class AdminController extends Controller
         }
         return redirect()->back()->with('error', 'Some unhandled issue');
     }
+    public function deleteSlider(Request $request, $id)
+    {
+        if (!$this->_access()) {
+            return  redirect('/')->with('error', 'you are not authorized to access this page');
+        }
+        if (!empty($id)) {
+            $slider = EventSlider::destroy($id);
+            if ($slider) {
+                return redirect()->back()->with('success', 'slider deletion successfully');
+            } else {
+                return redirect()->back()->with('error', 'slider deletion successfully');
+            }
+        } else {
+            return redirect()->back()->with('error', 'slider deletion successfully');
+        }
+    }
 }

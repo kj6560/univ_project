@@ -26,7 +26,6 @@
                                         <i class="bx bx-dots-vertical-rounded"></i>
                                     </button>
                                     <div class="dropdown-menu">
-                                        <a class="dropdown-item" href="/dashboard/editSlider/{{$slider->id}}"><i class="bx bx-edit-alt me-2"></i> Edit</a>
                                         <a class="dropdown-item" href="/dashboard/deleteSlider/{{$slider->id}}"><i class="bx bx-trash me-2"></i> Delete</a>
                                     </div>
                                 </div>
