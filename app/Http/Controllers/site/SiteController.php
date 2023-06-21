@@ -304,7 +304,7 @@ class SiteController extends Controller
         $event = Event::where('id', Crypt::decryptString($id))->first();
         $events = Event::limit(3)->orderBy('id', 'DESC')->get();
         $event_sliders = EventSlider::where("event_id", $event->id)->get();
-        return view('site.eventDetails', ['event' => $event, 'settings' => $this->getSettings(), 'events' => $events,'sliders'=>$event_sliders]);
+        return view('site.eventDetails', ['event' => $event, 'settings' => $this->getSettings(), 'events' => $events, 'sliders' => $event_sliders]);
     }
 
     public function gallery(Request $request)
@@ -336,44 +336,11 @@ class SiteController extends Controller
                     $subject = "Event Registration";
                     $email_sender_name = env("EMAIL_SENDER_NAME", "UNIV SPORTA");
                     $email = $post['email'];
-                    $message = "
-                    Dear $user_name,<br><br>
-
-                    Thank You for registering for IOA’S BHARAT IN PARIS and be a part of India's Olympic Movement.<br><br>
-
-                    We are happy to confirm your participation for the event:<br><br>
-
-                    Name of the event: IOA BHARAT IN PARIS<br><br>
-
-                    Date: 23 June<br><br>
-
-                    Venue: Jawaharlal Nehru Stadium, New Delhi<br><br>
-
-                    Reporting Time: 05:00 AM<br><br>
-
-                    BIB Collection for the Race Day:<br><br>
-
-                    Dates: 21st & 22nd June<br><br>
-
-                    Time: 11am - 6pm<br><br>
-
-                    Venue: Jawaharlal Nehru Stadium<br><br>
-
-                    Indian Olympic Association in partnership with UNIV Sportatech is committed to provide you with the best possible user experience.<br><br>
-
-                    For event flow, route and other relevant details please click the link below and login to fill other important fields:<br><br>
-
-                    https://univsportatech.com/login<br><br>
-                    Note: Kindly carry a Government Approved ID Card (Aadhaar/Driving License/Pan Card) on 21st & 22nd June for uploading on your registered profile and on 23rd June ID verification.<br><br>
-
-                    Thanking You<br><br>
-
-                    Best regards,<br><br>
-
-                    Administrator<br><br>
-
-                    UNIV SPORTATECH<br><br>
-                            ";
+                    $template = EmailTemplates::where('template_name', 'event_registration')->first();
+                    $template_data = $template->template_data;
+                    $template_data = str_replace("##user_name##", $user_name, $template_data);
+                    $template_data = str_replace("##event_name##", $event->event_name, $template_data);
+                    $message = $template_data;
                     $mailData = array("email" => $user->email, "first_name" => $user->first_name, "last_name" => $user->last_name, "subject" => $subject, "message" => $message);
 
                     $sent = Email::sendEmail($mailData);
