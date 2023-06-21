@@ -75,3 +75,12 @@ Route::get('/dashboard/createSettings', [AdminController::class, 'createSettings
 Route::post('/dashboard/storeSettings', [AdminController::class, 'storeSettings'])->middleware('auth:web')->name('storeSettings');
 Route::get('/dashboard/editSettings/{id}', [AdminController::class, 'editSettings'])->middleware('auth:web')->name('editSettings');
 Route::get('/dashboard/deleteSettings/{id}', [AdminController::class, 'deleteSettings'])->middleware('auth:web')->name('deleteSettings');
+
+
+//event sliders
+
+Route::get('/dashboard/eventSliders', [AdminController::class, 'eventSliders'])->middleware('auth:web')->name('eventSliders');
+Route::get('/dashboard/createSlider', [AdminController::class, 'createSlider'])->middleware('auth:web')->name('createSlider');
+Route::post('/dashboard/storeSlider', [AdminController::class, 'storeSlider'])->middleware('auth:web')->name('storeSlider');
+Route::get('/dashboard/editSlider/{id}', [AdminController::class, 'editSlider'])->middleware('auth:web')->name('editSlider');
+Route::get('/dashboard/deleteSlider/{id}', [AdminController::class, 'deleteSlider'])->middleware('auth:web')->name('deleteSlider');

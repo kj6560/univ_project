@@ -26,14 +26,14 @@
     <link rel="stylesheet" href="{{asset('admin/assets')}}/vendor/css/theme-default.css" class="template-customizer-theme-css" />
     <link rel="stylesheet" href="{{asset('admin/assets')}}/css/demo.css" />
     <link rel="stylesheet" href="{{asset('admin/assets')}}/css/bootstrap-datetimepicker.min.css" />
-    
+
     <!-- Vendors CSS -->
     <link rel="stylesheet" href="{{asset('admin/assets')}}/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
 
     <link rel="stylesheet" href="{{asset('admin/assets')}}/vendor/libs/apex-charts/apex-charts.css" />
 
     <script src="{{asset('admin/assets')}}/vendor/js/helpers.js"></script>
-    
+
 
     <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
@@ -107,50 +107,39 @@
                                     <div data-i18n="Without menu">Create Events</div>
                                 </a>
                             </li>
+
                             <li class="menu-item">
                                 <a href="/dashboard/eventsList" class="menu-link">
                                     <div data-i18n="Without navbar">List Events</div>
                                 </a>
                             </li>
 
-                        </ul>
-                    </li>
-                    <li class="menu-item">
-                        <a href="javascript:void(0);" class="menu-link menu-toggle">
-                            <i class="menu-icon tf-icons bx bx-layout"></i>
-                            <div data-i18n="Layouts">Event Users</div>
-                        </a>
-
-                        <ul class="menu-sub">
                             <li class="menu-item">
                                 <a href="/dashboard/eventUsers" class="menu-link">
                                     <div data-i18n="Without menu">Event Users</div>
                                 </a>
                             </li>
-                        </ul>
-                    </li>
 
-                    <li class="menu-item">
-                        <a href="javascript:void(0);" class="menu-link menu-toggle">
-                            <i class="menu-icon tf-icons bx bx-layout"></i>
-                            <div data-i18n="Layouts">Event Gallery</div>
-                        </a>
-
-                        <ul class="menu-sub">
                             <li class="menu-item">
                                 <a href="/dashboard/eventGallery" class="menu-link">
                                     <div data-i18n="Without menu">Event Gallery </div>
                                 </a>
                             </li>
-                        </ul>
-                        <ul class="menu-sub">
                             <li class="menu-item">
                                 <a href="/dashboard/eventGalleryUploads" class="menu-link">
                                     <div data-i18n="Without menu">Upload Gallery </div>
                                 </a>
                             </li>
+
+                            <li class="menu-item">
+                                <a href="/dashboard/eventSliders" class="menu-link">
+                                    <div data-i18n="Without menu">Event Sliders</div>
+                                </a>
+                            </li>
                         </ul>
                     </li>
+
+
 
                     <li class="menu-item">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">

@@ -8,6 +8,7 @@ use App\Models\EmailTemplates;
 use App\Models\EmergencyContactDetails;
 use App\Models\Event;
 use App\Models\EventGallery;
+use App\Models\EventSlider;
 use App\Models\EventUsers;
 use App\Models\Team;
 use App\Models\User;
@@ -302,7 +303,8 @@ class SiteController extends Controller
     {
         $event = Event::where('id', Crypt::decryptString($id))->first();
         $events = Event::limit(3)->orderBy('id', 'DESC')->get();
-        return view('site.eventDetails', ['event' => $event, 'settings' => $this->getSettings(), 'events' => $events]);
+        $event_sliders = EventSlider::where("event_id", $event->id)->get();
+        return view('site.eventDetails', ['event' => $event, 'settings' => $this->getSettings(), 'events' => $events,'sliders'=>$event_sliders]);
     }
 
     public function gallery(Request $request)

@@ -30,7 +30,27 @@ $event_details_header = $event->event_detail_header;
                 <div class="class-details">
                     <div class="class">
                         <div class="class-img">
+
+                            @if($sliders->count() > 0)
+                            <div class="slideshow-container" style="margin: 0 auto;">
+
+                                @foreach($sliders as $slider)
+                                <div class="mySlides shift">
+                                    <img src="{{asset('uploads/events/images/'.$slider->image)}}" style="width:100%;height:600px">
+                                </div>
+                                @endforeach
+
+                            </div>
+                            <br>
+
+                            <div style="text-align:center">
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                            </div>
+                            @else
                             <img src="{{asset('uploads/events/images/'.$event->event_image)}}" class="img-fluid" alt="">
+                            @endif
                         </div>
                         <div class="class-content">
                             <div class="class-title">
@@ -177,4 +197,27 @@ $event_details_header = $event->event_detail_header;
     </div>
     </div>
 </section>
+<script>
+    let slideIndex = 0;
+    showSlides();
+
+    function showSlides() {
+        let i;
+        let slides = document.getElementsByClassName("mySlides");
+        let dots = document.getElementsByClassName("dot");
+        for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
+        }
+        slideIndex++;
+        if (slideIndex > slides.length) {
+            slideIndex = 1
+        }
+        for (i = 0; i < dots.length; i++) {
+            dots[i].className = dots[i].className.replace(" active", "");
+        }
+        slides[slideIndex - 1].style.display = "block";
+        dots[slideIndex - 1].className += " active";
+        setTimeout(showSlides, 2000); // Change image every 2 seconds
+    }
+</script>
 @stop

@@ -8,6 +8,7 @@ use App\Models\Email;
 use App\Models\EmailTemplates;
 use App\Models\Event;
 use App\Models\EventGallery;
+use App\Models\EventSlider;
 use App\Models\SiteSettings;
 use App\Models\Sports;
 use Illuminate\Http\Request;
@@ -367,5 +368,56 @@ class AdminController extends Controller
         } else {
             return redirect()->back()->with('error', 'settings deletion successfully');
         }
+    }
+    public function eventSliders(Request $request)
+    {
+        if (!$this->_access()) {
+            return  redirect('/')->with('error', 'you are not authorized to access this page');
+        }
+        $sliders = EventSlider::join("events", "events.id", "=", "event_slider.event_id")
+            ->select("event_slider.*", "events.event_name")
+            ->orderBy('event_slider.id', 'desc')
+            ->paginate(10);
+        return view('site.admin.eventSliders', ['sliders' => $sliders]);
+    }
+
+    public function createSlider(Request $request){
+        if (!$this->_access()) {
+            return  redirect('/')->with('error', 'you are not authorized to access this page');
+        }
+        $events = Event::all();
+        return view('site.admin.createSlider', ['events' => $events]);
+    }
+
+    public function storeSlider(Request $request)
+    {
+        if (!$this->_access()) {
+            return  redirect('/')->with('error', 'you are not authorized to access this page');
+        }
+        $data = $request->all();
+        if (!empty($data['slider_id'])) {
+            //update
+            $slider = EventSlider::find($data['slider_id']);
+        } else {
+            //create
+            $slider = new EventSlider();
+        }
+        $slider->event_id = $data['event_id'];
+        if ($_FILES['image']['size'] > 0) {
+            $upload = $this->uploadFile($_FILES['image'], "events/images");
+            if (empty($upload['errors']) == true) {
+                $slider->image = $upload['file_name'];
+            } else {
+                return redirect()->back()->with('error', $upload['errors']);
+            }
+        }
+
+        
+        if ($slider->save()) {
+            return redirect()->back()->with('success', 'slider created successfully');
+        } else {
+            return redirect()->back()->with('error', 'slider creation failed');
+        }
+        return redirect()->back()->with('error', 'Some unhandled issue');
     }
 }
