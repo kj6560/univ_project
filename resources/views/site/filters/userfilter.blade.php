@@ -1,5 +1,5 @@
 <div class="header">
-    <span>Expand</span>
+    <h6 class="btn btn-primary"><span>Filter</span></h6>
 </div>
 <div class="col-xl-9 filter">
     <div class="row">
