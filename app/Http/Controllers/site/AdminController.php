@@ -152,6 +152,7 @@ class AdminController extends Controller
         $event->event_objective = $data['event_objective'];
         $event->event_category = $data['event_category'];
         $event->event_live_link = $data['event_live_link'];
+        $event->event_registration_available = $data['event_registration_available'];
         if ($_FILES['image']['size'] > 0) {
             $upload = $this->uploadFile($_FILES['image'], "events/images");
             if (empty($upload['errors']) == true) {
@@ -201,7 +202,7 @@ class AdminController extends Controller
             ->distinct()
             ->select("event_users.*", "users.first_name", "users.last_name", "users.number", "users.email", "events.event_name")
             ->orderBy('event_users.id', 'desc')
-            ->paginate(10);
+            ->paginate(50);
         return view('site.admin.eventUsers', ['eventusers' => $eventUsers]);
     }
 

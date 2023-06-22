@@ -43,6 +43,14 @@
                                 </select>
                             </div>
                             <div class="mb-3 row">
+                                <label for="exampleFormControlSelect1" class="form-label">Select Registration Available</label>
+                                <select class="form-select" id="exampleFormControlSelect1" aria-label="Select Registration Available" name="event_registration_available">
+                                    <option selected>Select Registration Available</option>
+                                    <option value="1" @if(isset($event) && $event->event_registration_available==1) selected @endif>YES</option>
+                                    <option value="0" @if(isset($event) && $event->event_registration_available==0) selected @endif>NO</option>
+                                </select>
+                            </div>
+                            <div class="mb-3 row">
                                 <label for="html5-text-input" class="col-md-2 col-form-label">Event Date</label>
                                 <div class="col-md-10">
                                     <input type="datetime-local" id="birthdaytime" value="{{isset($event) && $event->event_date?$event->event_date:''}}" name="event_date">
