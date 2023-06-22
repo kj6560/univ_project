@@ -203,15 +203,24 @@ class AdminController extends Controller
             ->leftJoin("user_personal_details", "user_personal_details.user_id", "=", "users.id")
             ->leftJoin("emergency_contact_details", "emergency_contact_details.user_id", "=", "users.id")
             ->distinct()
-            ->select("event_users.*", "user_address_details.*", "user_personal_details.*", "emergency_contact_details.*", "users.first_name", "users.last_name", "users.number", "users.email", "events.event_name")
-            ->orderBy('event_users.id', 'desc');
+            ->select(
+                "event_users.*",
+                "user_address_details.*",
+                "user_personal_details.*",
+                "emergency_contact_details.*",
+                "users.id",
+                "users.first_name",
+                "users.last_name",
+                "users.number",
+                "users.email",
+                "events.event_name"
+            );
+
         $reqData = $request->all();
         unset($reqData['_token']);
-        if (!empty($reqData) && empty($reqData['page'])) {
+        if (!empty($reqData) && empty($reqData['page']) && empty($reqData['sort'])) {
             $filter = $this->processFilter($reqData);
-
             $eventUsers = $eventUsers->whereRaw($filter);
-
             $eventUsers = $eventUsers->get();
         } else {
             $eventUsers = $eventUsers->paginate(50);
