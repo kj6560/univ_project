@@ -33,6 +33,7 @@
                         <label for="html5-search-input" class="col-md-2 col-form-label"></label>
                         <div class="col-md-10">
                             <input class="btn btn-primary" type="submit" value="submit" id="submit" />
+                            <a class="btn btn-primary" href="/dashboard/eventUsers">Reset</a>
                         </div>
                     </div>
                 </div>
