@@ -22,7 +22,7 @@
     <div class="col-xl-9 filter">
         <div class="row">
             <!-- HTML5 Inputs -->
-            <form action="/dashboard/users" method="get">
+            <form action="/dashboard/eventUsers" method="get">
                 @csrf
 
                 <div class="card mb-4">
@@ -47,12 +47,29 @@
                                 <input class="form-control" type="text" name="number" value="{{$filters['number'] ?? ''}}" placeholder="Enter phone number" id="number" />
                             </div>
                         </div>
-                        
+                        <div class="mb-3 row">
+                            <label for="html5-text-input" class="col-md-2 col-form-label">User City</label>
+                            <div class="col-md-10">
+                                <input class="form-control" type="text" name="city" value="{{$filters['city'] ?? ''}}" placeholder="Enter city" id="city" />
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="html5-text-input" class="col-md-2 col-form-label">User State</label>
+                            <div class="col-md-10">
+                                <input class="form-control" type="text" name="state" value="{{$filters['state'] ?? ''}}" placeholder="Enter state" id="state" />
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="html5-text-input" class="col-md-2 col-form-label">User Pincode</label>
+                            <div class="col-md-10">
+                                <input class="form-control" type="text" name="pincode" value="{{$filters['pincode'] ?? ''}}" placeholder="Enter pincode" id="pincode" />
+                            </div>
+                        </div>
                         <div class="mb-3 row">
                             <label for="html5-search-input" class="col-md-2 col-form-label"></label>
                             <div class="col-md-10">
                                 <input class="btn btn-primary" type="submit" value="submit" id="submit" />
-                                <a class="btn btn-primary" href="/dashboard/users">Reset</a>
+                                <a class="btn btn-primary" href="/dashboard/eventUsers">Reset</a>
                             </div>
                         </div>
                     </div>

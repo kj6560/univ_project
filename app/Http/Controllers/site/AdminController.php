@@ -11,6 +11,7 @@ use App\Models\EventGallery;
 use App\Models\EventSlider;
 use App\Models\SiteSettings;
 use App\Models\Sports;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -458,6 +459,73 @@ class AdminController extends Controller
             }
         } else {
             return redirect()->back()->with('error', 'slider deletion successfully');
+        }
+    }
+
+    public function users(Request $request)
+    {
+        if (!$this->_access()) {
+            return  redirect('/')->with('error', 'you are not authorized to access this page');
+        }
+        $users = DB::table('users')
+            ->distinct();
+        $reqData = $request->all();
+        unset($reqData['_token']);
+        if (!empty($reqData) && empty($reqData['page']) && empty($reqData['sort'])) {
+            $filter = $this->processFilter($reqData);
+            $users = $users->whereRaw($filter);
+            $users = $users->get();
+        } else {
+            $users = $users->paginate(50);
+        }
+        return view('site.admin.users', ['users' => $users]);
+    }
+
+    public function editUser(Request $request, $id)
+    {
+        if (!$this->_access()) {
+            return  redirect('/')->with('error', 'you are not authorized to access this page');
+        }
+        $user = User::find($id);
+        return view('site.admin.editUser', ['user' => $user]);
+    }
+    public function storeUser(Request $request)
+    {
+        if (!$this->_access()) {
+            return  redirect('/')->with('error', 'you are not authorized to access this page');
+        }
+        $data = $request->all();
+        if (!empty($data['id'])) {
+            $user = User::find($data['id']);
+            $user->first_name = $data['first_name'];
+            $user->last_name = $data['last_name'];
+            $user->email = $data['email'];
+            $user->number = $data['number'];
+            $user->user_role = $data['user_role'];
+            if (!empty($data['password'])) {
+                $pass_plain = $data['password'];
+                $password = bcrypt($pass_plain);
+                $user->password = $password;
+            }
+            if ($user->save()) {
+                return  redirect()->back()->with('success', 'user updated successfully');
+            } else {
+                return  redirect()->back()->with('error', 'user update failed');
+            }
+        }
+    }
+    public function deleteUser(Request $request, $id)
+    {
+        if (!$this->_access()) {
+            return  redirect('/')->with('error', 'you are not authorized to access this page');
+        }
+        if (!empty($id)) {
+            $user = User::destroy($id);
+            if($user){
+                return  redirect()->back()->with('success', 'user deleted successfully');
+            }else{
+                return  redirect()->back()->with('error', 'user deletion failed');
+            }
         }
     }
 }

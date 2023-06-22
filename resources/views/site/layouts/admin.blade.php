@@ -73,6 +73,44 @@
                         </a>
                     </li>
 
+                    <li class="menu-item">
+                        <a href="javascript:void(0);" class="menu-link menu-toggle">
+                            <i class="menu-icon tf-icons bx bx-layout"></i>
+                            <div data-i18n="Layouts">Users</div>
+                        </a>
+
+                        <ul class="menu-sub">
+                            <li class="menu-item">
+                                <a href="/dashboard/users" class="menu-link">
+                                    <div data-i18n="Without menu">All Users </div>
+                                </a>
+                            </li>
+                        </ul>
+
+                        <ul class="menu-sub">
+                            <li class="menu-item">
+                                <a href="/dashboard/userPersonalDetails" class="menu-link">
+                                    <div data-i18n="Without menu">User Personal Details </div>
+                                </a>
+                            </li>
+                        </ul>
+                        <ul class="menu-sub">
+                            <li class="menu-item">
+                                <a href="/dashboard/userAddressDetails" class="menu-link">
+                                    <div data-i18n="Without menu">User Address Details </div>
+                                </a>
+                            </li>
+                        </ul>
+
+                        <ul class="menu-sub">
+                            <li class="menu-item">
+                                <a href="/dashboard/userEmergencyDetails" class="menu-link">
+                                    <div data-i18n="Without menu">User Emergency Details </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
                     <!-- Layouts -->
                     <li class="menu-item">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">

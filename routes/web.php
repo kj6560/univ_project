@@ -84,3 +84,10 @@ Route::get('/dashboard/createSlider', [AdminController::class, 'createSlider'])-
 Route::post('/dashboard/storeSlider', [AdminController::class, 'storeSlider'])->middleware('auth:web')->name('storeSlider');
 Route::get('/dashboard/editSlider/{id}', [AdminController::class, 'editSlider'])->middleware('auth:web')->name('editSlider');
 Route::get('/dashboard/deleteSlider/{id}', [AdminController::class, 'deleteSlider'])->middleware('auth:web')->name('deleteSlider');
+
+//users from admin
+Route::get('/dashboard/editUser/{id}', [AdminController::class, 'edituser'])->middleware('auth:web')->name('edituser');
+Route::post('/dashboard/storeUser', [AdminController::class, 'storeUser'])->middleware('auth:web')->name('storeUser');
+Route::get('/dashboard/users', [AdminController::class, 'users'])->middleware('auth:web')->name('users');
+Route::get('/dashboard/deleteUser/{id}', [AdminController::class, 'deleteUser'])->middleware('auth:web')->name('deleteUser');
+

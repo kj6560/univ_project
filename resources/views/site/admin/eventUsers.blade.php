@@ -4,9 +4,10 @@
 <div class="container-xxl flex-grow-1 container-p-y">
     <div class="content-wrapper">
         <!-- Responsive Table -->
+        <h5 class="card-header">Users Registered for Event (Total: {{$eventusers instanceof Illuminate\Pagination\LengthAwarePaginator?$eventusers->total():count($eventusers)}} users)</h5>
+        @include('site.filters.eventUserfilter')
+
         <div class="card">
-            <h5 class="card-header">Users Registered for Event (Total: {{$eventusers instanceof Illuminate\Pagination\LengthAwarePaginator?$eventusers->total():count($eventusers)}} users)</h5>
-            @include('site.filters.userfilter')
             <a href="/dashboard/downloadEventUsers" class="btn btn-primary" style="width: 200px;margin-left: 10px">Download</a>
             <div class="table-responsive text-nowrap">
                 <table class="table" id="table">
