@@ -473,7 +473,8 @@ class AdminController extends Controller
             ->orderBy('id', 'desc');
         $reqData = $request->all();
         unset($reqData['_token']);
-        if (!empty(array_values($reqData)[0]) && empty($reqData['page']) && empty($reqData['sort'])) {
+        
+        if (!empty($reqData) && empty($reqData['page']) && empty($reqData['sort'])) {
             $filter = $this->processFilter($reqData);
             $users = $users->whereRaw($filter);
             $users = $users->get();
