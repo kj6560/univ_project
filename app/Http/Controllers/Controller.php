@@ -111,12 +111,36 @@ class Controller extends BaseController
                     $return .= "AND users.email like '".$email."%'";
             }
 
+            if (!empty($data['city'])) {
+                $city = $data['city'];
+                if($return == "")
+                    $return .= "user_address_details.city like '".$city."%'";
+                else
+                    $return .= "AND user_address_details.city like '".$city."%'";
+            }
+
+            if (!empty($data['state'])) {
+                $state = $data['state'];
+                if($return == "")
+                    $return .= "user_address_details.state like '".$state."%'";
+                else
+                    $return .= "AND user_address_details.state like '".$state."%'";
+            }
+
             if (!empty($data['number'])) {
                 $number = $data['number'];
                 if($return == "")
                     $return .= "users.number = '".$number."' ";
                 else
                     $return .= "AND users.number = '".$number."' ";
+            }
+
+            if (!empty($data['pincode'])) {
+                $pincode = $data['pincode'];
+                if($return == "")
+                    $return .= "user_address_details.pincode like '".$pincode."%'";
+                else
+                    $return .= "AND user_address_details.pincode like '".$pincode."%'";
             }
         }
         return $return;

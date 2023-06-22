@@ -30,6 +30,24 @@
                         </div>
                     </div>
                     <div class="mb-3 row">
+                        <label for="html5-text-input" class="col-md-2 col-form-label">User City</label>
+                        <div class="col-md-10">
+                            <input class="form-control" type="text" name="city" value="{{$filters['city'] ?? ''}}" placeholder="Enter city" id="city" />
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label for="html5-text-input" class="col-md-2 col-form-label">User State</label>
+                        <div class="col-md-10">
+                            <input class="form-control" type="text" name="state" value="{{$filters['state'] ?? ''}}" placeholder="Enter state" id="state" />
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label for="html5-text-input" class="col-md-2 col-form-label">User Pincode</label>
+                        <div class="col-md-10">
+                            <input class="form-control" type="text" name="pincode" value="{{$filters['pincode'] ?? ''}}" placeholder="Enter pincode" id="pincode" />
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
                         <label for="html5-search-input" class="col-md-2 col-form-label"></label>
                         <div class="col-md-10">
                             <input class="btn btn-primary" type="submit" value="submit" id="submit" />

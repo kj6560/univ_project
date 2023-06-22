@@ -21,7 +21,7 @@
     <div class="content-wrapper">
         <!-- Responsive Table -->
         <div class="card">
-            <h5 class="card-header">Users Registered for Event (Total: {{$eventusers->total()}} users)</h5>
+            <h5 class="card-header">Users Registered for Event (Total: {{$eventusers instanceof Illuminate\Pagination\LengthAwarePaginator?$eventusers->total():count($eventusers)}} users)</h5>
             @include('site.filters.userfilter')
             <a href="/dashboard/downloadEventUsers" class="btn btn-primary" style="width: 200px;margin-left: 10px">Download</a>
             <div class="table-responsive text-nowrap">
@@ -33,6 +33,11 @@
                             <th>User Last Name</th>
                             <th>User Mobile</th>
                             <th>User Email</th>
+                            <th>Address</th>
+                            <th>City</th>
+                            <th>State</th>
+                            <th>Pincode</th>
+
                         </tr>
                     </thead>
                     <tbody>
@@ -43,12 +48,20 @@
                             <td>{{$user->last_name}}</td>
                             <td>{{$user->number}}</td>
                             <td>{{$user->email}}</td>
+                            <td>{{$user->address_line1}}</td>
+                            <td>{{$user->city}}</td>
+                            <td>{{$user->state}}</td>
+                            <td>{{$user->pincode}}</td>
                         </tr>
                         @endforeach
                     </tbody>
                 </table>
                 <div class="col-12">
+                    @php
+                    if($eventusers instanceof Illuminate\Pagination\LengthAwarePaginator){
+                    @endphp
                     {!! $eventusers->links('pagination::bootstrap-4') !!}
+                    @php } @endphp
                 </div>
             </div>
         </div>

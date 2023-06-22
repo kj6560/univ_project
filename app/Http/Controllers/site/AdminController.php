@@ -199,18 +199,24 @@ class AdminController extends Controller
         $eventUsers = DB::table('event_users')
             ->Join("users", "users.id", "=", "event_users.user_id")
             ->Join("events", "events.id", "=", "event_users.event_id")
+            ->leftJoin("user_address_details", "user_address_details.user_id", "=", "users.id")
+            ->leftJoin("user_personal_details", "user_personal_details.user_id", "=", "users.id")
+            ->leftJoin("emergency_contact_details", "emergency_contact_details.user_id", "=", "users.id")
             ->distinct()
-            ->select("event_users.*", "users.first_name", "users.last_name", "users.number", "users.email", "events.event_name")
+            ->select("event_users.*", "user_address_details.*", "user_personal_details.*", "emergency_contact_details.*", "users.first_name", "users.last_name", "users.number", "users.email", "events.event_name")
             ->orderBy('event_users.id', 'desc');
         $reqData = $request->all();
         unset($reqData['_token']);
-        if (!empty($reqData)) {
+        if (!empty($reqData) && empty($reqData['page'])) {
             $filter = $this->processFilter($reqData);
-            
+
             $eventUsers = $eventUsers->whereRaw($filter);
+
+            $eventUsers = $eventUsers->get();
+        } else {
+            $eventUsers = $eventUsers->paginate(50);
         }
-        $eventUsers = $eventUsers->paginate(50);
-        return view('site.admin.eventUsers', ['eventusers' => $eventUsers,'filters'=>$reqData]);
+        return view('site.admin.eventUsers', ['eventusers' => $eventUsers, 'filters' => $reqData]);
     }
 
     public  function downloadEventUsers(Request $request)
