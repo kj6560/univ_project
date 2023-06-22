@@ -73,12 +73,52 @@ class Controller extends BaseController
         return $ipaddress;
     }
 
-    public function getSettings(){
+    public function getSettings()
+    {
         $settings = SiteSettings::all();
         $all_settings = array();
-        foreach($settings as $setting){
+        foreach ($settings as $setting) {
             $all_settings[$setting['site_key']] = $setting['site_value'];
         }
         return $all_settings;
+    }
+    public function processFilter($data)
+    {
+        $return = "";
+        if (!empty($data)) {
+            $user_name = $data['user_name'];
+            if (!empty($user_name)) {
+                $user_name_arr = explode(' ', $user_name);
+                if (!empty($user_name_arr[0])) {
+                    $first_name = $user_name_arr[0];
+                    $return .= "users.first_name like '".$first_name."%'";
+                }
+
+                if (!empty($user_name_arr[1])) {
+                    $last_name = $user_name_arr[1];
+                    if($return == "")
+                        $return .= " users.last_name like '".$last_name."%'";
+                    else
+                    $return .= " AND users.last_name like '".$last_name."%'";
+                }
+            }
+
+            if (!empty($data['user_email'])) {
+                $email = $data['user_email'];
+                if($return == "")
+                    $return .= "users.email like '".$email."%'";
+                else
+                    $return .= "AND users.email like '".$email."%'";
+            }
+
+            if (!empty($data['number'])) {
+                $number = $data['number'];
+                if($return == "")
+                    $return .= "users.number = '".$number."' ";
+                else
+                    $return .= "AND users.number = '".$number."' ";
+            }
+        }
+        return $return;
     }
 }

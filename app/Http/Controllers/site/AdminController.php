@@ -201,9 +201,16 @@ class AdminController extends Controller
             ->Join("events", "events.id", "=", "event_users.event_id")
             ->distinct()
             ->select("event_users.*", "users.first_name", "users.last_name", "users.number", "users.email", "events.event_name")
-            ->orderBy('event_users.id', 'desc')
-            ->paginate(50);
-        return view('site.admin.eventUsers', ['eventusers' => $eventUsers]);
+            ->orderBy('event_users.id', 'desc');
+        $reqData = $request->all();
+        unset($reqData['_token']);
+        if (!empty($reqData)) {
+            $filter = $this->processFilter($reqData);
+            
+            $eventUsers = $eventUsers->whereRaw($filter);
+        }
+        $eventUsers = $eventUsers->paginate(50);
+        return view('site.admin.eventUsers', ['eventusers' => $eventUsers,'filters'=>$reqData]);
     }
 
     public  function downloadEventUsers(Request $request)
@@ -382,7 +389,8 @@ class AdminController extends Controller
         return view('site.admin.eventSliders', ['sliders' => $sliders]);
     }
 
-    public function createSlider(Request $request){
+    public function createSlider(Request $request)
+    {
         if (!$this->_access()) {
             return  redirect('/')->with('error', 'you are not authorized to access this page');
         }
@@ -413,7 +421,7 @@ class AdminController extends Controller
             }
         }
 
-        
+
         if ($slider->save()) {
             return redirect()->back()->with('success', 'slider created successfully');
         } else {
