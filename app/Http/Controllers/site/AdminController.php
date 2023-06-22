@@ -215,7 +215,8 @@ class AdminController extends Controller
                 "users.number",
                 "users.email",
                 "events.event_name"
-            );
+            )
+            ->orderBy('event_users.id', 'desc');
 
         $reqData = $request->all();
         unset($reqData['_token']);
@@ -468,7 +469,8 @@ class AdminController extends Controller
             return  redirect('/')->with('error', 'you are not authorized to access this page');
         }
         $users = DB::table('users')
-            ->distinct();
+            ->distinct()
+            ->orderBy('id', 'desc');
         $reqData = $request->all();
         unset($reqData['_token']);
         if (!empty($reqData) && empty($reqData['page']) && empty($reqData['sort'])) {
