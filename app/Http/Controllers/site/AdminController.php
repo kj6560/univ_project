@@ -473,14 +473,14 @@ class AdminController extends Controller
             ->orderBy('id', 'desc');
         $reqData = $request->all();
         unset($reqData['_token']);
-        if (!empty($reqData) && empty($reqData['page']) && empty($reqData['sort'])) {
+        if (!empty(array_values($reqData)[0]) && empty($reqData['page']) && empty($reqData['sort'])) {
             $filter = $this->processFilter($reqData);
             $users = $users->whereRaw($filter);
             $users = $users->get();
         } else {
             $users = $users->paginate(50);
         }
-        return view('site.admin.users', ['users' => $users]);
+        return view('site.admin.users', ['users' => $users,'filters'=>$reqData]);
     }
 
     public function editUser(Request $request, $id)
