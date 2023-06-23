@@ -4,7 +4,7 @@
     <div class="content-wrapper">
         <!-- Responsive Table -->
         <div class="card">
-            <h5 class="card-header">Responsive Table</h5>
+            <h5 class="card-header">Events</h5>
             <div class="table-responsive text-nowrap">
                 <table class="table">
                     <thead>
