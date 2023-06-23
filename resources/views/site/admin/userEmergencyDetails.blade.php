@@ -4,7 +4,7 @@
     <div class="content-wrapper">
         <!-- Responsive Table -->
         <h5 class="card-header">Emergency Contact Details (Total: {{$users instanceof Illuminate\Pagination\LengthAwarePaginator?$users->total():count($users)}} )</h5>
-        @include('site.filters.userfilter')
+        @include('site.filters.userfilterEmergencyDetails')
         <div class="card">
 
             <div class="table-responsive text-nowrap">
