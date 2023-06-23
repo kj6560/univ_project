@@ -16,6 +16,8 @@ class UserPersonalDetails extends Model
         'gender',
         'married',
         'height',
-        'weight'
+        'weight',
+        'age',
+        'user_doc'
     ];
 } 

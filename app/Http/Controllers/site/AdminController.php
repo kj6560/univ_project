@@ -12,6 +12,7 @@ use App\Models\EventSlider;
 use App\Models\SiteSettings;
 use App\Models\Sports;
 use App\Models\User;
+use App\Models\UserPersonalDetails;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -621,5 +622,71 @@ class AdminController extends Controller
             $users = $users->paginate(50);
         }
         return view('site.admin.userEmergencyDetails', ['users' => $users, 'filters' => $reqData]);
+    }
+    public function editUserPersonalDetails(Request $request, $id)
+    {
+        if (!$this->_access()) {
+            return  redirect('/')->with('error', 'you are not authorized to access this page');
+        }
+        $user = UserPersonalDetails::find($id);
+        return view('site.admin.editUserPersonalDetails', ['user' => $user]);
+    }
+
+    public function storeUserPersonalDetails(Request $request)
+    {
+        if (!$this->_access()) {
+            return  redirect('/')->with('error', 'you are not authorized to access this page');
+        }
+        $data = $request->all();
+        unset($data['_token']);
+        if (!empty($data['user_id'])) {
+            $userPersonalDetails = UserPersonalDetails::where('user_id', $data['user_id'])->first();
+        } else {
+            $userPersonalDetails = new UserPersonalDetails();
+        }
+        $userPersonalDetails->gender = $data['gender'];
+        $userPersonalDetails->birthday = $data['birthday'];
+        $userPersonalDetails->height = $data['height'];
+        $userPersonalDetails->weight = $data['weight'];
+        $userPersonalDetails->age = $data['age'];
+        $userPersonalDetails->married = $data['married'];
+        if (isset($_FILES['profile_image']) && $_FILES['profile_image']['size'] > 0) {
+            $upload = $this->uploadFile($_FILES['profile_image'], "users/profile_pics");
+            if (empty($upload['errors']) == true) {
+                $userPersonalDetails->image = $upload['file_name'];
+            } else {
+                return redirect()->back()->with('error', $upload['errors']);
+            }
+        }
+
+        if (isset($_FILES['user_doc']) && $_FILES['user_doc']['size'] > 0) {
+            $upload = $this->uploadFile($_FILES['user_doc'], "users/docs/images");
+            if (empty($upload['errors']) == true) {
+                $userPersonalDetails->user_doc = $upload['file_name'];
+            } else {
+                return redirect()->back()->with('error', $upload['errors']);
+            }
+        }
+         
+        if ($userPersonalDetails->save()) {
+            return  redirect()->back()->with('success', 'user personal details updated successfully');
+        } else {
+            return  redirect()->back()->with('error', 'user personal details update failed');
+        }
+    }
+
+    public function deleteUserPersonalDetails(Request $request, $id)
+    {
+        if (!$this->_access()) {
+            return  redirect('/')->with('error', 'you are not authorized to access this page');
+        }
+        if (!empty($id)) {
+            $user = UserPersonalDetails::destroy($id);
+            if ($user) {
+                return  redirect()->back()->with('success', 'user personal details deleted successfully');
+            } else {
+                return  redirect()->back()->with('error', 'user personal details deletion failed');
+            }
+        }
     }
 }

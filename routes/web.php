@@ -94,11 +94,14 @@ Route::get('/dashboard/deleteUser/{id}', [AdminController::class, 'deleteUser'])
 
 
 //user  personal details for admin
-Route::get('/dashboard/editUser/{id}', [AdminController::class, 'edituser'])->middleware('auth:web')->name('edituser');
-Route::post('/dashboard/storeUser', [AdminController::class, 'storeUser'])->middleware('auth:web')->name('storeUser');
+Route::get('/dashboard/editUserPersonalDetails/{id}', [AdminController::class, 'editUserPersonalDetails'])->middleware('auth:web')->name('editUserPersonalDetails');
+Route::post('/dashboard/storeUserPersonalDetails', [AdminController::class, 'storeUserPersonalDetails'])->middleware('auth:web')->name('storeUserPersonalDetails');
 Route::get('/dashboard/userPersonalDetails', [AdminController::class, 'userPersonalDetails'])->middleware('auth:web')->name('userPersonalDetails');
+Route::get('/dashboard/deleteUserPersonalDetails/{id}', [AdminController::class, 'deleteUserPersonalDetails'])->middleware('auth:web')->name('deleteUserPersonalDetails');
+
+
+// user activity log for admin
 Route::get('/dashboard/userActivityLog', [AdminController::class, 'userActivityLog'])->middleware('auth:web')->name('userActivityLog');
-Route::get('/dashboard/deleteUser/{id}', [AdminController::class, 'deleteUser'])->middleware('auth:web')->name('deleteUser');
 
 //user Address Details
 Route::get('/dashboard/userAddressDetails', [AdminController::class, 'userAddressDetails'])->middleware('auth:web')->name('userAddressDetails');
