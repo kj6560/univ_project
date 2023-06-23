@@ -554,4 +554,24 @@ class AdminController extends Controller
         }
         return view('site.admin.userActivityLog', ['users' => $users,'filters'=>$reqData]);
     }
+    public function userPersonalDetails(Request $request){
+        if (!$this->_access()) {
+            return  redirect('/')->with('error', 'you are not authorized to access this page');
+        }
+        $users = DB::table('user_personal_details')
+                ->join('users', 'users.id', '=', 'user_personal_details.user_id')
+            ->distinct()
+            ->orderBy('user_personal_details.id', 'desc');
+        $reqData = $request->all();
+        unset($reqData['_token']);
+        
+        if (!empty($reqData) && empty($reqData['page']) && empty($reqData['sort'])) {
+            $filter = $this->processFilter($reqData);
+            $users = $users->whereRaw($filter);
+            $users = $users->get();
+        } else {
+            $users = $users->paginate(50);
+        }
+        return view('site.admin.userPersonalDetails',['users' => $users,'filters'=>$reqData]);
+    }
 }

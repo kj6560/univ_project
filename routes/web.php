@@ -92,3 +92,10 @@ Route::get('/dashboard/users', [AdminController::class, 'users'])->middleware('a
 Route::get('/dashboard/userActivityLog', [AdminController::class, 'userActivityLog'])->middleware('auth:web')->name('userActivityLog');
 Route::get('/dashboard/deleteUser/{id}', [AdminController::class, 'deleteUser'])->middleware('auth:web')->name('deleteUser');
 
+
+//user  personal details for admin
+Route::get('/dashboard/editUser/{id}', [AdminController::class, 'edituser'])->middleware('auth:web')->name('edituser');
+Route::post('/dashboard/storeUser', [AdminController::class, 'storeUser'])->middleware('auth:web')->name('storeUser');
+Route::get('/dashboard/userPersonalDetails', [AdminController::class, 'userPersonalDetails'])->middleware('auth:web')->name('userPersonalDetails');
+Route::get('/dashboard/userActivityLog', [AdminController::class, 'userActivityLog'])->middleware('auth:web')->name('userActivityLog');
+Route::get('/dashboard/deleteUser/{id}', [AdminController::class, 'deleteUser'])->middleware('auth:web')->name('deleteUser');
