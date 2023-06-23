@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\SiteSettings;
+use App\Models\UserActivityLog;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -144,5 +145,16 @@ class Controller extends BaseController
             }
         }
         return $return;
+    }
+    public function updateUserActivityLog($user_id, $activity_id){
+        $user_activity_log = new UserActivityLog();
+        $user_activity_log->user_id = $user_id;
+        $user_activity_log->activity_id = $activity_id;
+        $user_activity_log->ip_address = $this->get_client_ip();
+        if($user_activity_log->save()){
+            return true;
+        }else{
+            return false;
+        }
     }
 }
