@@ -109,6 +109,14 @@
                                 </a>
                             </li>
                         </ul>
+
+                        <ul class="menu-sub">
+                            <li class="menu-item">
+                                <a href="/dashboard/userActivityLog" class="menu-link">
+                                    <div data-i18n="Without menu">User Activity Log </div>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
 
                     <!-- Layouts -->

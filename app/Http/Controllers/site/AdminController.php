@@ -531,4 +531,27 @@ class AdminController extends Controller
             }
         }
     }
+
+    public function userActivityLog(Request $request)
+    {
+        if (!$this->_access()) {
+            return  redirect('/')->with('error', 'you are not authorized to access this page');
+        }
+        $users = DB::table('user_activity_log')
+                ->join('users', 'users.id', '=', 'user_activity_log.user_id')
+                ->join('activity', 'activity.id', '=', 'user_activity_log.activity_id')
+            ->distinct()
+            ->orderBy('user_activity_log.id', 'desc');
+        $reqData = $request->all();
+        unset($reqData['_token']);
+        
+        if (!empty($reqData) && empty($reqData['page']) && empty($reqData['sort'])) {
+            $filter = $this->processFilter($reqData);
+            $users = $users->whereRaw($filter);
+            $users = $users->get();
+        } else {
+            $users = $users->paginate(50);
+        }
+        return view('site.admin.userActivityLog', ['users' => $users,'filters'=>$reqData]);
+    }
 }
