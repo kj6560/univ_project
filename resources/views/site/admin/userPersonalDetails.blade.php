@@ -12,6 +12,10 @@
                     <thead>
                         <tr class="text-nowrap">
                             <th>User Id</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Number</th>
+                            <th>Email</th>
                             <th>DOB</th>
                             <th>Gender</th>
                             <th>Married</th>
@@ -25,6 +29,10 @@
                         @foreach($users as $user)
                         <tr>
                             <th scope="row">{{$user->id}}</th>
+                            <td>{{$user->first_name}}</td>
+                            <td>{{$user->last_name}}</td>
+                            <td>{{$user->number}}</td>
+                            <td>{{$user->email}}</td>
                             <td>{{$user->birthday}}</td>
                             <td>{{$user->gender==1?'Male':'Female'}}</td>
                             @if(!empty($user->married) && $user->married ==1)

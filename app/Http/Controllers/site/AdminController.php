@@ -561,6 +561,7 @@ class AdminController extends Controller
         }
         $users = DB::table('user_personal_details')
                 ->join('users', 'users.id', '=', 'user_personal_details.user_id')
+                ->select('user_personal_details.*', 'users.first_name', 'users.last_name','users.number','users.email')
             ->distinct()
             ->orderBy('user_personal_details.id', 'desc');
         $reqData = $request->all();
