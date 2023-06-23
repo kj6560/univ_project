@@ -575,4 +575,47 @@ class AdminController extends Controller
         }
         return view('site.admin.userPersonalDetails',['users' => $users,'filters'=>$reqData]);
     }
+    public function userAddressDetails(Request $request){
+        if (!$this->_access()) {
+            return  redirect('/')->with('error', 'you are not authorized to access this page');
+        }
+        $users = DB::table('user_address_details')
+                ->join('users', 'users.id', '=', 'user_address_details.user_id')
+                ->select('user_address_details.*', 'users.first_name', 'users.last_name','users.number','users.email')
+            ->distinct()
+            ->orderBy('user_address_details.id', 'desc');
+        $reqData = $request->all();
+        unset($reqData['_token']);
+        
+        if (!empty($reqData) && empty($reqData['page']) && empty($reqData['sort'])) {
+            $filter = $this->processFilter($reqData);
+            $users = $users->whereRaw($filter);
+            $users = $users->get();
+        } else {
+            $users = $users->paginate(50);
+        }
+        return view('site.admin.userAddressDetails',['users' => $users,'filters'=>$reqData]);
+    }
+
+    public function userEmergencyDetails(Request $request){
+        if (!$this->_access()) {
+            return  redirect('/')->with('error', 'you are not authorized to access this page');
+        }
+        $users = DB::table('emergency_contact_details')
+                ->join('users', 'users.id', '=', 'emergency_contact_details.user_id')
+                ->select('emergency_contact_details.*', 'users.first_name', 'users.last_name','users.number','users.email')
+            ->distinct()
+            ->orderBy('emergency_contact_details.id', 'desc');
+        $reqData = $request->all();
+        unset($reqData['_token']);
+        
+        if (!empty($reqData) && empty($reqData['page']) && empty($reqData['sort'])) {
+            $filter = $this->processFilter($reqData);
+            $users = $users->whereRaw($filter);
+            $users = $users->get();
+        } else {
+            $users = $users->paginate(50);
+        }
+        return view('site.admin.userEmergencyDetails',['users' => $users,'filters'=>$reqData]);
+    }
 }

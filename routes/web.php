@@ -99,3 +99,9 @@ Route::post('/dashboard/storeUser', [AdminController::class, 'storeUser'])->midd
 Route::get('/dashboard/userPersonalDetails', [AdminController::class, 'userPersonalDetails'])->middleware('auth:web')->name('userPersonalDetails');
 Route::get('/dashboard/userActivityLog', [AdminController::class, 'userActivityLog'])->middleware('auth:web')->name('userActivityLog');
 Route::get('/dashboard/deleteUser/{id}', [AdminController::class, 'deleteUser'])->middleware('auth:web')->name('deleteUser');
+
+//user Address Details
+Route::get('/dashboard/userAddressDetails', [AdminController::class, 'userAddressDetails'])->middleware('auth:web')->name('userAddressDetails');
+
+//user Emergency Details
+Route::get('/dashboard/userEmergencyDetails', [AdminController::class, 'userEmergencyDetails'])->middleware('auth:web')->name('userEmergencyDetails');
