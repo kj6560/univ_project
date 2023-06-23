@@ -540,6 +540,7 @@ class AdminController extends Controller
         $users = DB::table('user_activity_log')
                 ->join('users', 'users.id', '=', 'user_activity_log.user_id')
                 ->join('activity', 'activity.id', '=', 'user_activity_log.activity_id')
+                ->select('user_activity_log.*', 'users.first_name', 'users.last_name','users.number','users.email', 'activity.activity_name')
             ->distinct()
             ->orderBy('user_activity_log.id', 'desc');
         $reqData = $request->all();
