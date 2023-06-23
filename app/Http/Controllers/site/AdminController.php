@@ -6,12 +6,14 @@ use App\Exports\ExportEventUsers;
 use App\Http\Controllers\Controller;
 use App\Models\Email;
 use App\Models\EmailTemplates;
+use App\Models\EmergencyContactDetails;
 use App\Models\Event;
 use App\Models\EventGallery;
 use App\Models\EventSlider;
 use App\Models\SiteSettings;
 use App\Models\Sports;
 use App\Models\User;
+use App\Models\UserAddressDetails;
 use App\Models\UserPersonalDetails;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -643,6 +645,7 @@ class AdminController extends Controller
             $userPersonalDetails = UserPersonalDetails::where('user_id', $data['user_id'])->first();
         } else {
             $userPersonalDetails = new UserPersonalDetails();
+            $userPersonalDetails->user_id = $data['user_id'];
         }
         $userPersonalDetails->gender = $data['gender'];
         $userPersonalDetails->birthday = $data['birthday'];
@@ -686,6 +689,103 @@ class AdminController extends Controller
                 return  redirect()->back()->with('success', 'user personal details deleted successfully');
             } else {
                 return  redirect()->back()->with('error', 'user personal details deletion failed');
+            }
+        }
+    }
+
+    public function editUserAddressDetails(Request $request, $id)
+    {
+        if (!$this->_access()) {
+            return  redirect('/')->with('error', 'you are not authorized to access this page');
+        }
+        $user = UserAddressDetails::find($id);
+        return view('site.admin.editUserAddressDetails', ['user' => $user]);
+    }
+
+    public function storeUserAddressDetails(Request $request)
+    {
+        if (!$this->_access()) {
+            return  redirect('/')->with('error', 'you are not authorized to access this page');
+        }
+        $data = $request->all();
+        unset($data['_token']);
+        if (!empty($data['user_id'])) {
+            $userAddressDetails = UserAddressDetails::where('user_id', $data['user_id'])->first();
+        } else {
+            $userAddressDetails = new UserAddressDetails();
+            $userAddressDetails->user_id = $data['user_id'];
+        }
+        $userAddressDetails->address_line1 = $data['address_line1'];
+        $userAddressDetails->city = $data['city'];
+        $userAddressDetails->state = $data['state'];
+        $userAddressDetails->pincode = $data['pincode'];
+         
+        if ($userAddressDetails->save()) {
+            return  redirect()->back()->with('success', 'user address details updated successfully');
+        } else {
+            return  redirect()->back()->with('error', 'user address details update failed');
+        }
+    }
+
+    public function deleteUserAddressDetails(Request $request, $id)
+    {
+        if (!$this->_access()) {
+            return  redirect('/')->with('error', 'you are not authorized to access this page');
+        }
+        if (!empty($id)) {
+            $user = UserAddressDetails::destroy($id);
+            if ($user) {
+                return  redirect()->back()->with('success', 'user Address details deleted successfully');
+            } else {
+                return  redirect()->back()->with('error', 'user Address details deletion failed');
+            }
+        }
+    }
+
+    public function editUserEmergencyDetails(Request $request, $id)
+    {
+        if (!$this->_access()) {
+            return  redirect('/')->with('error', 'you are not authorized to access this page');
+        }
+        $user = EmergencyContactDetails::find($id);
+        return view('site.admin.editUserEmergencyDetails', ['user' => $user]);
+    }
+
+    public function storeUserEmergencyDetails(Request $request)
+    {
+        if (!$this->_access()) {
+            return  redirect('/')->with('error', 'you are not authorized to access this page');
+        }
+        $data = $request->all();
+        unset($data['_token']);
+        if (!empty($data['user_id'])) {
+            $emergencyContactDetails = EmergencyContactDetails::where('user_id', $data['user_id'])->first();
+        } else {
+            $emergencyContactDetails = new EmergencyContactDetails();
+            $emergencyContactDetails->user_id = $data['user_id'];
+        }
+        $emergencyContactDetails->blood_group = $data['blood_group'];
+        $emergencyContactDetails->emergency_contact_name = $data['emergency_contact_name'];
+        $emergencyContactDetails->emergency_contact_number = $data['emergency_contact_number'];
+         
+        if ($emergencyContactDetails->save()) {
+            return  redirect()->back()->with('success', 'user emergency details updated successfully');
+        } else {
+            return  redirect()->back()->with('error', 'user emergency details update failed');
+        }
+    }
+
+    public function deleteUserEmergencyDetails(Request $request, $id)
+    {
+        if (!$this->_access()) {
+            return  redirect('/')->with('error', 'you are not authorized to access this page');
+        }
+        if (!empty($id)) {
+            $user = EmergencyContactDetails::destroy($id);
+            if ($user) {
+                return  redirect()->back()->with('success', 'user emergency details deleted successfully');
+            } else {
+                return  redirect()->back()->with('error', 'user emergency details deletion failed');
             }
         }
     }

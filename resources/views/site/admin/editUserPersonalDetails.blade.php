@@ -11,7 +11,7 @@
                     <input type="hidden" name="user_id" value="{{$user->user_id}}">
                     @endif
                     <div class="card mb-4">
-                        <h5 class="card-header">Edit Users</h5>
+                        <h5 class="card-header">Edit User Personal Details</h5>
 
                         <div class="card-body">
                             <div class="mb-3 row">

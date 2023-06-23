@@ -105,6 +105,11 @@ Route::get('/dashboard/userActivityLog', [AdminController::class, 'userActivityL
 
 //user Address Details
 Route::get('/dashboard/userAddressDetails', [AdminController::class, 'userAddressDetails'])->middleware('auth:web')->name('userAddressDetails');
-
+Route::get('/dashboard/editUserAddressDetails/{id}', [AdminController::class, 'editUserAddressDetails'])->middleware('auth:web')->name('editUserAddressDetails');
+Route::post('/dashboard/storeUserAddressDetails', [AdminController::class, 'storeUserAddressDetails'])->middleware('auth:web')->name('storeUserAddressDetails');
+Route::get('/dashboard/deleteUserAddressDetails/{id}', [AdminController::class, 'deleteUserAddressDetails'])->middleware('auth:web')->name('deleteUserAddressDetails');
 //user Emergency Details
 Route::get('/dashboard/userEmergencyDetails', [AdminController::class, 'userEmergencyDetails'])->middleware('auth:web')->name('userEmergencyDetails');
+Route::get('/dashboard/editUserEmergencyDetails/{id}', [AdminController::class, 'editUserEmergencyDetails'])->middleware('auth:web')->name('editUserEmergencyDetails');
+Route::post('/dashboard/storeUserEmergencyDetails', [AdminController::class, 'storeUserEmergencyDetails'])->middleware('auth:web')->name('storeUserEmergencyDetails');
+Route::get('/dashboard/deleteUserEmergencyDetails/{id}', [AdminController::class, 'deleteUserEmergencyDetails'])->middleware('auth:web')->name('deleteUserEmergencyDetails');

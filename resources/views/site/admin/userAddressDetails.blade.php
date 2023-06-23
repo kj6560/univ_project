@@ -38,6 +38,17 @@
                             <td>{{$user->pincode}}</td>
                             <td>{{$user->created_at}}</td>
                             <td>{{$user->updated_at}}</td>
+                            <td>
+                                <div class="dropdown">
+                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                        <i class="bx bx-dots-vertical-rounded"></i>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" href="/dashboard/editUserAddressDetails/{{$user->id}}"><i class="bx bx-edit-alt me-2"></i> Edit</a>
+                                        <a class="dropdown-item" href="/dashboard/deleteUserAddressDetails/{{$user->id}}"><i class="bx bx-trash me-2"></i> Delete</a>
+                                    </div>
+                                </div>
+                            </td>
                         </tr>
                         @endforeach
                     </tbody>
