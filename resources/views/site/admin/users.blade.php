@@ -3,7 +3,7 @@
 <div class="container-xxl flex-grow-1 container-p-y">
     <div class="content-wrapper">
         <!-- Responsive Table -->
-        <h5 class="card-header">Users Registered for Event (Total: {{$users instanceof Illuminate\Pagination\LengthAwarePaginator?$users->total():count($users)}} users)</h5>
+        <h5 class="card-header">All Users Registered (Total: {{$users instanceof Illuminate\Pagination\LengthAwarePaginator?$users->total():count($users)}} users)</h5>
         @include('site.filters.userfilter')
         <div class="card">
 

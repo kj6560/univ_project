@@ -473,7 +473,7 @@ class AdminController extends Controller
             ->orderBy('id', 'desc');
         $reqData = $request->all();
         unset($reqData['_token']);
-        
+
         if (!empty($reqData) && empty($reqData['page']) && empty($reqData['sort'])) {
             $filter = $this->processFilter($reqData);
             $users = $users->whereRaw($filter);
@@ -481,7 +481,7 @@ class AdminController extends Controller
         } else {
             $users = $users->paginate(50);
         }
-        return view('site.admin.users', ['users' => $users,'filters'=>$reqData]);
+        return view('site.admin.users', ['users' => $users, 'filters' => $reqData]);
     }
 
     public function editUser(Request $request, $id)
@@ -524,9 +524,9 @@ class AdminController extends Controller
         }
         if (!empty($id)) {
             $user = User::destroy($id);
-            if($user){
+            if ($user) {
                 return  redirect()->back()->with('success', 'user deleted successfully');
-            }else{
+            } else {
                 return  redirect()->back()->with('error', 'user deletion failed');
             }
         }
@@ -538,14 +538,14 @@ class AdminController extends Controller
             return  redirect('/')->with('error', 'you are not authorized to access this page');
         }
         $users = DB::table('user_activity_log')
-                ->join('users', 'users.id', '=', 'user_activity_log.user_id')
-                ->join('activity', 'activity.id', '=', 'user_activity_log.activity_id')
-                ->select('user_activity_log.*', 'users.first_name', 'users.last_name','users.number','users.email', 'activity.activity_name')
+            ->join('users', 'users.id', '=', 'user_activity_log.user_id')
+            ->join('activity', 'activity.id', '=', 'user_activity_log.activity_id')
+            ->select('user_activity_log.*', 'users.first_name', 'users.last_name', 'users.number', 'users.email', 'activity.activity_name')
             ->distinct()
             ->orderBy('user_activity_log.id', 'desc');
         $reqData = $request->all();
         unset($reqData['_token']);
-        
+
         if (!empty($reqData) && empty($reqData['page']) && empty($reqData['sort'])) {
             $filter = $this->processFilter($reqData);
             $users = $users->whereRaw($filter);
@@ -553,20 +553,21 @@ class AdminController extends Controller
         } else {
             $users = $users->paginate(50);
         }
-        return view('site.admin.userActivityLog', ['users' => $users,'filters'=>$reqData]);
+        return view('site.admin.userActivityLog', ['users' => $users, 'filters' => $reqData]);
     }
-    public function userPersonalDetails(Request $request){
+    public function userPersonalDetails(Request $request)
+    {
         if (!$this->_access()) {
             return  redirect('/')->with('error', 'you are not authorized to access this page');
         }
         $users = DB::table('user_personal_details')
-                ->join('users', 'users.id', '=', 'user_personal_details.user_id')
-                ->select('user_personal_details.*', 'users.first_name', 'users.last_name','users.number','users.email')
+            ->join('users', 'users.id', '=', 'user_personal_details.user_id')
+            ->select('user_personal_details.*', 'users.first_name', 'users.last_name', 'users.number', 'users.email')
             ->distinct()
             ->orderBy('user_personal_details.id', 'desc');
         $reqData = $request->all();
         unset($reqData['_token']);
-        
+
         if (!empty($reqData) && empty($reqData['page']) && empty($reqData['sort'])) {
             $filter = $this->processFilter($reqData);
             $users = $users->whereRaw($filter);
@@ -574,20 +575,21 @@ class AdminController extends Controller
         } else {
             $users = $users->paginate(50);
         }
-        return view('site.admin.userPersonalDetails',['users' => $users,'filters'=>$reqData]);
+        return view('site.admin.userPersonalDetails', ['users' => $users, 'filters' => $reqData]);
     }
-    public function userAddressDetails(Request $request){
+    public function userAddressDetails(Request $request)
+    {
         if (!$this->_access()) {
             return  redirect('/')->with('error', 'you are not authorized to access this page');
         }
         $users = DB::table('user_address_details')
-                ->join('users', 'users.id', '=', 'user_address_details.user_id')
-                ->select('user_address_details.*', 'users.first_name', 'users.last_name','users.number','users.email')
+            ->join('users', 'users.id', '=', 'user_address_details.user_id')
+            ->select('user_address_details.*', 'users.first_name', 'users.last_name', 'users.number', 'users.email')
             ->distinct()
             ->orderBy('user_address_details.id', 'desc');
         $reqData = $request->all();
         unset($reqData['_token']);
-        
+
         if (!empty($reqData) && empty($reqData['page']) && empty($reqData['sort'])) {
             $filter = $this->processFilter($reqData);
             $users = $users->whereRaw($filter);
@@ -595,21 +597,22 @@ class AdminController extends Controller
         } else {
             $users = $users->paginate(50);
         }
-        return view('site.admin.userAddressDetails',['users' => $users,'filters'=>$reqData]);
+        return view('site.admin.userAddressDetails', ['users' => $users, 'filters' => $reqData]);
     }
 
-    public function userEmergencyDetails(Request $request){
+    public function userEmergencyDetails(Request $request)
+    {
         if (!$this->_access()) {
             return  redirect('/')->with('error', 'you are not authorized to access this page');
         }
         $users = DB::table('emergency_contact_details')
-                ->join('users', 'users.id', '=', 'emergency_contact_details.user_id')
-                ->select('emergency_contact_details.*', 'users.first_name', 'users.last_name','users.number','users.email')
+            ->join('users', 'users.id', '=', 'emergency_contact_details.user_id')
+            ->select('emergency_contact_details.*', 'users.first_name', 'users.last_name', 'users.number', 'users.email')
             ->distinct()
             ->orderBy('emergency_contact_details.id', 'desc');
         $reqData = $request->all();
         unset($reqData['_token']);
-        
+
         if (!empty($reqData) && empty($reqData['page']) && empty($reqData['sort'])) {
             $filter = $this->processFilter($reqData);
             $users = $users->whereRaw($filter);
@@ -617,6 +620,6 @@ class AdminController extends Controller
         } else {
             $users = $users->paginate(50);
         }
-        return view('site.admin.userEmergencyDetails',['users' => $users,'filters'=>$reqData]);
+        return view('site.admin.userEmergencyDetails', ['users' => $users, 'filters' => $reqData]);
     }
 }
