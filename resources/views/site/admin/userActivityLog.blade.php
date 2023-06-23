@@ -4,7 +4,7 @@
     <div class="content-wrapper">
         <!-- Responsive Table -->
         <h5 class="card-header">Users Log (Total: {{$users instanceof Illuminate\Pagination\LengthAwarePaginator?$users->total():count($users)}} Logs)</h5>
-        @include('site.filters.userfilter')
+        @include('site.filters.userfilterActivityLog')
         <div class="card">
 
             <div class="table-responsive text-nowrap">
