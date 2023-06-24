@@ -49,8 +49,6 @@ Route::get('/dashboard/downloadEventUsers', [AdminController::class, 'downloadEv
 
 Route::get('/dashboard/eventGallery', [AdminController::class, 'eventGallery'])->middleware('auth:web')->name('eventGallery');
 
-Route::get('/dashboard/eventGalleryUploads', [AdminController::class, 'eventGalleryUploads'])->middleware('auth:web')->name('eventGalleryUploads');
-
 //Email Templates
 
 Route::get('/dashboard/emailTemplates', [AdminController::class, 'emailTemplates'])->middleware('auth:web')->name('emailTemplates');
@@ -108,8 +106,14 @@ Route::get('/dashboard/userAddressDetails', [AdminController::class, 'userAddres
 Route::get('/dashboard/editUserAddressDetails/{id}', [AdminController::class, 'editUserAddressDetails'])->middleware('auth:web')->name('editUserAddressDetails');
 Route::post('/dashboard/storeUserAddressDetails', [AdminController::class, 'storeUserAddressDetails'])->middleware('auth:web')->name('storeUserAddressDetails');
 Route::get('/dashboard/deleteUserAddressDetails/{id}', [AdminController::class, 'deleteUserAddressDetails'])->middleware('auth:web')->name('deleteUserAddressDetails');
+
 //user Emergency Details
 Route::get('/dashboard/userEmergencyDetails', [AdminController::class, 'userEmergencyDetails'])->middleware('auth:web')->name('userEmergencyDetails');
 Route::get('/dashboard/editUserEmergencyDetails/{id}', [AdminController::class, 'editUserEmergencyDetails'])->middleware('auth:web')->name('editUserEmergencyDetails');
 Route::post('/dashboard/storeUserEmergencyDetails', [AdminController::class, 'storeUserEmergencyDetails'])->middleware('auth:web')->name('storeUserEmergencyDetails');
 Route::get('/dashboard/deleteUserEmergencyDetails/{id}', [AdminController::class, 'deleteUserEmergencyDetails'])->middleware('auth:web')->name('deleteUserEmergencyDetails');
+
+//site gallery
+Route::get('/dashboard/siteGallery', [AdminController::class, 'siteGallery'])->middleware('auth:web')->name('siteGallery');
+Route::get('/dashboard/addGallery', [AdminController::class, 'addGallery'])->middleware('auth:web')->name('addGallery');
+Route::post('/dashboard/storeGallery', [AdminController::class, 'storeGallery'])->middleware('auth:web')->name('storeGallery');

@@ -10,6 +10,7 @@ use App\Models\EmergencyContactDetails;
 use App\Models\Event;
 use App\Models\EventGallery;
 use App\Models\EventSlider;
+use App\Models\SiteGallery;
 use App\Models\SiteSettings;
 use App\Models\Sports;
 use App\Models\User;
@@ -245,13 +246,13 @@ class AdminController extends Controller
 
         return Excel::download(new ExportEventUsers, 'users.csv');
     }
-    public function eventGalleryUploads(Request $request)
+    public function siteGallery(Request $request)
     {
         if (!$this->_access()) {
             return  redirect('/')->with('error', 'you are not authorized to access this page');
         }
-        $eventGallery = EventGallery::join("events", "events.id", "=", "event_gallery.event_id")->paginate(10);
-        return view('site.admin.eventGallery', ['gallery' => $eventGallery]);
+        $siteGallery = SiteGallery::paginate(10);
+        return view('site.admin.siteGallery', ['gallery' => $siteGallery]);
     }
 
     public function emailTemplates(Request $request)
@@ -670,7 +671,7 @@ class AdminController extends Controller
                 return redirect()->back()->with('error', $upload['errors']);
             }
         }
-         
+
         if ($userPersonalDetails->save()) {
             return  redirect()->back()->with('success', 'user personal details updated successfully');
         } else {
@@ -719,7 +720,7 @@ class AdminController extends Controller
         $userAddressDetails->city = $data['city'];
         $userAddressDetails->state = $data['state'];
         $userAddressDetails->pincode = $data['pincode'];
-         
+
         if ($userAddressDetails->save()) {
             return  redirect()->back()->with('success', 'user address details updated successfully');
         } else {
@@ -767,7 +768,7 @@ class AdminController extends Controller
         $emergencyContactDetails->blood_group = $data['blood_group'];
         $emergencyContactDetails->emergency_contact_name = $data['emergency_contact_name'];
         $emergencyContactDetails->emergency_contact_number = $data['emergency_contact_number'];
-         
+
         if ($emergencyContactDetails->save()) {
             return  redirect()->back()->with('success', 'user emergency details updated successfully');
         } else {
@@ -786,6 +787,69 @@ class AdminController extends Controller
                 return  redirect()->back()->with('success', 'user emergency details deleted successfully');
             } else {
                 return  redirect()->back()->with('error', 'user emergency details deletion failed');
+            }
+        }
+    }
+
+    public function eventGallery(Request $request)
+    {
+        if (!$this->_access()) {
+            return  redirect('/')->with('error', 'you are not authorized to access this page');
+        }
+    }
+
+    public function addGallery(Request $request)
+    {
+        if (!$this->_access()) {
+            return  redirect('/')->with('error', 'you are not authorized to access this page');
+        }
+        return view('site.admin.addGallery');
+    }
+    public function storeGallery(Request $request)
+    {
+        if (!$this->_access()) {
+            return  redirect('/')->with('error', 'you are not authorized to access this page');
+        }
+        $data = $request->all();
+        unset($data['_token']);
+        if (!empty($data)) {
+            $siteGallery = new SiteGallery();
+            if (isset($_FILES['image']) && $_FILES['image']['size'] > 0) {
+                $upload = $this->uploadFile($_FILES['image'], "events/images");
+                if (empty($upload['errors']) == true) {
+
+                    $siteGallery->image = $upload['file_name'];
+                } else {
+                    return redirect()->back()->with('error', $upload['errors']);
+                }
+            }
+            if (!empty($data['image_priority'])) {
+                $siteGallery->image_priority = $data['image_priority'];
+                $currentImagesWithPriority = SiteGallery::whereRaw("image_priority > 0")->orderBy('image_priority', 'ASC')->get();
+                if (!empty($currentImagesWithPriority[0])) {
+                    if ($this->adjustPriority($currentImagesWithPriority, $data['image_priority'], $siteGallery->image)) {
+                        if ($siteGallery->save()) {
+                            return redirect()->back()->with('success', 'gallery image added successfully');
+                        } else {
+                            return redirect()->back()->with('error', 'gallery image add failed');
+                        }
+                    } else {
+                        return redirect()->back()->with('error', 'gallery image add failed');
+                    }
+                } else {
+                    if ($siteGallery->save()) {
+                        return redirect()->back()->with('success', 'gallery image added successfully');
+                    } else {
+                        return redirect()->back()->with('error', 'gallery image add failed');
+                    }
+                }
+            } else {
+                $siteGallery->image_priority = DB::table("site_gallery")->selectRaw("max(image_priority) as max")->first()->max + 1;
+                if ($siteGallery->save()) {
+                    return redirect()->back()->with('success', 'gallery image added successfully');
+                } else {
+                    return redirect()->back()->with('error', 'gallery image add failed');
+                }
             }
         }
     }

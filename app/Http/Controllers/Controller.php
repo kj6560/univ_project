@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\SiteGallery;
 use App\Models\SiteSettings;
 use App\Models\UserActivityLog;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Facades\DB;
 
 class Controller extends BaseController
 {
@@ -92,69 +94,115 @@ class Controller extends BaseController
                 $user_name_arr = explode(' ', $user_name);
                 if (!empty($user_name_arr[0])) {
                     $first_name = $user_name_arr[0];
-                    $return .= "users.first_name like '".$first_name."%'";
+                    $return .= "users.first_name like '" . $first_name . "%'";
                 }
 
                 if (!empty($user_name_arr[1])) {
                     $last_name = $user_name_arr[1];
-                    if($return == "")
-                        $return .= " users.last_name like '".$last_name."%'";
+                    if ($return == "")
+                        $return .= " users.last_name like '" . $last_name . "%'";
                     else
-                    $return .= " AND users.last_name like '".$last_name."%'";
+                        $return .= " AND users.last_name like '" . $last_name . "%'";
                 }
             }
 
             if (!empty($data['user_email'])) {
                 $email = $data['user_email'];
-                if($return == "")
-                    $return .= "users.email like '".$email."%'";
+                if ($return == "")
+                    $return .= "users.email like '" . $email . "%'";
                 else
-                    $return .= "AND users.email like '".$email."%'";
+                    $return .= "AND users.email like '" . $email . "%'";
             }
 
             if (!empty($data['city'])) {
                 $city = $data['city'];
-                if($return == "")
-                    $return .= "user_address_details.city like '".$city."%'";
+                if ($return == "")
+                    $return .= "user_address_details.city like '" . $city . "%'";
                 else
-                    $return .= "AND user_address_details.city like '".$city."%'";
+                    $return .= "AND user_address_details.city like '" . $city . "%'";
             }
 
             if (!empty($data['state'])) {
                 $state = $data['state'];
-                if($return == "")
-                    $return .= "user_address_details.state like '".$state."%'";
+                if ($return == "")
+                    $return .= "user_address_details.state like '" . $state . "%'";
                 else
-                    $return .= "AND user_address_details.state like '".$state."%'";
+                    $return .= "AND user_address_details.state like '" . $state . "%'";
             }
 
             if (!empty($data['number'])) {
                 $number = $data['number'];
-                if($return == "")
-                    $return .= "users.number = '".$number."' ";
+                if ($return == "")
+                    $return .= "users.number = '" . $number . "' ";
                 else
-                    $return .= "AND users.number = '".$number."' ";
+                    $return .= "AND users.number = '" . $number . "' ";
             }
 
             if (!empty($data['pincode'])) {
                 $pincode = $data['pincode'];
-                if($return == "")
-                    $return .= "user_address_details.pincode like '".$pincode."%'";
+                if ($return == "")
+                    $return .= "user_address_details.pincode like '" . $pincode . "%'";
                 else
-                    $return .= "AND user_address_details.pincode like '".$pincode."%'";
+                    $return .= "AND user_address_details.pincode like '" . $pincode . "%'";
             }
         }
         return $return;
     }
-    public function updateUserActivityLog($user_id, $activity_id){
+    public function updateUserActivityLog($user_id, $activity_id)
+    {
         $user_activity_log = new UserActivityLog();
         $user_activity_log->user_id = $user_id;
         $user_activity_log->activity_id = $activity_id;
         $user_activity_log->ip_address = $this->get_client_ip();
-        if($user_activity_log->save()){
+        if ($user_activity_log->save()) {
             return true;
-        }else{
+        } else {
             return false;
         }
+    }
+
+    public function adjustPriority($currentImagesWithPriority, $image_priority, $image)
+    {
+        $existing = [];
+
+        foreach ($currentImagesWithPriority as $key => $value) {
+            $existing[$value['image']] = $value['image_priority'];
+        }
+        $response = $this->processPriority($existing, $image_priority, $image);
+        return $response;
+    }
+    public function processPriority($existing, $priotiy, $key_priority)
+    {
+        if (array_search($priotiy, array_values($existing)) == false) {
+            return true;
+        }
+        asort($existing);
+        $toProcess = [];
+        foreach ($existing as $key => $val) {
+            if ($val == $priotiy) {
+                $toProcess[$key] = $val;
+                unset($existing[$key]);
+            }
+        }
+
+        foreach ($existing as $key => $val) {
+            if ($val > $priotiy)
+                $existing[$key] = $val + 1;
+        }
+        $existing = array_merge($existing, array($key_priority => $priotiy));
+        foreach ($toProcess as $key => $val) {
+            $toProcess[$key] = $val + 1;
+        }
+        $final_array = array_merge($existing, $toProcess);
+        $return = false;
+        foreach ($final_array as $key => $val) {
+            $image = DB::table("site_gallery")->where("image", $key)->update(["image_priority" => $val]);
+            if ($image) {
+                $return = true;
+            } else {
+                $return = false;
+            }
+        }
+        return $return;
     }
 }
