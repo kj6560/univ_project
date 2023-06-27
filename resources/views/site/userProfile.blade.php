@@ -98,6 +98,16 @@
                         <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap emer_details">
                             <h6 class="mb-0 " id="emer_det" style="cursor: pointer;">Emergency Contact Details</h6>
                         </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap resu_details">
+                            <h6 class="mb-0" id="resu_det" style="cursor: pointer;">Event Results</h6>
+                            <select class="form-control" name="gender" required="">
+                                <option value="0">Select Event</option>
+                                <option value="1" selected="">IOA BHARAT IN PARIS</option>
+                                <option value="2">Sports Conclave 2.0</option>
+                                <option value="3">Other</option>
+                            </select>
+                        </li>
+
                     </ul>
                 </div>
             </div>
@@ -285,6 +295,69 @@
                     </div>
                 </div>
             </div>
+            <div class="col-md-8" id="result_details" hidden>
+                <div class="card mb-3">
+                    <div class="card-body">
+                        @foreach($eventResults as $eventResult)
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">{{$eventResult->event_result_key}}</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                {{$eventResult->event_result_value}}
+                            </div>
+                        </div>
+                        <hr>
+                        @endforeach
+                    </div>
+                </div>
+
+
+
+                <section class="classesforg">
+                    <div class="container">
+                        <div class="row">
+                            <!-- New Item -->
+                            <div class="col-lg-3 col-md-6">
+                                <div class="class">
+                                    <div class="class-img">
+                                        <a target="_blank" href="images/classes/g1.jpg">
+                                            <img src="images/classes/g1.jpg" class="img-fluid" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- New Item -->
+                            <div class="col-lg-3 col-md-6">
+                                <div class="class">
+                                    <div class="class-img">
+                                        <a target="_blank" href="images/classes/g2.jpg">
+                                            <img src="images/classes/g2.jpg" class="img-fluid" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- New Item -->
+                            <div class="col-lg-3 col-md-6">
+                                <div class="class">
+                                    <div class="class-img">
+                                        <a target="_blank" href="images/classes/g3.jpg">
+                                            <img src="images/classes/g3.jpg" class="img-fluid" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- New Item -->
+                            <div class="col-lg-3 col-md-6">
+                                <div class="class">
+                                    <div class="class-img">
+                                        <a target="_blank" href="images/classes/g3.jpg">
+                                            <img src="images/classes/g4.jpg" class="img-fluid" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
         </div>
     </div>
 </div>
@@ -296,34 +369,52 @@
         var contact_details = document.getElementById("cont_det");
         var personal_details = document.getElementById("pers_det");
         var emergency_details = document.getElementById("emer_det");
+        var result_details = document.getElementById("resu_det");
 
         var _contact_details = document.getElementById("contact_details");
         var _personal_details = document.getElementById("personal_details");
         var _emergency_details = document.getElementById("emergency_details");
+        var _result_details = document.getElementById("result_details");
 
         contact_details.addEventListener("click", function() {
             _personal_details.hidden = true;
             _emergency_details.hidden = true;
             _contact_details.hidden = false;
+            _result_details.hidden = true;
             $('.pers_details').removeClass('active');
             $('.emer_details').removeClass('active');
+            $('.resu_details').removeClass('active');
             $('.cont_details').addClass('active');
         });
         personal_details.addEventListener("click", function() {
             _contact_details.hidden = true;
             _emergency_details.hidden = true;
             _personal_details.hidden = false;
+            _result_details.hidden = true;
             $('.cont_details').removeClass('active');
             $('.emer_details').removeClass('active');
+            $('.resu_details').removeClass('active');
             $('.pers_details').addClass('active');
         });
         emergency_details.addEventListener("click", function() {
             _personal_details.hidden = true;
             _contact_details.hidden = true;
             _emergency_details.hidden = false;
+            _result_details.hidden = true;
             $('.pers_details').removeClass('active');
             $('.cont_details').removeClass('active');
+            $('.resu_details').removeClass('active');
             $('.emer_details').addClass('active');
+        });
+        result_details.addEventListener("click", function() {
+            _personal_details.hidden = true;
+            _contact_details.hidden = true;
+            _emergency_details.hidden = true;
+            _result_details.hidden = false;
+            $('.pers_details').removeClass('active');
+            $('.cont_details').removeClass('active');
+            $('.resu_details').addClass('active');
+            $('.emer_details').removeClass('active');
         });
         $('#profile_image').change(function() {
             var file_data = $('#profile_image').prop('files')[0];

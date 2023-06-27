@@ -18,12 +18,12 @@ class Controller extends BaseController
     public function uploadFile($file, $path)
     {
         $errors = array();
-        $file_name = time()."_".trim($file['name']);
+        $file_name = time() . "_" . trim($file['name']);
         $file_size = $file['size'];
         $file_tmp = $file['tmp_name'];
         $file_ext = strtolower(explode('.', $file['name'])[1]);
 
-        $extensions = array("jpeg", "jpg", "png","csv");
+        $extensions = array("jpeg", "jpg", "png", "csv");
 
         if (in_array($file_ext, $extensions) === false) {
             $errors[] = "extension not allowed, please choose a JPEG or PNG file.";
@@ -214,7 +214,7 @@ class Controller extends BaseController
             $existing[$value['image']] = $value['image_priority'];
         }
         $response = $this->processEventGalleryPriority($existing, $image_priority, $image);
-        
+
         return $response;
     }
     public function processEventGalleryPriority($existing, $priotiy, $key_priority)
@@ -222,7 +222,7 @@ class Controller extends BaseController
         if (in_array($priotiy, array_values($existing)) == false) {
             return true;
         }
-        
+
         asort($existing);
         $toProcess = [];
         foreach ($existing as $key => $val) {
@@ -251,5 +251,24 @@ class Controller extends BaseController
             }
         }
         return $return;
+    }
+    public function csvToArray($filename = '', $delimiter = ',')
+    {
+        if (!file_exists($filename) || !is_readable($filename))
+            return false;
+
+        $header = null;
+        $data = array();
+        if (($handle = fopen($filename, 'r')) !== false) {
+            while (($row = fgetcsv($handle, 1000, $delimiter)) !== false) {
+                if (!$header)
+                    $header = $row;
+                else
+                    $data[] = array_combine($header, $row);
+            }
+            fclose($handle);
+        }
+
+        return $data;
     }
 }

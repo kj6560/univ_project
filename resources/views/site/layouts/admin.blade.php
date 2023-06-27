@@ -233,6 +233,21 @@
                             </li>
                         </ul>
                     </li>
+
+                    <li class="menu-item">
+                        <a href="javascript:void(0);" class="menu-link menu-toggle">
+                            <i class="menu-icon tf-icons bx bx-layout"></i>
+                            <div data-i18n="Layouts">Event Results</div>
+                        </a>
+
+                        <ul class="menu-sub">
+                            <li class="menu-item">
+                                <a href="/dashboard/eventResults" class="menu-link">
+                                    <div data-i18n="Without menu">Event Results </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
             </aside>
             <!-- / Menu -->

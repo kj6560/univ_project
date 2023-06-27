@@ -932,22 +932,22 @@ class AdminController extends Controller
     }
     public function storeEventResults(Request $request)
     {
+        $data = $request->all();
         if (isset($_FILES['file']) && $_FILES['file']['size'] > 0) {
             $upload = $this->uploadFile($_FILES['file'], "users/docs");
-            $event_id= $request->event_id;
             if (empty($upload['errors']) == true) {
                 try {
                     $file_name = $upload['file_name'];
                     $job = new Jobs();
                     $job->status = 0;
-                    $job->params_upload = json_encode(array('event_id' => $event_id, 'model' => 'Results'));
+                    $job->params = json_encode(array('event_id' => $data['event_id']));
                     $job->file =  $file_name;
                     $job->model = "Results";
 
                     if ($job->save()) {
-
                         return redirect()->back()->with('success', 'Results upload added to queue. The process will start in 1 minute from now');
                     } else {
+                        return redirect()->back()->with('success', 'Results upload failed');
                     }
                 } catch (Exception $e) {
                     print_r($e->getMessage());
