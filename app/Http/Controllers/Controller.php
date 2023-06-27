@@ -18,12 +18,12 @@ class Controller extends BaseController
     public function uploadFile($file, $path)
     {
         $errors = array();
-        $file_name = $file['name'];
+        $file_name = time()."_".trim($file['name']);
         $file_size = $file['size'];
         $file_tmp = $file['tmp_name'];
         $file_ext = strtolower(explode('.', $file['name'])[1]);
 
-        $extensions = array("jpeg", "jpg", "png");
+        $extensions = array("jpeg", "jpg", "png","csv");
 
         if (in_array($file_ext, $extensions) === false) {
             $errors[] = "extension not allowed, please choose a JPEG or PNG file.";
@@ -173,7 +173,7 @@ class Controller extends BaseController
     }
     public function processPriority($existing, $priotiy, $key_priority)
     {
-        if (array_search($priotiy, array_values($existing)) == false) {
+        if (in_array($priotiy, array_values($existing)) == false) {
             return true;
         }
         asort($existing);
@@ -197,6 +197,53 @@ class Controller extends BaseController
         $return = false;
         foreach ($final_array as $key => $val) {
             $image = DB::table("site_gallery")->where("image", $key)->update(["image_priority" => $val]);
+            if ($image) {
+                $return = true;
+            } else {
+                $return = false;
+            }
+        }
+        return $return;
+    }
+
+    public function adjustEventGalleryPriority($currentImagesWithPriority, $image_priority, $image)
+    {
+        $existing = [];
+
+        foreach ($currentImagesWithPriority as $key => $value) {
+            $existing[$value['image']] = $value['image_priority'];
+        }
+        $response = $this->processEventGalleryPriority($existing, $image_priority, $image);
+        
+        return $response;
+    }
+    public function processEventGalleryPriority($existing, $priotiy, $key_priority)
+    {
+        if (in_array($priotiy, array_values($existing)) == false) {
+            return true;
+        }
+        
+        asort($existing);
+        $toProcess = [];
+        foreach ($existing as $key => $val) {
+            if ($val == $priotiy) {
+                $toProcess[$key] = $val;
+                unset($existing[$key]);
+            }
+        }
+
+        foreach ($existing as $key => $val) {
+            if ($val > $priotiy)
+                $existing[$key] = $val + 1;
+        }
+        $existing = array_merge($existing, array($key_priority => $priotiy));
+        foreach ($toProcess as $key => $val) {
+            $toProcess[$key] = $val + 1;
+        }
+        $final_array = array_merge($existing, $toProcess);
+        $return = false;
+        foreach ($final_array as $key => $val) {
+            $image = DB::table("event_gallery")->where("image", $key)->update(["image_priority" => $val]);
             if ($image) {
                 $return = true;
             } else {

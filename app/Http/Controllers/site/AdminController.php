@@ -4,22 +4,26 @@ namespace App\Http\Controllers\site;
 
 use App\Exports\ExportEventUsers;
 use App\Http\Controllers\Controller;
+use App\Imports\EventResultsImport;
 use App\Models\Email;
 use App\Models\EmailTemplates;
 use App\Models\EmergencyContactDetails;
 use App\Models\Event;
 use App\Models\EventGallery;
 use App\Models\EventSlider;
+use App\Models\Jobs;
 use App\Models\SiteGallery;
 use App\Models\SiteSettings;
 use App\Models\Sports;
 use App\Models\User;
 use App\Models\UserAddressDetails;
 use App\Models\UserPersonalDetails;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\HeadingRowImport;
 
 class AdminController extends Controller
 {
@@ -796,6 +800,17 @@ class AdminController extends Controller
         if (!$this->_access()) {
             return  redirect('/')->with('error', 'you are not authorized to access this page');
         }
+        $event_gallery = EventGallery::join("events", "events.id", "=", "event_gallery.event_id")->paginate(15);
+        return view('site.admin.eventGallery', ['gallery' => $event_gallery]);
+    }
+
+    public function addEventGallery(Request $request)
+    {
+        if (!$this->_access()) {
+            return  redirect('/')->with('error', 'you are not authorized to access this page');
+        }
+        $events = Event::all();
+        return view('site.admin.addEventGallery',['events' => $events]);
     }
 
     public function addGallery(Request $request)
@@ -805,6 +820,60 @@ class AdminController extends Controller
         }
         return view('site.admin.addGallery');
     }
+
+    public function storeEventGallery(Request $request)
+    {
+        if (!$this->_access()) {
+            return  redirect('/')->with('error', 'you are not authorized to access this page');
+        }
+        $data = $request->all();
+        unset($data['_token']);
+        if (!empty($data)) {
+            $eventGallery = new EventGallery();
+            $eventGallery->event_id = $data['event_id'];
+            if (isset($_FILES['image']) && $_FILES['image']['size'] > 0) {
+                $upload = $this->uploadFile($_FILES['image'], "event_gallery/images");
+                if (empty($upload['errors']) == true) {
+
+                    $eventGallery->image = $upload['file_name'];
+                } else {
+                    return redirect()->back()->with('error', $upload['errors']);
+                }
+            }
+            
+            if (!empty($data['image_priority'])) {
+                $eventGallery->image_priority = $data['image_priority'];
+                $currentImagesWithPriority = EventGallery::whereRaw("image_priority > 0")->orderBy('image_priority', 'ASC')->get();
+                
+                if (!empty($currentImagesWithPriority[0])) {
+                    
+                    if ($this->adjustEventGalleryPriority($currentImagesWithPriority, $data['image_priority'], $eventGallery->image)) {
+                        if ($eventGallery->save()) {
+                            return redirect()->back()->with('success', 'gallery image added successfully');
+                        } else {
+                            return redirect()->back()->with('error', 'gallery image add failed');
+                        }
+                    } else {
+                        return redirect()->back()->with('error', 'gallery image add failed');
+                    }
+                } else {
+                    if ($eventGallery->save()) {
+                        return redirect()->back()->with('success', 'gallery image added successfully');
+                    } else {
+                        return redirect()->back()->with('error', 'gallery image add failed');
+                    }
+                }
+            } else {
+                $eventGallery->image_priority = DB::table("site_gallery")->selectRaw("max(image_priority) as max")->first()->max + 1;
+                if ($eventGallery->save()) {
+                    return redirect()->back()->with('success', 'gallery image added successfully');
+                } else {
+                    return redirect()->back()->with('error', 'gallery image add failed');
+                }
+            }
+        }
+    }
+
     public function storeGallery(Request $request)
     {
         if (!$this->_access()) {
@@ -852,5 +921,50 @@ class AdminController extends Controller
                 }
             }
         }
+    }
+    public function eventResults(Request $request)
+    {
+        if (!$this->_access()) {
+            return  redirect('/')->with('error', 'you are not authorized to access this page');
+        }
+        $events = Event::all();
+        return view('site.admin.eventResults', ['events' => $events]);
+    }
+    public function storeEventResults(Request $request)
+    {
+        if (isset($_FILES['file']) && $_FILES['file']['size'] > 0) {
+            $upload = $this->uploadFile($_FILES['file'], "users/docs");
+            $event_id= $request->event_id;
+            if (empty($upload['errors']) == true) {
+                try {
+                    $file_name = $upload['file_name'];
+                    $job = new Jobs();
+                    $job->status = 0;
+                    $job->params_upload = json_encode(array('event_id' => $event_id, 'model' => 'Results'));
+                    $job->file =  $file_name;
+                    $job->model = "Results";
+
+                    if ($job->save()) {
+
+                        return redirect()->back()->with('success', 'Results upload added to queue. The process will start in 1 minute from now');
+                    } else {
+                    }
+                } catch (Exception $e) {
+                    print_r($e->getMessage());
+                }
+            } else {
+                return redirect()->back()->with('error', $upload['errors']);
+            }
+        }
+
+
+        // $headings = (new HeadingRowImport())->toArray($_FILES['file']['tmp_name']);
+        // $event_id = $request->event_id;
+        // $stored = Excel::import(new EventResultsImport($headings[0][0],$event_id), $request->file);
+        // if($stored){
+        //     return redirect()->back()->with('success', 'event results added successfully');
+        // }else{
+        //     return redirect()->back()->with('error', 'event results add failed');
+        // }
     }
 }

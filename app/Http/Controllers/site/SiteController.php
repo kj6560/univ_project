@@ -3,13 +3,16 @@
 namespace App\Http\Controllers\site;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\UploadResults;
 use App\Models\Email;
 use App\Models\EmailTemplates;
 use App\Models\EmergencyContactDetails;
 use App\Models\Event;
 use App\Models\EventGallery;
+use App\Models\EventResult;
 use App\Models\EventSlider;
 use App\Models\EventUsers;
+use App\Models\SiteGallery;
 use App\Models\Team;
 use App\Models\User;
 use App\Models\UserAddressDetails;
@@ -40,7 +43,7 @@ class SiteController extends Controller
             $attemptData = array("email" => $data['email'], "password" => $data['password']);
             if (Auth::attempt($attemptData)) {
                 $request->session()->regenerate();
-                $this->updateUserActivityLog(Auth::user()->id,1);
+                $this->updateUserActivityLog(Auth::user()->id, 1);
                 if (intval(Auth::user()->user_role) == 3) {
                     return redirect('/dashboard');
                 } else {
@@ -139,7 +142,7 @@ class SiteController extends Controller
     }
     public function logout(Request $request)
     {
-        $this->updateUserActivityLog(Auth::user()->id,6);
+        $this->updateUserActivityLog(Auth::user()->id, 6);
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
@@ -175,7 +178,7 @@ class SiteController extends Controller
                 $mailData = array("email" => $email, "first_name" => $user->first_name, "last_name" => $user->last_name, "subject" => $subject, "message" => $message);
                 $sent = Email::sendEmail($mailData);
                 if ($sent) {
-                    $this->updateUserActivityLog($user->id,5);
+                    $this->updateUserActivityLog($user->id, 5);
                     return redirect()->back()->with('success', 'Email sent to your registered email id. please check your email and follow the instructions.Please check your spam or junk folder if not received in primary email.');
                 }
             } else {
@@ -289,7 +292,7 @@ class SiteController extends Controller
 
     public function gallery(Request $request)
     {
-        $gallery = EventGallery::join('events', 'event_gallery.event_id', '=', 'events.id')->select('events.event_name', 'event_gallery.*')->orderBy("events.id", "desc")->paginate(20);
+        $gallery = SiteGallery::orderBy("id", "desc")->paginate(20);
         return view('site.gallery', ['gallery' => $gallery, 'settings' => $this->getSettings()]);
     }
 
@@ -310,7 +313,7 @@ class SiteController extends Controller
             } else {
                 if ($event->event_registration_available != 0) {
                     if ($user) {
-                        $this->updateUserActivityLog($user->id,3);
+                        $this->updateUserActivityLog($user->id, 3);
                         $event_user = EventUsers::create(['event_id' => $post['event_id'], 'user_id' => $user['id']]);
                         $time = strtotime($event->event_date);
                         $month = date("F", $time);
@@ -360,7 +363,7 @@ class SiteController extends Controller
                                     'password' => $password
                                 ]);
                             }
-                            $this->updateUserActivityLog($user->id,3);
+                            $this->updateUserActivityLog($user->id, 3);
                             $registeredUser = EventUsers::where(['event_id' => $post['event_id'], 'user_id' => $user['id']])->first();
                             if (empty($registeredUser)) {
                                 $event_user = EventUsers::create(['event_id' => $post['event_id'], 'user_id' => $user['id']]);
@@ -428,7 +431,6 @@ class SiteController extends Controller
                     return redirect()->back()->with('error', 'Registration process is closed for this event. Kindly check back later.');
                 }
             }
-            
         }
     }
     public function userProfile(Request $request)
@@ -437,7 +439,8 @@ class SiteController extends Controller
         $userPersonalDetails = UserPersonalDetails::where('user_id', $user->id)->first();
         $userAddressDetails = UserAddressDetails::where('user_id', $user->id)->first();
         $emergencyContactDetails = EmergencyContactDetails::where('user_id', $user->id)->first();
-        return view('site.userProfile', ['user' => $user, 'settings' => $this->getSettings(), 'userPersonalDetails' => $userPersonalDetails, 'userAddressDetails' => $userAddressDetails, 'emergencyContactDetails' => $emergencyContactDetails]);
+        $eventResult = EventResult::where("user_id", $user->id)->first();
+        return view('site.userProfile', ['user' => $user, 'settings' => $this->getSettings(), 'userPersonalDetails' => $userPersonalDetails, 'userAddressDetails' => $userAddressDetails, 'emergencyContactDetails' => $emergencyContactDetails, 'eventResults' => $eventResult]);
     }
 
     public function updateContactDetails(Request $request)
@@ -445,7 +448,7 @@ class SiteController extends Controller
         $data = $request->all();
         if ($data) {
             $user = User::find($data['user_id']);
-            $this->updateUserActivityLog($user->id,7);
+            $this->updateUserActivityLog($user->id, 7);
             if ($user) {
                 $user->first_name = $data['first_name'];
                 $user->last_name = $data['last_name'];
@@ -475,7 +478,7 @@ class SiteController extends Controller
         $data = $request->all();
         if ($data) {
             $user = User::find($data['user_id']);
-            $this->updateUserActivityLog($user->id,2);
+            $this->updateUserActivityLog($user->id, 2);
             if ($user) {
                 $user_personal_details = UserPersonalDetails::where('user_id', $user->id)->first();
                 if (empty($user_personal_details)) {
@@ -505,7 +508,7 @@ class SiteController extends Controller
         $data = $request->all();
         if ($data) {
             $user = User::find($data['user_id']);
-            $this->updateUserActivityLog($user->id,2);
+            $this->updateUserActivityLog($user->id, 2);
             if ($user) {
                 $user_personal_details = UserPersonalDetails::where('user_id', $user->id)->first();
                 if (empty($user_personal_details)) {
@@ -539,7 +542,7 @@ class SiteController extends Controller
         $data = $request->all();
         if ($data) {
             $user = User::find($data['user_id']);
-            $this->updateUserActivityLog($user->id,8);
+            $this->updateUserActivityLog($user->id, 8);
             if ($user) {
                 $emergencyContactDetails = EmergencyContactDetails::where('user_id', $user->id)->first();
                 if (empty($emergencyContactDetails)) {

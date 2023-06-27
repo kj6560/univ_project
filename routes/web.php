@@ -48,7 +48,8 @@ Route::get('/dashboard/downloadEventUsers', [AdminController::class, 'downloadEv
 //event gallery
 
 Route::get('/dashboard/eventGallery', [AdminController::class, 'eventGallery'])->middleware('auth:web')->name('eventGallery');
-
+Route::get('/dashboard/addEventGallery', [AdminController::class, 'addEventGallery'])->middleware('auth:web')->name('addEventGallery');
+Route::post('/dashboard/storeEventGallery', [AdminController::class, 'storeEventGallery'])->middleware('auth:web')->name('storeEventGallery');
 //Email Templates
 
 Route::get('/dashboard/emailTemplates', [AdminController::class, 'emailTemplates'])->middleware('auth:web')->name('emailTemplates');
@@ -117,3 +118,8 @@ Route::get('/dashboard/deleteUserEmergencyDetails/{id}', [AdminController::class
 Route::get('/dashboard/siteGallery', [AdminController::class, 'siteGallery'])->middleware('auth:web')->name('siteGallery');
 Route::get('/dashboard/addGallery', [AdminController::class, 'addGallery'])->middleware('auth:web')->name('addGallery');
 Route::post('/dashboard/storeGallery', [AdminController::class, 'storeGallery'])->middleware('auth:web')->name('storeGallery');
+
+
+//event result
+Route::get('/dashboard/eventResults', [AdminController::class, 'eventResults'])->middleware('auth:web')->name('eventResults');
+Route::post('/dashboard/storeEventResults', [AdminController::class, 'storeEventResults'])->middleware('auth:web')->name('storeEventResults');

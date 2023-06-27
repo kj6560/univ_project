@@ -5,7 +5,7 @@
         <div class="content">
             <h2>Gallery</h2>
             <ul class="list-unstyled">
-                <li><a href="index.html">Home</a></li>
+                <li><a href="/">Home</a></li>
                 <li>Gallery</li>
             </ul>
         </div>
@@ -27,7 +27,7 @@
             <div class="col-lg-3 col-md-6">
                 <div class="class">
                     <div class="class-img">
-                            <img src="{{asset('uploads/event_gallery/images/'.$gallery_item->image)}} " class="img-fluid" alt="">
+                            <img src="{{asset('uploads/events/images/'.$gallery_item->image)}} " class="img-fluid" alt="">
                     </div>
                 </div>
             </div>

@@ -2,10 +2,11 @@
 @section('content')
 <div class="container-xxl flex-grow-1 container-p-y">
     <div class="content-wrapper">
+        <a href="/dashboard/addGallery" class="btn btn-primary" style="max-width: 150px; margin: 10px auto;">Add Gallery Image</a>
         <!-- Responsive Table -->
         <div class="card">
             <h5 class="card-header">Site Gallery</h5>
-            <a href="/dashboard/addGallery" class="btn btn-primary" style="max-width: 150px; margin: 10px auto;">Add Gallery Image</a>
+            
             <div class="table-responsive text-nowrap">
                 <table class="table">
                     <thead>
