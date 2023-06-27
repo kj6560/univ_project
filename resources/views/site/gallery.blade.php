@@ -28,7 +28,6 @@
                 <div class="class">
                     <div class="class-img">
                             <img src="{{asset('uploads/events/images/'.$gallery_item->image)}} " class="img-fluid" alt="">
-                            <h6>{{$gallery_item->image_priority}}</h6>
                     </div>
                 </div>
             </div>
