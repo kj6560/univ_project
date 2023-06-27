@@ -292,7 +292,7 @@ class SiteController extends Controller
 
     public function gallery(Request $request)
     {
-        $gallery = SiteGallery::orderBy("id", "desc")->paginate(20);
+        $gallery = SiteGallery::orderBy("image_priority", "asc")->paginate(20);
         return view('site.gallery', ['gallery' => $gallery, 'settings' => $this->getSettings()]);
     }
 
