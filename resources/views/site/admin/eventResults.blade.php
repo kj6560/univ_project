@@ -3,6 +3,7 @@
 <div class="content-wrapper">
     <div class="container-xxl flex-grow-1 container-p-y">
         <div class="col-xl-9">
+            <a href="/dashboard/processEventResults" class="btn btn-primary">Process result</a>
             <div class="row">
                 <!-- HTML5 Inputs -->
                 <form action="/dashboard/storeEventResults" enctype="multipart/form-data" method="POST">

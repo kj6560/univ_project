@@ -100,11 +100,11 @@
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap resu_details">
                             <h6 class="mb-0" id="resu_det" style="cursor: pointer;">Event Results</h6>
-                            <select class="form-control" name="gender" required="">
+                            <select class="form-control" name="events" id="events" required="" onchange="showEventResults(this.value)">
                                 <option value="0">Select Event</option>
-                                <option value="1" selected="">IOA BHARAT IN PARIS</option>
-                                <option value="2">Sports Conclave 2.0</option>
-                                <option value="3">Other</option>
+                                @foreach($events as $event)
+                                <option value="{{$event->id}}" {{$requested ?'selected':''}} >{{$event->event_name}}</option>
+                                @endforeach
                             </select>
                         </li>
 
@@ -298,16 +298,18 @@
             <div class="col-md-8" id="result_details" hidden>
                 <div class="card mb-3">
                     <div class="card-body">
-                        @foreach($eventResults as $eventResult)
+                        @foreach($eventResults as $key=> $eventResult)
+                        @if(!empty($eventResult->event_result_value))
                         <div class="row">
                             <div class="col-sm-3">
-                                <h6 class="mb-0">{{$eventResult->event_result_key}}</h6>
+                                <h6 class="mb-0">{{str_replace('_',' ',$eventResult->event_result_key) ?? ''}}</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                {{$eventResult->event_result_value}}
+                                {{$eventResult->event_result_value ?? ''}}
                             </div>
                         </div>
                         <hr>
+                        @endif
                         @endforeach
                     </div>
                 </div>
@@ -376,6 +378,17 @@
         var _emergency_details = document.getElementById("emergency_details");
         var _result_details = document.getElementById("result_details");
 
+        var requested = "{{$requested}}";
+        if (requested) {
+            _personal_details.hidden = true;
+            _contact_details.hidden = true;
+            _emergency_details.hidden = true;
+            _result_details.hidden = false;
+            $('.pers_details').removeClass('active');
+            $('.cont_details').removeClass('active');
+            $('.resu_details').addClass('active');
+            $('.emer_details').removeClass('active');
+        }
         contact_details.addEventListener("click", function() {
             _personal_details.hidden = true;
             _emergency_details.hidden = true;
@@ -434,7 +447,12 @@
                 }
             });
         });
+
     });
+
+    function showEventResults(event_id) {
+        location.href = "/userProfile?event_id=" + event_id;
+    }
 </script>
 
 @stop

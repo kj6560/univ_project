@@ -19,7 +19,9 @@ use App\Models\User;
 use App\Models\UserAddressDetails;
 use App\Models\UserPersonalDetails;
 use Exception;
+use Illuminate\Contracts\Queue\Job;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
@@ -810,7 +812,7 @@ class AdminController extends Controller
             return  redirect('/')->with('error', 'you are not authorized to access this page');
         }
         $events = Event::all();
-        return view('site.admin.addEventGallery',['events' => $events]);
+        return view('site.admin.addEventGallery', ['events' => $events]);
     }
 
     public function addGallery(Request $request)
@@ -840,13 +842,13 @@ class AdminController extends Controller
                     return redirect()->back()->with('error', $upload['errors']);
                 }
             }
-            
+
             if (!empty($data['image_priority'])) {
                 $eventGallery->image_priority = $data['image_priority'];
                 $currentImagesWithPriority = EventGallery::whereRaw("image_priority > 0")->orderBy('image_priority', 'ASC')->get();
-                
+
                 if (!empty($currentImagesWithPriority[0])) {
-                    
+
                     if ($this->adjustEventGalleryPriority($currentImagesWithPriority, $data['image_priority'], $eventGallery->image)) {
                         if ($eventGallery->save()) {
                             return redirect()->back()->with('success', 'gallery image added successfully');
@@ -927,8 +929,9 @@ class AdminController extends Controller
         if (!$this->_access()) {
             return  redirect('/')->with('error', 'you are not authorized to access this page');
         }
+        $showProcess = DB::table("jobs")->whereRaw("status = 0")->count();
         $events = Event::all();
-        return view('site.admin.eventResults', ['events' => $events]);
+        return view('site.admin.eventResults', ['events' => $events, "showProcess" => $showProcess]);
     }
     public function storeEventResults(Request $request)
     {
@@ -945,7 +948,7 @@ class AdminController extends Controller
                     $job->model = "Results";
 
                     if ($job->save()) {
-                        return redirect()->back()->with('success', 'Results upload added to queue. The process will start in 1 minute from now');
+                        return redirect()->back()->with('success', 'Results upload added to queue.');
                     } else {
                         return redirect()->back()->with('success', 'Results upload failed');
                     }
@@ -956,15 +959,14 @@ class AdminController extends Controller
                 return redirect()->back()->with('error', $upload['errors']);
             }
         }
-
-
-        // $headings = (new HeadingRowImport())->toArray($_FILES['file']['tmp_name']);
-        // $event_id = $request->event_id;
-        // $stored = Excel::import(new EventResultsImport($headings[0][0],$event_id), $request->file);
-        // if($stored){
-        //     return redirect()->back()->with('success', 'event results added successfully');
-        // }else{
-        //     return redirect()->back()->with('error', 'event results add failed');
-        // }
+    }
+    public function processEventResults(Request $request)
+    {
+        $showProcess = DB::table("jobs")->whereRaw("status = 0")->count();
+        if ($showProcess == 0) {
+            return redirect()->back()->with('error', 'no event results to process');
+        }
+        Artisan::call('schedule:run');
+        return redirect()->back()->with('success', 'event results processing completed');
     }
 }

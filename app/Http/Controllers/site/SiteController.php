@@ -436,11 +436,17 @@ class SiteController extends Controller
     public function userProfile(Request $request)
     {
         $user = Auth::user();
+        $data = $request->all();
         $userPersonalDetails = UserPersonalDetails::where('user_id', $user->id)->first();
         $userAddressDetails = UserAddressDetails::where('user_id', $user->id)->first();
         $emergencyContactDetails = EmergencyContactDetails::where('user_id', $user->id)->first();
-        $eventResult = EventResult::where("user_id", $user->id)->first();
-        return view('site.userProfile', ['user' => $user, 'settings' => $this->getSettings(), 'userPersonalDetails' => $userPersonalDetails, 'userAddressDetails' => $userAddressDetails, 'emergencyContactDetails' => $emergencyContactDetails, 'eventResults' => $eventResult]);
+        $events = Event::all();
+        if (!empty($data['event_id']))
+            $eventResult = EventResult::where("user_id", $user->id)
+                ->where("event_id", $data['event_id'])->get();
+        else
+            $eventResult = EventResult::where("user_id", $user->id)->get();
+        return view('site.userProfile', ['requested'=>!empty($data['event_id'])?true:false,'events'=>$events,'user' => $user, 'settings' => $this->getSettings(), 'userPersonalDetails' => $userPersonalDetails, 'userAddressDetails' => $userAddressDetails, 'emergencyContactDetails' => $emergencyContactDetails, 'eventResults' => $eventResult]);
     }
 
     public function updateContactDetails(Request $request)
