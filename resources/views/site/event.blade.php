@@ -36,10 +36,10 @@
                             <a href="/eventDetails/{{Crypt::encryptString($event->id)}}">
                                 <h4>{{$event->event_name}}</h4>
                             </a>
-                        </div> 
+                        </div>
                         <ul class="details list-unstyled">
                             <li><i class="fa fa-calendar"></i>@php $date = $event->event_date;
-                                    echo date('D d M Y', strtotime($date)); @endphp</li>
+                                echo date('D d M Y', strtotime($date)); @endphp</li>
                             <li><i class="fa fa-clock-o"></i>@php $date = $event->event_date;
                                 echo date('H:i', strtotime($date)); echo " ",date('H:i', strtotime($date)) > 12 ?"PM":"AM" @endphp</li>
                         </ul>
@@ -145,7 +145,9 @@
                 </div>
             </div>
             @endforeach
-            
+            <div class="col-12">
+                {!! $event_gallery->links('pagination::bootstrap-4') !!}
+            </div>
         </div>
     </div>
 </section>
