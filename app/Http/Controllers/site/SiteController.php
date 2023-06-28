@@ -277,7 +277,7 @@ class SiteController extends Controller
 
     public function event(Request $request)
     {
-        $event_gallery_images = DB::table('event_gallery')->limit(30)->orderBy('image_priority', 'asc')->get();
+        $event_gallery_images = DB::table('event_gallery')->limit(8)->orderBy('image_priority', 'asc')->get();
         $events = Event::orderBy('id', 'DESC')->get();
         return view('site.event', ['events' => $events, 'settings' => $this->getSettings(), 'event_gallery' => $event_gallery_images]);
     }
@@ -292,7 +292,7 @@ class SiteController extends Controller
 
     public function gallery(Request $request)
     {
-        $gallery = SiteGallery::orderBy("image_priority", "asc")->paginate(20);
+        $gallery = SiteGallery::orderBy("image_priority", "asc")->paginate(8);
         return view('site.gallery', ['gallery' => $gallery, 'settings' => $this->getSettings()]);
     }
 
