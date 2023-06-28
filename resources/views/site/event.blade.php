@@ -145,9 +145,10 @@
                 </div>
             </div>
             @endforeach
-            <div class="col-12">
-                {!! $event_gallery->links('pagination::bootstrap-4') !!}
-            </div>
+
+        </div>
+        <div class="col-12">
+            {!! $event_gallery->links('pagination::bootstrap-4') !!}
         </div>
     </div>
 </section>
