@@ -40,7 +40,7 @@ class MiscController extends Controller
                 $user->number = $number;
                 $user->save();
 
-                $birthday = $personal_details['birthday'];
+                $birthday = trim($personal_details['birthday']);
                 //$image = $image_path;
                 $gender = $personal_details['gender'];
                 $married = $personal_details['married'];
