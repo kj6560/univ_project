@@ -7,7 +7,9 @@ use App\Models\EventGallery;
 use App\Models\User;
 use App\Models\UserAddressDetails;
 use App\Models\UserPersonalDetails;
+use DateTime;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class MiscController extends Controller
 {
@@ -24,7 +26,7 @@ class MiscController extends Controller
         $user = auth()->user();
         //$image_path = $request->file('image')->store('image', 'public/uploads/profile/profileImage');
 
-        
+
         if ($data) {
             if ($data['personal_details']) {
                 $personal_details = $data['personal_details'];
@@ -44,11 +46,11 @@ class MiscController extends Controller
                 $married = $personal_details['married'];
                 $height = $personal_details['height'];
                 $weight = $personal_details['weight'];
-
+                $birthday = DateTime::createFromFormat('d-m-Y', $birthday);
                 if (UserPersonalDetails::where('user_id', $user->id)->count() == 0) {
                     UserPersonalDetails::create([
                         'user_id' => $user->id,
-                        'birthday' => date("d-m-Y", strtotime($birthday)),
+                        'birthday' => $birthday->format('Y-m-d'),
                         //'image' => $image?$image:null,
                         'gender' => $gender,
                         'married' => $married,
@@ -57,7 +59,7 @@ class MiscController extends Controller
                     ]);
                 } else {
                     UserPersonalDetails::where('user_id', $user->id)->update([
-                        'birthday' => $birthday,
+                        'birthday' => $birthday->format('Y-m-d'),
                         'gender' => $gender,
                         'married' => $married,
                         'height' => $height,
@@ -88,7 +90,31 @@ class MiscController extends Controller
                 }
                 $address_details = UserAddressDetails::where('user_id', $user->id)->first();
             }
+            $reg_user = DB::table('users')
+                ->select(
+                    'users.id as id',
+                    'users.first_name as first_name',
+                    'users.last_name as last_name',
+                    'users.email as email',
+                    'users.number as number',
+                    'users.user_role as user_role',
+                    'user_personal_details.image as image',
+                    'user_personal_details.gender as gender',
+                    'user_personal_details.married as married',
+                    'user_personal_details.height as height',
+                    'user_personal_details.weight as weight',
+                    'user_personal_details.age as age',
+                    'user_personal_details.user_doc as user_doc',
+                    'user_personal_details.birthday as birthday',
+                    'user_address_details.address_line1 as address_line1',
+                    'user_address_details.city as city',
+                    'user_address_details.state as state',
+                    'user_address_details.pincode as pincode'
+                )
+                ->leftJoin("user_personal_details", "user_personal_details.user_id", "=", "users.id")
+                ->leftJoin("user_address_details", "user_address_details.user_id", "=", "users.id")
+                ->where("users.id", $user->id)->first();
         }
-        return response()->json(['user'=>$user,'user_personal_details' => $user_personal_details, 'address_details' => $address_details]);
+        return response()->json(['user' => $reg_user]);
     }
 }
