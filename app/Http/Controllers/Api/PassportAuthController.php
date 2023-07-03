@@ -67,6 +67,7 @@ class PassportAuthController extends Controller
             if (Hash::check($request->password, $user['password'])) {
                 $token = $user->createToken('LaravelAuthApp')->accessToken;
                 $reg_user = DB::table('users')
+                ->select('users.id as id', 'users.first_name', 'users.last_name', 'users.email', 'users.number', 'user_personal_details.*', 'user_address_details.*')
                             ->leftJoin("user_personal_details", "user_personal_details.user_id", "=", "users.id")
                             ->leftJoin("user_address_details", "user_address_details.user_id", "=", "users.id")
                             ->where("users.id", $user->id)->first();
