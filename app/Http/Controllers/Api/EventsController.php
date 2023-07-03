@@ -18,7 +18,7 @@ class EventsController extends Controller
      */
     public function index(Request $request)
     {
-        $data = DB::table('events')->join('sports', 'sports.id', '=', 'events.event_category')->get();
+        $data = DB::table('events')->join('sports', 'sports.id', '=', 'events.event_category')->orderBy("id", "desc")->get();
         return response()->json($data);
     }
 
