@@ -46,7 +46,7 @@ class MiscController extends Controller
                 $married = $personal_details['married'];
                 $height = $personal_details['height'];
                 $weight = $personal_details['weight'];
-                $birthday = DateTime::createFromFormat('d-m-Y', $birthday);
+                $birthday = DateTime::createFromFormat('Y-m-d', $birthday);
                 if (UserPersonalDetails::where('user_id', $user->id)->count() == 0) {
                     UserPersonalDetails::create([
                         'user_id' => $user->id,
