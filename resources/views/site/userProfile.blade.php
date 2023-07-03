@@ -107,7 +107,6 @@
                                 @endforeach
                             </select>
                         </li>
-
                     </ul>
                 </div>
             </div>
@@ -313,51 +312,6 @@
                         @endforeach
                     </div>
                 </div>
-
-
-
-                <section class="classesforg">
-                    <div class="container">
-                        <div class="row">
-                            <!-- New Item -->
-                            <div class="col-lg-3 col-md-6">
-                                <div class="class">
-                                    <div class="class-img">
-                                        <a target="_blank" href="images/classes/g1.jpg">
-                                            <img src="images/classes/g1.jpg" class="img-fluid" alt="">
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- New Item -->
-                            <div class="col-lg-3 col-md-6">
-                                <div class="class">
-                                    <div class="class-img">
-                                        <a target="_blank" href="images/classes/g2.jpg">
-                                            <img src="images/classes/g2.jpg" class="img-fluid" alt="">
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- New Item -->
-                            <div class="col-lg-3 col-md-6">
-                                <div class="class">
-                                    <div class="class-img">
-                                        <a target="_blank" href="images/classes/g3.jpg">
-                                            <img src="images/classes/g3.jpg" class="img-fluid" alt="">
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- New Item -->
-                            <div class="col-lg-3 col-md-6">
-                                <div class="class">
-                                    <div class="class-img">
-                                        <a target="_blank" href="images/classes/g3.jpg">
-                                            <img src="images/classes/g4.jpg" class="img-fluid" alt="">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
 
             </div>
         </div>
