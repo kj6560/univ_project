@@ -23,9 +23,12 @@ class EventsController extends Controller
             ->select('events.*', 'sports.name as name','sports.description as description','sports.icon as icon');
         if (!empty($request->id)) {
             $events = $events->where('events.id', $request->id);
+            $events = $events->first();
+        }else{
+            $events = $events->orderByDesc('events.id')->get();
         }
 
-        $events = $events->orderByDesc('events.id')->get();
+        
 
         return response()->json($events);
     }
