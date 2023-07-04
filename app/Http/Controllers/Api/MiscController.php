@@ -119,8 +119,14 @@ class MiscController extends Controller
         return response()->json(['user' => $reg_user]);
     }
 
-    public function getEventPartners(Request $request){
-        $data = EventPartners::all();
+    public function getEventPartners(Request $request)
+    {
+        if (!empty($request->event_id)) {
+            $data = EventPartners::where('event_id', $request->event_id)->get();
+        } else {
+            $data = EventPartners::all();
+        }
+
         return response()->json($data);
     }
 }
