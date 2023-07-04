@@ -18,12 +18,16 @@ class EventsController extends Controller
      */
     public function index(Request $request)
     {
-        return response()->json(
-            DB::table('events')
-                ->join('sports', 'sports.id', '=', 'events.event_category')
-                ->orderByDesc('events.id')
-                ->get()
-        );
+        $events = DB::table('events')
+            ->join('sports', 'sports.id', '=', 'events.event_category')
+            ->select('events.*', 'sports.name as name','sports.description as description','sports.icon as icon');
+        if (!empty($request->id)) {
+            $events = $events->where('events.id', $request->id);
+        }
+
+        $events = $events->orderByDesc('events.id')->get();
+
+        return response()->json($events);
     }
 
     /**
@@ -70,5 +74,4 @@ class EventsController extends Controller
     {
         //
     }
-    
 }
