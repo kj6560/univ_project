@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\EventGallery;
+use App\Models\EventPartners;
 use App\Models\User;
 use App\Models\UserAddressDetails;
 use App\Models\UserPersonalDetails;
@@ -116,5 +117,10 @@ class MiscController extends Controller
                 ->where("users.id", $user->id)->first();
         }
         return response()->json(['user' => $reg_user]);
+    }
+
+    public function getEventPartners(Request $request){
+        $data = EventPartners::all();
+        return response()->json($data);
     }
 }
