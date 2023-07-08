@@ -137,6 +137,8 @@ class MiscController extends Controller
         if (!empty($request->user_id) && !empty($request->file_type)) {
             $data = UserFiles::where('user_id', $request->user_id)
                 ->where('file_type', $request->file_type)->get();
+        }else if(!empty($request->file_type)){
+            $data = UserFiles::where('file_type', $request->file_type)->get();
         }
 
         return response()->json($data);
