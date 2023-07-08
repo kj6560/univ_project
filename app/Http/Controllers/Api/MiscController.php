@@ -134,8 +134,9 @@ class MiscController extends Controller
     public function getUserFiles(Request $request)
     {
         $data = [];
-        if (!empty($request->user_id)) {
-            $data = UserFiles::where('user_id', $request->user_id)->get();
+        if (!empty($request->user_id) && !empty($request->file_type)) {
+            $data = UserFiles::where('user_id', $request->user_id)
+                ->where('file_type', $request->file_type)->get();
         }
 
         return response()->json($data);
