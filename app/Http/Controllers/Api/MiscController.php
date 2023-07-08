@@ -7,6 +7,7 @@ use App\Models\EventGallery;
 use App\Models\EventPartners;
 use App\Models\User;
 use App\Models\UserAddressDetails;
+use App\Models\UserFiles;
 use App\Models\UserPersonalDetails;
 use DateTime;
 use Illuminate\Http\Request;
@@ -125,6 +126,15 @@ class MiscController extends Controller
             $data = EventPartners::where('event_id', $request->event_id)->get();
         } else {
             $data = EventPartners::all();
+        }
+
+        return response()->json($data);
+    }
+
+    public function getUserFiles(Request $request)
+    {
+        if (!empty($request->user_id)) {
+            $data = UserFiles::where('user_id', $request->user_id)->get();
         }
 
         return response()->json($data);

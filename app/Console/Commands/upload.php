@@ -55,7 +55,6 @@ class upload extends Command
                 }
             }
         }
-        echo "job done";
         return true;
     }
 }
