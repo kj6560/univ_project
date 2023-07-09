@@ -151,6 +151,7 @@ class MiscController extends Controller
         if (!empty($request->user_id)) {
             $data = DB::table('event_result')
                 ->join('events', 'events.id', '=', 'event_result.event_id')
+                ->where('event_result.user_id', $request->user_id)
                 ->get();
         }
 
