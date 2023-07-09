@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\EventGallery;
 use App\Models\EventPartners;
+use App\Models\EventResult;
 use App\Models\User;
 use App\Models\UserAddressDetails;
 use App\Models\UserFiles;
@@ -139,6 +140,16 @@ class MiscController extends Controller
                 ->where('file_type', $request->file_type)->get();
         }else if(!empty($request->file_type)){
             $data = UserFiles::where('file_type', $request->file_type)->get();
+        }
+
+        return response()->json($data);
+    }
+
+    public function getUserPerformance(Request $request)
+    {
+        $data = [];
+        if (!empty($request->user_id)) {
+            $data = EventResult::where('user_id', $request->user_id)->get();
         }
 
         return response()->json($data);

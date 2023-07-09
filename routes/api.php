@@ -13,6 +13,7 @@ Route::apiResource('/events', EventsController::class)->middleware('auth:api');
 Route::get('/sliders', [MiscController::class, 'getSliders'])->middleware('auth:api');
 Route::get('/eventPartners', [MiscController::class, 'getEventPartners'])->middleware('auth:api');
 Route::get('/userFiles', [MiscController::class, 'getUserFiles'])->middleware('auth:api');
+Route::get('/userPerformance', [MiscController::class, 'getUserPerformance'])->middleware('auth:api');
 Route::post('/setProfile', [MiscController::class, 'setProfile'])->middleware('auth:api');
 Route::post('register', [PassportAuthController::class, 'register']);
 Route::post('login', [PassportAuthController::class, 'login']);
