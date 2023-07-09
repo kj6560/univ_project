@@ -149,7 +149,9 @@ class MiscController extends Controller
     {
         $data = [];
         if (!empty($request->user_id)) {
-            $data = EventResult::where('user_id', $request->user_id)->get();
+            $data = DB::table('event_results')
+                ->innerJoin('events', 'events.id', '=', 'event_results.event_id')
+                ->get();
         }
 
         return response()->json($data);
