@@ -153,7 +153,6 @@ class MiscController extends Controller
             ->select(['event_result.event_id','event_result.event_result_key','event_result.event_result_value','events.event_name','events.event_date','events.event_location'])
                 ->join('events', 'events.id', '=', 'event_result.event_id')
                 ->where('event_result.user_id', $request->user_id)
-                ->groupBy('event_result.event_id')
                 ->get();
         }
 
