@@ -155,16 +155,12 @@ class MiscController extends Controller
                 ->where('event_result.user_id', $request->user_id)
                 ->get();
             
-            $response = [];
+            $resp = [];
             foreach($data as $key=>$val){
-                $response["event_id"] = $val->event_id;
-                $response["event_name"] = $val->event_name;
-                $response["event_date"] = $val->event_date;
-                $response["event_location"] = $val->event_location;
-                $response["UserPerformance"][$val->event_result_key] = $val->event_result_value;
+                $resp[$val->event_id][] = $val;
             }
         }
 
-        return response()->json($response);
+        return response()->json($resp);
     }
 }
