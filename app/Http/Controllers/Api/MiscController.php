@@ -161,7 +161,7 @@ class MiscController extends Controller
                 $response["event_name"] = $val->event_name;
                 $response["event_date"] = $val->event_date;
                 $response["event_location"] = $val->event_location;
-                $response["event_keys"][$val->event_result_key] = $val->event_result_value;
+                $response["UserPerformance"][$val->event_result_key] = $val->event_result_value;
             }
         }
 
