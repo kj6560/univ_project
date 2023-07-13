@@ -175,7 +175,7 @@ class MiscController extends Controller
             $data = EventGallery::select($request->file_type ==1?['image,image_priority']:['event_video','video_priority'])->get();
         }else if(!empty($request->event_id)){
             $data = EventGallery::get();
-        }
+        } 
 
         return response()->json($data);
     }
