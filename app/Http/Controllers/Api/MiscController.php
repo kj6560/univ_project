@@ -140,6 +140,8 @@ class MiscController extends Controller
                 ->where('file_type', $request->file_type)->get();
         }else if(!empty($request->file_type)){
             $data = UserFiles::where('file_type', $request->file_type)->get();
+        }else if(!empty($request->event_id)){
+            $data = UserFiles::get();
         }
 
         return response()->json($data);
@@ -162,5 +164,19 @@ class MiscController extends Controller
         }
 
         return response()->json($resp);
+    }
+
+    public function getEventFiles(Request $request)
+    {
+        $data = [];
+        if (!empty($request->event_id) && !empty($request->file_type)) {
+            $data = EventGallery::select($request->file_type ==1?['image,image_priority']:['event_video','video_priority'])->where('event_id', $request->event_id)->get();
+        }else if(!empty($request->file_type)){
+            $data = UserFiles::select($request->file_type ==1?['image,image_priority']:['event_video','video_priority'])->get();
+        }else if(!empty($request->event_id)){
+            $data = UserFiles::get();
+        }
+
+        return response()->json($data);
     }
 }
