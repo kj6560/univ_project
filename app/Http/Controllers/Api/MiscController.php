@@ -175,7 +175,7 @@ class MiscController extends Controller
             $data = EventGallery::get();
         }else if(!empty($request->event_id)){
             $data = EventGallery::get();
-        } 
+        }  
 
         return response()->json($data);
     } 
