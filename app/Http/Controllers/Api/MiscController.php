@@ -178,5 +178,5 @@ class MiscController extends Controller
         } 
 
         return response()->json($data);
-    }
+    } 
 }
