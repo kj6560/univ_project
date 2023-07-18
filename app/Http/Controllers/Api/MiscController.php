@@ -138,9 +138,9 @@ class MiscController extends Controller
         if (!empty($request->user_id) && !empty($request->file_type)) {
             $data = UserFiles::where('user_id', $request->user_id)
                 ->where('file_type', $request->file_type)->get();
-        }else if(!empty($request->file_type)){
+        } else if (!empty($request->file_type)) {
             $data = UserFiles::where('file_type', $request->file_type)->get();
-        }else if(!empty($request->event_id)){
+        } else if (!empty($request->event_id)) {
             $data = UserFiles::get();
         }
 
@@ -152,13 +152,13 @@ class MiscController extends Controller
         $data = [];
         if (!empty($request->user_id)) {
             $data = DB::table('event_result')
-            ->select(['event_result.event_id','event_result.event_result_key','event_result.event_result_value','events.event_name','events.event_date','events.event_location'])
+                ->select(['event_result.event_id', 'event_result.event_result_key', 'event_result.event_result_value', 'events.event_name', 'events.event_date', 'events.event_location'])
                 ->join('events', 'events.id', '=', 'event_result.event_id')
                 ->where('event_result.user_id', $request->user_id)
                 ->get();
-            
+
             $resp = [];
-            foreach($data as $key=>$val){
+            foreach ($data as $key => $val) {
                 $resp[$val->event_id][] = $val;
             }
         }
@@ -171,12 +171,42 @@ class MiscController extends Controller
         $data = [];
         if (!empty($request->event_id) && !empty($request->file_type)) {
             $data = EventGallery::where('event_id', $request->event_id)->get();
-        }else if(!empty($request->file_type)){
+        } else if (!empty($request->file_type)) {
             $data = EventGallery::get();
-        }else if(!empty($request->event_id)){
+        } else if (!empty($request->event_id)) {
             $data = EventGallery::get();
-        }  
+        }
 
         return response()->json($data);
-    } 
+    }
+    public function uploadProfilePicture(Request $request)
+    {
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $user_id = $request->user_id;
+            // Specify the directory where you want to save the uploaded images
+            $uploadDir = 'uploads/profile/profileImage/';
+
+
+            $filename = uniqid() . '.jpg';
+
+            // Set the path of the uploaded file
+            $uploadPath = $uploadDir . $filename;
+
+            // Move the uploaded file to the specified path
+            if (move_uploaded_file($_FILES['image']['tmp_name'], $uploadPath)) {
+                // File uploaded successfully
+                $userPersonalDetails = UserPersonalDetails::where('user_id', $user_id)->first();
+                $userPersonalDetails->image = $filename;
+                if ($userPersonalDetails->save()) {
+                    return response()->json(['status' => 200, 'message' => 'Profile picture uploaded successfully.']);
+                } else {
+                    return response()->json(['status' => 500, 'message' => 'Error uploading image.']);
+                }
+            } else {
+                // Error uploading the file
+                return response()->json(['status' => 500, 'message' => 'Error uploading image.']);
+            }
+        }
+    }
 }
