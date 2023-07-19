@@ -27,6 +27,7 @@ class SiteController extends Controller
 {
     public function index(Request $request)
     {
+        echo phpinfo();die;
         $events = Event::limit(2)->orderBy('id', 'DESC')->get();
 
         return view('site.index', ['events' => $events, 'settings' => $this->getSettings()]);
