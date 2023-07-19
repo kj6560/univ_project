@@ -198,7 +198,7 @@ class MiscController extends Controller
                 $userPersonalDetails = UserPersonalDetails::where('user_id', $user_id)->first();
                 $userPersonalDetails->image = $filename;
                 if ($userPersonalDetails->save()) {
-                    return response()->json(['status' => 200, 'message' => 'Profile picture uploaded successfully.']);
+                    return response()->json(['status' => 200, 'message' => 'Profile picture uploaded successfully.','image'=>$filename]);
                 } else {
                     return response()->json(['status' => 500, 'message' => 'Error uploading image.']);
                 }
