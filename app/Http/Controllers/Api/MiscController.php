@@ -138,11 +138,11 @@ class MiscController extends Controller
         $data = [];
         if (!empty($request->user_id) && !empty($request->file_type)) {
             $data = UserFiles::where('user_id', $request->user_id)
-                ->where('file_type', $request->file_type)->get();
+                ->where('file_type', $request->file_type)->orderBy('id', 'desc')->get();
         } else if (!empty($request->file_type)) {
-            $data = UserFiles::where('file_type', $request->file_type)->get();
+            $data = UserFiles::where('file_type', $request->file_type)->orderBy('id', 'desc')->get();
         } else if (!empty($request->event_id)) {
-            $data = UserFiles::get();
+            $data = UserFiles::orderBy('id', 'desc')->get();
         }
 
         return response()->json($data);
