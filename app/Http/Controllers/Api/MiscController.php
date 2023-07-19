@@ -214,7 +214,7 @@ class MiscController extends Controller
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $user_id = $request->user_id;
             // Specify the directory where you want to save the uploaded images
-            $uploadDir = 'uploads/users/docs/';
+            $uploadDir = 'uploads/users/docs/images/';
 
             $filename = uniqid() . '.mp4';
 
