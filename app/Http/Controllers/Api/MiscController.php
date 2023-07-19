@@ -188,7 +188,6 @@ class MiscController extends Controller
             // Specify the directory where you want to save the uploaded images
             $uploadDir = 'uploads/profile/profileImage/';
 
-
             $filename = uniqid() . '.jpg';
 
             // Set the path of the uploaded file
@@ -196,7 +195,6 @@ class MiscController extends Controller
 
             // Move the uploaded file to the specified path
             if (move_uploaded_file($_FILES['image']['tmp_name'], $uploadPath)) {
-                // File uploaded successfully
                 $userPersonalDetails = UserPersonalDetails::where('user_id', $user_id)->first();
                 $userPersonalDetails->image = $filename;
                 if ($userPersonalDetails->save()) {
