@@ -208,6 +208,39 @@ class MiscController extends Controller
             }
         }
     }
+    public function userImageUpload(Request $request)
+    {
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $user_id = $request->user_id;
+            // Specify the directory where you want to save the uploaded images
+            $uploadDir = 'uploads/users/docs/images/';
+
+            $filename = uniqid() . '.jpg';
+
+            // Set the path of the uploaded file
+            $uploadPath = $uploadDir . $filename;
+
+            // Move the uploaded file to the specified path
+            if (move_uploaded_file($_FILES['image']['tmp_name'], $uploadPath)) {
+                $user_files = new UserFiles();
+                $user_files->user_id = $user_id;
+                $user_files->file_path = $filename;
+                $user_files->file_type = 1;
+                $user_files->title = " ";
+                $user_files->description = " ";
+                $user_files->tags = " ";
+                if ($user_files->save()) {
+                    return response()->json(['status' => 200, 'message' => 'user video uploaded successfully.']);
+                } else {
+                    return response()->json(['status' => 500, 'message' => 'Error uploading video.','error'=>"not saved in db"]);
+                }
+            } else {
+                // Error uploading the file
+                return response()->json(['status' => 500, 'message' => 'Error uploading image.']);
+            }
+        }
+    }
     public function uploadUserVideos(Request $request)
     {
 
@@ -222,7 +255,7 @@ class MiscController extends Controller
             $uploadPath = $uploadDir . $filename;
 
             // Move the uploaded file to the specified path
-            if (move_uploaded_file($_FILES['video']['tmp_name'], $uploadPath)) {
+            if (move_uploaded_file($_FILES['video_file']['tmp_name'], $uploadPath)) {
                 $user_files = new UserFiles();
                 $user_files->user_id = $user_id;
                 $user_files->file_path = $filename;
