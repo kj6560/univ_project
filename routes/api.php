@@ -11,6 +11,7 @@ Route::apiResource('/home', HomeController::class)->middleware('auth:api');
 Route::apiResource('/sports', SportsController::class)->middleware('auth:api');
 Route::apiResource('/events', EventsController::class)->middleware('auth:api');
 Route::get('/sliders', [MiscController::class, 'getSliders'])->middleware('auth:api');
+Route::get('/siteSettings', [MiscController::class, 'getSiteSettings'])->middleware('auth:api');
 Route::get('/eventPartners', [MiscController::class, 'getEventPartners'])->middleware('auth:api');
 Route::get('/userFiles', [MiscController::class, 'getUserFiles'])->middleware('auth:api');
 Route::get('/eventFiles', [MiscController::class, 'getEventFiles'])->middleware('auth:api');

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\EventGallery;
 use App\Models\EventPartners;
 use App\Models\EventResult;
+use App\Models\SiteSettings;
 use App\Models\User;
 use App\Models\UserAddressDetails;
 use App\Models\UserFiles;
@@ -208,5 +209,8 @@ class MiscController extends Controller
                 return response()->json(['status' => 500, 'message' => 'Error uploading image.']);
             }
         }
+    }
+    public function getSiteSettings(Request $request){
+        return response()->json(SiteSettings::get());
     }
 }
