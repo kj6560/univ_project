@@ -233,11 +233,11 @@ class MiscController extends Controller
                 if ($user_files->save()) {
                     return response()->json(['status' => 200, 'message' => 'user video uploaded successfully.']);
                 } else {
-                    return response()->json(['status' => 500, 'message' => 'Error uploading video.']);
+                    return response()->json(['status' => 500, 'message' => 'Error uploading video.','error'=>"not saved in db"]);
                 }
             } else {
                 // Error uploading the file
-                return response()->json(['status' => 500, 'message' => 'Error uploading video.']);
+                return response()->json(['status' => 500, 'message' => 'Error uploading video.','error'=>$_FILES['video']['error']]);
             }
         }
     }
