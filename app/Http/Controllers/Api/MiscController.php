@@ -208,6 +208,39 @@ class MiscController extends Controller
             }
         }
     }
+    public function uploadUserVideos(Request $request)
+    {
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $user_id = $request->user_id;
+            // Specify the directory where you want to save the uploaded images
+            $uploadDir = 'uploads/users/docs/images';
+
+            $filename = uniqid() . '.mp4';
+
+            // Set the path of the uploaded file
+            $uploadPath = $uploadDir . $filename;
+
+            // Move the uploaded file to the specified path
+            if (move_uploaded_file($_FILES['video']['tmp_name'], $uploadPath)) {
+                $user_files = new UserFiles();
+                $user_files->user_id = $user_id;
+                $user_files->file_path = $filename;
+                $user_files->file_type = 2;
+                $user_files->title = $request->title;
+                $user_files->description = $request->description;
+                $user_files->tags = $request->tags;
+                if ($user_files->save()) {
+                    return response()->json(['status' => 200, 'message' => 'user video uploaded successfully.']);
+                } else {
+                    return response()->json(['status' => 500, 'message' => 'Error uploading video.']);
+                }
+            } else {
+                // Error uploading the file
+                return response()->json(['status' => 500, 'message' => 'Error uploading video.']);
+            }
+        }
+    }
     public function getSiteSettings(Request $request){
         return response()->json(SiteSettings::get());
     }

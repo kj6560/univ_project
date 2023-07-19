@@ -16,6 +16,7 @@ Route::get('/eventPartners', [MiscController::class, 'getEventPartners'])->middl
 Route::get('/userFiles', [MiscController::class, 'getUserFiles'])->middleware('auth:api');
 Route::get('/eventFiles', [MiscController::class, 'getEventFiles'])->middleware('auth:api');
 Route::post('/uploadProfilePicture', [MiscController::class, 'uploadProfilePicture'])->middleware('auth:api');
+Route::post('/uploadUserVideos', [MiscController::class, 'uploadUserVideos'])->middleware('auth:api');
 Route::get('/userPerformance', [MiscController::class, 'getUserPerformance'])->middleware('auth:api');
 Route::post('/setProfile', [MiscController::class, 'setProfile'])->middleware('auth:api');
 Route::post('register', [PassportAuthController::class, 'register']);
