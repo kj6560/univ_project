@@ -17,6 +17,7 @@ Route::get('/userFiles', [MiscController::class, 'getUserFiles'])->middleware('a
 Route::get('/eventFiles', [MiscController::class, 'getEventFiles'])->middleware('auth:api');
 Route::post('/uploadProfilePicture', [MiscController::class, 'uploadProfilePicture'])->middleware('auth:api');
 Route::post('/userImageUpload', [MiscController::class, 'userImageUpload'])->middleware('auth:api');
+Route::post('/registerNow', [MiscController::class, 'registerNow'])->name('registerNow');
 Route::post('/uploadUserVideos', [MiscController::class, 'uploadUserVideos'])->middleware('auth:api');
 Route::get('/userPerformance', [MiscController::class, 'getUserPerformance'])->middleware('auth:api');
 Route::post('/setProfile', [MiscController::class, 'setProfile'])->middleware('auth:api');

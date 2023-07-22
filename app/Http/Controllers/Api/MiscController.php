@@ -3,9 +3,14 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\site\SiteController;
+use App\Models\Email;
+use App\Models\EmailTemplates;
+use App\Models\Event;
 use App\Models\EventGallery;
 use App\Models\EventPartners;
 use App\Models\EventResult;
+use App\Models\EventUsers;
 use App\Models\SiteSettings;
 use App\Models\User;
 use App\Models\UserAddressDetails;
@@ -276,5 +281,138 @@ class MiscController extends Controller
     }
     public function getSiteSettings(Request $request){
         return response()->json(SiteSettings::get());
+    }
+
+    public function registerNow(Request $request)
+    {
+        $post = $request->all();
+        if (!empty($post)) {
+            $user = User::where('email', $post['email'])->first();
+            $eventUser = EventUsers::where(['event_id' => $post['event_id'], 'user_id' => $user['id']])->first();
+            $event = Event::where('id', $post['event_id'])->first();
+            if (!empty($eventUser)) {
+                return response()->json(["error"=>true,"message"=>"You have already registered for this event."]);
+            } else {
+                if ($event->event_registration_available != 0) {
+                    if ($user) {
+                        $this->updateUserActivityLog($user->id, 3);
+                        $event_user = EventUsers::create(['event_id' => $post['event_id'], 'user_id' => $user['id']]);
+                        $time = strtotime($event->event_date);
+                        $month = date("F", $time);
+                        $date = date("d", $time);
+                        $event_time = date("h:i A", $time);
+                        if ($event_user) {
+                            $user_name = $user->first_name . " " . $user->last_name;
+                            $site_name = env("SITE_NAME", "UNIV SPORTA");
+                            $subject = "Event Registration";
+                            $email_sender_name = env("EMAIL_SENDER_NAME", "UNIV SPORTA");
+                            $email = $post['email'];
+                            $template = EmailTemplates::where('template_name', 'event_registration')->first();
+                            $template_data = $template->template_data;
+                            $template_data = str_replace("##user_name##", $user_name, $template_data);
+                            $template_data = str_replace("##event_name##", $event->event_name, $template_data);
+                            $message = $template_data;
+                            $mailData = array("email" => $user->email, "first_name" => $user->first_name, "last_name" => $user->last_name, "subject" => $subject, "message" => $message);
+
+                            $sent = Email::sendEmail($mailData);
+                            if ($sent) {
+                                return response()->json(["error"=>false,"message"=>"You have successfully registered for this event. Kindly check your email for details."]);
+                            } else {
+                                return response()->json(["error"=>true,"message"=>"There is some issue with email. plz check your email id and try again."]);
+                            }
+                        } else {
+                            return response()->json(["error"=>true,"message"=>"There is some issue with email. plz check your email id and try again."]);
+                        }
+                    } else {
+                        $credentials = $request->validate([
+                            'first_name' => ['required', 'string'],
+                            'last_name' => ['required', 'string'],
+                            'number' => ['required', 'string'],
+                            'email' => ['required', 'email']
+                        ]);
+
+                        if ($credentials) {
+                            $user = User::where("email", $post['email'])->first();
+                            if (empty($user)) {
+                                $pass_plain = SiteController::getName(8);
+                                $password = bcrypt($pass_plain);
+                                $user = User::create([
+                                    'first_name' => $post['first_name'],
+                                    'last_name' => $post['last_name'],
+                                    'number' => $post['number'],
+                                    'email' => $post['email'],
+                                    'email_verified_at' => now(),
+                                    'password' => $password
+                                ]);
+                            }
+                            $this->updateUserActivityLog($user->id, 3);
+                            $registeredUser = EventUsers::where(['event_id' => $post['event_id'], 'user_id' => $user['id']])->first();
+                            if (empty($registeredUser)) {
+                                $event_user = EventUsers::create(['event_id' => $post['event_id'], 'user_id' => $user['id']]);
+                                if ($event_user) {
+                                    $user_name = $user->first_name . " " . $user->last_name;
+                                    $site_name = env("SITE_NAME", "UNIV SPORTA");
+                                    $subject = "Welcome to $site_name";
+                                    $email_sender_name = env("EMAIL_SENDER_NAME", "UNIV SPORTA");
+                                    $email = $post['email'];
+                                    $message = "
+                                    Dear $user_name,<br><br>
+        
+                                    Thank You for registering for IOA’S BHARAT IN PARIS and be a part of India's Olympic Movement.<br><br>
+        
+                                    We are happy to confirm your participation for the event:<br><br>
+        
+                                    Name of the event: IOA BHARAT IN PARIS<br><br>
+        
+                                    Date: 23 June<br><br>
+        
+                                    Venue: Jawaharlal Nehru Stadium, New Delhi<br><br>
+        
+                                    Reporting Time: 05:00 AM<br><br>
+        
+                                    BIB Collection for the Race Day:<br><br>
+        
+                                    Dates: 21st & 22nd June<br><br>
+        
+                                    Time: 11am - 6pm<br><br>
+        
+                                    Venue: Jawaharlal Nehru Stadium<br><br>
+        
+                                    Indian Olympic Association in partnership with UNIV Sportatech is committed to provide you with the best possible user experience.<br><br>
+        
+                                    For event flow, route and other relevant details please click the link below and login to fill other important fields:<br><br>
+        
+                                    Your Login Credentials are:email: $email     password: $pass_plain<br><br>
+        
+                                    https://univsportatech.com/login<br><br>
+                                    Note: Kindly carry a Government Approved ID Card (Aadhaar/Driving License/Pan Card) on 21st & 22nd June for uploading on your registered profile and on 23rd June ID verification.<br><br>
+        
+                                    Thanking You<br><br>
+        
+                                    Best regards,<br><br>
+        
+                                    Administrator<br><br>
+        
+                                    UNIV SPORTATECH<br><br>
+                                    ";
+                                    $mailData = array("email" => $user->email, "first_name" => $user->first_name, "last_name" => $user->last_name, "subject" => $subject, "message" => $message);
+
+                                    $sent = Email::sendEmail($mailData);
+                                    if ($sent) {
+                                        return response()->json(["error"=>false,"message"=>"You have successfully registered for this event. Kindly check your email for details."]);
+                                    } else {
+                                        return response()->json(["error"=>true,"message"=>"There is some issue with email. plz check your email id and try again."]);
+                                    }
+                                } else {
+                                    return response()->json(["error"=>true,"message"=>"There is some issue with  registration process. plz try again later."]);
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    return response()->json(["error"=>true,"message"=>"Registration process is closed for this event. Kindly check back later."]);
+                }
+            }
+        }
     }
 }
