@@ -4,11 +4,14 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Email;
+use App\Models\OauthAccessTokens;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-
+use Laravel\Passport\RefreshToken;
+use Laravel\Passport\Token;
 class PassportAuthController extends Controller
 {
     public function register(Request $request)
@@ -98,5 +101,15 @@ class PassportAuthController extends Controller
         } else {
             return response()->json(['error' => 'user email not registered'], 403);
         }
+    }
+    public function logout(Request $request)
+    {
+        $user = OauthAccessTokens::where('user_id', $request->user_id)->delete();
+        if(empty($user)){
+            return response()->json(['success' => true], 200);
+        }else{
+            return response()->json(['error' => true], 200);
+        }
+        
     }
 }
