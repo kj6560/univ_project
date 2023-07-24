@@ -105,10 +105,10 @@ class PassportAuthController extends Controller
     public function logout(Request $request)
     {
         $user = OauthAccessTokens::where('user_id', $request->user_id)->delete();
-        if(empty($user)){
-            return response()->json(['success' => true], 200);
-        }else{
+        if($user){
             return response()->json(['error' => true], 200);
+        }else{
+            return response()->json(['success' => true], 200);
         }
         
     }
