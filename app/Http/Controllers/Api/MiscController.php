@@ -165,7 +165,7 @@ class MiscController extends Controller
 
             $resp = [];
             foreach ($data as $key => $val) {
-                $resp[$val->event_id][] = $val;
+                $resp[$val->event_name][] = $val;
             }
         }
 
