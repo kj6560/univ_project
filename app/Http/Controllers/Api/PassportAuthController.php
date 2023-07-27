@@ -6,12 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Models\Email;
 use App\Models\OauthAccessTokens;
 use App\Models\User;
+use App\Models\UserOtp;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Passport\RefreshToken;
 use Laravel\Passport\Token;
+
 class PassportAuthController extends Controller
 {
     public function register(Request $request)
@@ -105,11 +107,48 @@ class PassportAuthController extends Controller
     public function logout(Request $request)
     {
         $user = OauthAccessTokens::where('user_id', $request->user_id)->delete();
-        if($user){
+        if ($user) {
             return response()->json(['error' => true], 200);
-        }else{
+        } else {
             return response()->json(['success' => true], 200);
         }
-        
+    }
+    public function sendEmailOtp(Request $request)
+    {
+        $email = $request->email;
+        if (!empty($email)) {
+            $user = User::where('email', $email)->first();
+            if (!empty($user)) {
+                $otp = rand(100000, 999999);
+                $user_otp = new UserOtp();
+                $user_otp->user_id = $user->id;
+                $user_otp->otp = $otp;
+                $user_otp->is_available = 1;
+                $user_otp->source = 1;
+                if ($user_otp->save()) {
+                    $user_name = $user->first_name . " " . $user->last_name;
+                    $site_name = env("SITE_NAME", "UNIV SPORTA");
+                    $subject = "Forgot Password";
+                    $email_sender_name = env("EMAIL_SENDER_NAME", "UNIV SPORTA");
+                    $email = $user->email;
+                    $message = "
+                    <p>Dear $user_name,</p><br>
+                    <p>Your OTP to reset password is $otp.<br> Please do not share this OTP with anyone.</p>
+                    
+                    <br>Best regards,
+                    <br>$email_sender_name <br>
+                    $site_name
+                    ";
+                    $mailData = array("email" => $user->email, "first_name" => $user->first_name, "last_name" => $user->last_name, "subject" => $subject, "message" => $message);
+
+                    Email::sendEmail($mailData);
+                    return response()->json(['success' => true, 'otp' => $otp, "Otp has been sent to email successfully"], 200);
+                }
+            } else {
+                return response()->json(['error' => true, 'msg' => 'No user registered by this email'], 402);
+            }
+        } else {
+            return response()->json(['error' => true, 'msg' => 'Email id missing'], 402);
+        }
     }
 }
