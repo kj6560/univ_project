@@ -179,10 +179,8 @@ class PassportAuthController extends Controller
             $user_otp = UserOtp::where('user_id', $user->id)->where("otp", $request->otp)->where('is_available', 1)->first();
             if (!empty($user) && !empty($user_otp)) {
                 $user->password = bcrypt($request->password);
-                $user = $user->save();
                 $user_otp->is_available = 0;
-                $user_otp = $user_otp->save();
-                if (!empty($user) && !empty($user_otp)) {
+                if ($user_otp->save() && $user->save()) {
                     $user_name = $user->first_name . " " . $user->last_name;
                     $site_name = env("SITE_NAME", "UNIV SPORTA");
                     $subject = "Forgot Password";
