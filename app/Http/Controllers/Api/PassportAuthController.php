@@ -145,15 +145,52 @@ class PassportAuthController extends Controller
                     Email::sendEmail($mailData);
                     return response()->json(['success' => true, 'otp' => $otp, "Otp has been sent to email successfully"], 200);
                 }
-            } else if(!empty($user_otp)) {
+            } else if (!empty($user_otp)) {
                 $user_name = $user->first_name . " " . $user->last_name;
+                $site_name = env("SITE_NAME", "UNIV SPORTA");
+                $subject = "Forgot Password";
+                $email_sender_name = env("EMAIL_SENDER_NAME", "UNIV SPORTA");
+                $email = $user->email;
+                $message = "
+                    <p>Dear $user_name,</p><br>
+                    <p>Your OTP to reset password is $user_otp->otp.<br> Please do not share this OTP with anyone.</p>
+                    
+                    <br>Best regards,
+                    <br>$email_sender_name <br>
+                    $site_name
+                    ";
+                $mailData = array("email" => $user->email, "first_name" => $user->first_name, "last_name" => $user->last_name, "subject" => $subject, "message" => $message);
+
+                Email::sendEmail($mailData);
+                return response()->json(['success' => true, 'otp' => $user_otp->otp, "Otp has been sent to email successfully"], 200);
+            } else {
+                return response()->json(['error' => true, 'msg' => 'No user registered by this email'], 402);
+            }
+        } else {
+            return response()->json(['error' => true, 'msg' => 'Email id missing'], 402);
+        }
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $email = $request->email;
+        if (!empty($email)) {
+            $user = User::where('email', $email)->first();
+            $user_otp = UserOtp::where('user_id', $user->id)->where("otp", $request->otp)->where('is_available', 1)->first();
+            if (!empty($user) && !empty($user_otp)) {
+                $user->password = bcrypt($request->password);
+                $user = $user->save();
+                $user_otp->is_available = 0;
+                $user_otp = $user_otp->save();
+                if (!empty($user) && !empty($user_otp)) {
+                    $user_name = $user->first_name . " " . $user->last_name;
                     $site_name = env("SITE_NAME", "UNIV SPORTA");
                     $subject = "Forgot Password";
                     $email_sender_name = env("EMAIL_SENDER_NAME", "UNIV SPORTA");
                     $email = $user->email;
                     $message = "
                     <p>Dear $user_name,</p><br>
-                    <p>Your OTP to reset password is $user_otp->otp.<br> Please do not share this OTP with anyone.</p>
+                    <p>Your password has been reset successfully. If you haven't changed it, please contact us immediately</p>
                     
                     <br>Best regards,
                     <br>$email_sender_name <br>
@@ -162,12 +199,13 @@ class PassportAuthController extends Controller
                     $mailData = array("email" => $user->email, "first_name" => $user->first_name, "last_name" => $user->last_name, "subject" => $subject, "message" => $message);
 
                     Email::sendEmail($mailData);
-                return response()->json(['success' => true, 'otp' => $user_otp->otp, "Otp has been sent to email successfully"], 200);
-            }else{
-                return response()->json(['error' => true, 'msg' => 'No user registered by this email'], 402);
+                    return response()->json(['success' => true,  "password has been reset successfully"], 200);
+                }
+            } else {
+                return response()->json(['error' => true,  "Invalid user or otp"], 200);
             }
         } else {
-            return response()->json(['error' => true, 'msg' => 'Email id missing'], 402);
+            return response()->json(['error' => true,  "missing email"], 200);
         }
     }
 }

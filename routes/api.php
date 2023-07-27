@@ -23,5 +23,6 @@ Route::get('/userPerformance', [MiscController::class, 'getUserPerformance'])->m
 Route::post('/setProfile', [MiscController::class, 'setProfile'])->middleware('auth:api');
 Route::post('register', [PassportAuthController::class, 'register']);
 Route::post('/sendEmailOtp', [PassportAuthController::class, 'sendEmailOtp']);
+Route::post('/resetPassword', [PassportAuthController::class, 'resetPassword']);
 Route::post('login', [PassportAuthController::class, 'login']);
 Route::post('logout', [PassportAuthController::class, 'logout']);
