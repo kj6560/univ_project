@@ -146,6 +146,22 @@ class PassportAuthController extends Controller
                     return response()->json(['success' => true, 'otp' => $otp, "Otp has been sent to email successfully"], 200);
                 }
             } else if(!empty($user_otp)) {
+                $user_name = $user->first_name . " " . $user->last_name;
+                    $site_name = env("SITE_NAME", "UNIV SPORTA");
+                    $subject = "Forgot Password";
+                    $email_sender_name = env("EMAIL_SENDER_NAME", "UNIV SPORTA");
+                    $email = $user->email;
+                    $message = "
+                    <p>Dear $user_name,</p><br>
+                    <p>Your OTP to reset password is $user_otp->otp.<br> Please do not share this OTP with anyone.</p>
+                    
+                    <br>Best regards,
+                    <br>$email_sender_name <br>
+                    $site_name
+                    ";
+                    $mailData = array("email" => $user->email, "first_name" => $user->first_name, "last_name" => $user->last_name, "subject" => $subject, "message" => $message);
+
+                    Email::sendEmail($mailData);
                 return response()->json(['success' => true, 'otp' => $user_otp->otp, "Otp has been sent to email successfully"], 200);
             }else{
                 return response()->json(['error' => true, 'msg' => 'No user registered by this email'], 402);
