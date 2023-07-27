@@ -183,7 +183,7 @@ class PassportAuthController extends Controller
                 if ($user_otp->save() && $user->save()) {
                     $user_name = $user->first_name . " " . $user->last_name;
                     $site_name = env("SITE_NAME", "UNIV SPORTA");
-                    $subject = "Forgot Password";
+                    $subject = "Reset Password";
                     $email_sender_name = env("EMAIL_SENDER_NAME", "UNIV SPORTA");
                     $email = $user->email;
                     $message = "
