@@ -118,7 +118,8 @@ class PassportAuthController extends Controller
         $email = $request->email;
         if (!empty($email)) {
             $user = User::where('email', $email)->first();
-            if (!empty($user)) {
+            $user_otp = UserOtp::where('user_id', $user->id)->where('is_available', 1)->first();
+            if (!empty($user) && empty($user_otp)) {
                 $otp = rand(100000, 999999);
                 $user_otp = new UserOtp();
                 $user_otp->user_id = $user->id;
@@ -144,7 +145,9 @@ class PassportAuthController extends Controller
                     Email::sendEmail($mailData);
                     return response()->json(['success' => true, 'otp' => $otp, "Otp has been sent to email successfully"], 200);
                 }
-            } else {
+            } else if(!empty($user_otp)) {
+                return response()->json(['success' => true, 'otp' => $user_otp->otp, "Otp has been sent to email successfully"], 200);
+            }else{
                 return response()->json(['error' => true, 'msg' => 'No user registered by this email'], 402);
             }
         } else {
