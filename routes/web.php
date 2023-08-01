@@ -9,6 +9,7 @@ Route::get('/', [SiteController::class, 'index'])->name('home');
 Route::get('/login', [SiteController::class, 'login'])->name('login');
 Route::get('/privacy', [SiteController::class, 'privacyPolicy'])->name('privacyPolicy');
 Route::get('/deleteRequests', [SiteController::class, 'deleteRequests'])->name('deleteRequests');
+Route::post('/requestDelete', [SiteController::class, 'requestDelete'])->name('requestDelete');
 
 Route::post('/loginAuthentication', [SiteController::class, 'loginAuthentication'])->name('loginAuthentication');
 Route::get('/register', [SiteController::class, 'register'])->name('register');
