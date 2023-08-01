@@ -4,6 +4,7 @@ namespace App\Http\Controllers\site;
 
 use App\Http\Controllers\Controller;
 use App\Jobs\UploadResults;
+use App\Models\DeletionRequest;
 use App\Models\Email;
 use App\Models\EmailTemplates;
 use App\Models\EmergencyContactDetails;
@@ -22,6 +23,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx\Rels;
 
 class SiteController extends Controller
 {
@@ -569,5 +571,31 @@ class SiteController extends Controller
     }
     public function privacyPolicy(Request $request){
         return view('site.privacyPolicy', ['settings' => $this->getSettings()]);
+    }
+    public function deleteRequests(Request $request){
+        return view('site.deleteRequests', ['settings' => $this->getSettings()]);
+    }
+    public function requestDelete(Request $request){
+        $data = $request->all();
+        if(!empty($data)){
+            $user = User::find($data['email']);
+            if($user){
+                $deletion_req = new DeletionRequest();
+                $deletion_req->user_id = $user->id;
+                $deletion_req->reason = $data['reason'];
+                $deletion_req->source = 1;
+                $deletion_req->status=1;
+                if($deletion_req->save()){
+                    return redirect()->back()->with('success', 'Request sent successfully.');
+                }else{
+                    return redirect()->back()->with('error', 'Request sending failed. Please try again.');
+                }
+            }else{
+                return redirect()->back()->with('error', 'Request sending failed. No user with this email.');
+            }
+
+        }else{
+            return redirect()->back()->with('error', 'Request sending failed. some error.');
+        }
     }
 }
