@@ -567,4 +567,7 @@ class SiteController extends Controller
             }
         }
     }
+    public function privacyPolicy(Request $request){
+        return view('site.privacyPolicy', ['privacy' => $privacy, 'settings' => $this->getSettings()]);
+    }
 }
