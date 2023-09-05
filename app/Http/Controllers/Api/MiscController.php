@@ -52,7 +52,7 @@ class MiscController extends Controller
                 $birthday = trim($personal_details['birthday']);
                 //$image = $image_path;
                 $gender = !empty($personal_details['gender']) ? $personal_details['gender'] : "";
-                $married = !empty($personal_details['married']) ? $personal_details['married'] : "";
+                $married = !empty($personal_details['married']) ? $personal_details['married'] : 0;
                 $height = !empty($personal_details['height']) ? $personal_details['height'] : "";
                 $weight = !empty($personal_details['weight']) ? $personal_details['weight'] : "";
                 $birthday = !empty($birthday) ? date('Y:m:d', strtotime($birthday)) : "";
