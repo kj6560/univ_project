@@ -113,6 +113,7 @@ class MiscController extends Controller
                     'user_personal_details.image as image',
                     'user_personal_details.gender as gender',
                     'user_personal_details.married as married',
+                    'user_personal_details.about as about',
                     'user_personal_details.height as height',
                     'user_personal_details.weight as weight',
                     'user_personal_details.age as age',
