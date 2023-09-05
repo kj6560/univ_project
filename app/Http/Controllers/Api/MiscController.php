@@ -55,11 +55,11 @@ class MiscController extends Controller
                 $married = !empty($personal_details['married']) ? $personal_details['married'] : "";
                 $height = !empty($personal_details['height']) ? $personal_details['height'] : "";
                 $weight = !empty($personal_details['weight']) ? $personal_details['weight'] : "";
-                $birthday = !empty($birthday)?DateTime::createFromFormat('Y-m-d', $birthday):"";
+                $birthday = !empty($birthday) ? date('Y:m:d', strtotime($birthday)) : "";
                 if (UserPersonalDetails::where('user_id', $user->id)->count() == 0) {
                     UserPersonalDetails::create([
                         'user_id' => $user->id,
-                        'birthday' => $birthday->format('Y-m-d'),
+                        'birthday' => $birthday,
                         //'image' => $image?$image:null,
                         'gender' => $gender,
                         'married' => $married,
@@ -68,7 +68,7 @@ class MiscController extends Controller
                     ]);
                 } else {
                     UserPersonalDetails::where('user_id', $user->id)->update([
-                        'birthday' => $birthday->format('Y-m-d'),
+                        'birthday' => $birthday,
                         'gender' => $gender,
                         'married' => $married,
                         'height' => $height,
