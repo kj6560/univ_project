@@ -448,7 +448,7 @@ class SiteController extends Controller
                 ->where("event_id", $data['event_id'])->get();
         else
             $eventResult = EventResult::where("user_id", $user->id)->get();
-        return view('site.userProfile', ['requested'=>!empty($data['event_id'])?true:false,'events'=>$events,'user' => $user, 'settings' => $this->getSettings(), 'userPersonalDetails' => $userPersonalDetails, 'userAddressDetails' => $userAddressDetails, 'emergencyContactDetails' => $emergencyContactDetails, 'eventResults' => $eventResult]);
+        return view('site.userProfile', ['requested' => !empty($data['event_id']) ? true : false, 'events' => $events, 'user' => $user, 'settings' => $this->getSettings(), 'userPersonalDetails' => $userPersonalDetails, 'userAddressDetails' => $userAddressDetails, 'emergencyContactDetails' => $emergencyContactDetails, 'eventResults' => $eventResult]);
     }
 
     public function updateContactDetails(Request $request)
@@ -569,32 +569,39 @@ class SiteController extends Controller
             }
         }
     }
-    public function privacyPolicy(Request $request){
+    public function privacyPolicy(Request $request)
+    {
         return view('site.privacyPolicy', ['settings' => $this->getSettings()]);
     }
-    public function deleteRequests(Request $request){
+    public function deleteRequests(Request $request)
+    {
         return view('site.deleteRequests', ['settings' => $this->getSettings()]);
     }
-    public function requestDelete(Request $request){
+    public function requestDelete(Request $request)
+    {
         $data = $request->all();
-        if(!empty($data)){
-            $user = User::find($data['email']);
-            if($user){
-                $deletion_req = new DeletionRequest();
-                $deletion_req->user_id = $user->id;
-                $deletion_req->reason = $data['reason'];
-                $deletion_req->source = 1;
-                $deletion_req->status=1;
-                if($deletion_req->save()){
-                    return redirect()->back()->with('success', 'Request sent successfully.');
-                }else{
-                    return redirect()->back()->with('error', 'Request sending failed. Please try again.');
+        if (!empty($data)) {
+            $user = User::where('email', $data['email'])->first();
+            $delete_req = DeletionRequest::where('user_id', $user->id)->first();
+            if (empty($delete_req)) {
+                if ($user) {
+                    $deletion_req = new DeletionRequest();
+                    $deletion_req->user_id = $user->id;
+                    $deletion_req->reason = $data['reason'];
+                    $deletion_req->source = 1;
+                    $deletion_req->status = 1;
+                    if ($deletion_req->save()) {
+                        return redirect()->back()->with('success', 'Request sent successfully.');
+                    } else {
+                        return redirect()->back()->with('error', 'Request sending failed. Please try again.');
+                    }
+                } else {
+                    return redirect()->back()->with('error', 'Request sending failed. No user with this email.');
                 }
             }else{
-                return redirect()->back()->with('error', 'Request sending failed. No user with this email.');
+                return redirect()->back()->with('success', 'You already have requested account deletion.plz wait for approval');
             }
-
-        }else{
+        } else {
             return redirect()->back()->with('error', 'Request sending failed. some error.');
         }
     }

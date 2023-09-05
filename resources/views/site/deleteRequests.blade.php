@@ -19,12 +19,21 @@
     <link rel="stylesheet" type="text/css" href="{{asset('/css-1/iofrm-style.css')}}">
 
     <link rel="stylesheet" type="text/css" href="{{asset('/css-1/iofrm-theme4.css')}}">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </head>
 
 
 
 <body>
+    @php
+    $success = Session::get('success');
+    $error = Session::get('error');
+    @endphp
+    @php
+    $email = $settings['site_email'];
+    $number = $settings['site_number'];
+    @endphp
 
     <div class="form-body">
 
@@ -66,7 +75,7 @@
 
                         <p>Please Raise an account deletion request.</p>
 
-                        
+
 
                         <form method="POST" action="/requestDelete">
 
@@ -78,13 +87,13 @@
 
                             <div class="form-button">
 
-                                <button id="submit" type="submit" class="ibtn">Submit</button> 
+                                <button id="submit" type="submit" class="ibtn">Submit</button>
 
                             </div>
 
                         </form>
 
-                        
+
 
                     </div>
 
@@ -106,6 +115,32 @@
 
 </body>
 
+<script>
+    var success = "{{!empty($success)?$success:'NA'}}";
+    var error = "{{!empty($error)?$error:'NA'}}";
+    console.log(success);
+    if (success != 'NA') {
+        Swal.fire({
+            title: 'Done',
+            text: success,
+            icon: 'success',
+            confirmButtonText: 'Okay',
 
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = '/';
+            }
+        })
+    }
+    if (error != 'NA') {
+        Swal.fire({
+            title: 'Failed!',
+            text: error,
+            icon: 'error',
+            confirmButtonText: 'Okay',
+
+        });
+    }
+</script>
 
 </html>

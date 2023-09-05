@@ -38,11 +38,11 @@ class MiscController extends Controller
 
         if ($data) {
             if ($data['personal_details']) {
-                $personal_details = $data['personal_details'];
-                $first_name = $personal_details['first_name'];
-                $last_name = $personal_details['last_name'];
-                $number = $personal_details['number'];
-                $email = $personal_details['email'];
+                $personal_details = !empty($data['personal_details']) ? $data['personal_details'] : [];
+                $first_name = !empty($personal_details['first_name']) ? $personal_details['first_name'] : "";
+                $last_name = !empty($personal_details['last_name']) ? $personal_details['last_name'] : "";
+                $number = !empty($personal_details['number']) ? $personal_details['number'] : "";
+                $email = !empty($personal_details['email']) ? $personal_details['email'] : "";
                 $user = User::where('email', $email)->first();
                 $user->first_name = $first_name;
                 $user->last_name = $last_name;
@@ -51,10 +51,10 @@ class MiscController extends Controller
 
                 $birthday = trim($personal_details['birthday']);
                 //$image = $image_path;
-                $gender = $personal_details['gender'];
-                $married = $personal_details['married'];
-                $height = $personal_details['height'];
-                $weight = $personal_details['weight'];
+                $gender = !empty($personal_details['gender']) ? $personal_details['gender'] : "";
+                $married = !empty($personal_details['married']) ? $personal_details['married'] : "";
+                $height = !empty($personal_details['height']) ? $personal_details['height'] : "";
+                $weight = !empty($personal_details['weight']) ? $personal_details['weight'] : "";
                 $birthday = DateTime::createFromFormat('Y-m-d', $birthday);
                 if (UserPersonalDetails::where('user_id', $user->id)->count() == 0) {
                     UserPersonalDetails::create([
@@ -79,22 +79,22 @@ class MiscController extends Controller
             }
 
             if ($data['address_details']) {
-                $address_details = $data['address_details'];
+                $address_details = !empty($data['address_details']) ? $data['address_details'] : [];
                 if (UserAddressDetails::where('user_id', $user->id)->count() == 0) {
                     UserAddressDetails::create([
                         'user_id' => $user->id,
-                        'address_line1' => $address_details['address_line1'],
-                        'city' => $address_details['city'],
-                        'state' => $address_details['state'],
-                        'pincode' => $address_details['pincode']
+                        'address_line1' => !empty($address_details['address_line1']) ? $address_details['address_line1'] : "",
+                        'city' => !empty($address_details['city']) ? $address_details['city'] : "",
+                        'state' => !empty($address_details['state']) ? $address_details['state'] : "",
+                        'pincode' => !empty($address_details['pincode']) ? $address_details['pincode'] : ""
                     ]);
                 } else {
                     UserAddressDetails::where('user_id', $user->id)->update([
                         'user_id' => $user->id,
-                        'address_line1' => $address_details['address_line1'],
-                        'city' => $address_details['city'],
-                        'state' => $address_details['state'],
-                        'pincode' => $address_details['pincode']
+                        'address_line1' => !empty($address_details['address_line1']) ? $address_details['address_line1'] : "",
+                        'city' => !empty($address_details['city']) ? $address_details['city'] : "",
+                        'state' => !empty($address_details['state']) ? $address_details['state'] : "",
+                        'pincode' => !empty($address_details['pincode']) ? $address_details['pincode'] : ""
                     ]);
                 }
                 $address_details = UserAddressDetails::where('user_id', $user->id)->first();
@@ -203,7 +203,7 @@ class MiscController extends Controller
                 $userPersonalDetails = UserPersonalDetails::where('user_id', $user_id)->first();
                 $userPersonalDetails->image = $filename;
                 if ($userPersonalDetails->save()) {
-                    return response()->json(['status' => 200, 'message' => 'Profile picture uploaded successfully.','image'=>$filename]);
+                    return response()->json(['status' => 200, 'message' => 'Profile picture uploaded successfully.', 'image' => $filename]);
                 } else {
                     return response()->json(['status' => 500, 'message' => 'Error uploading image.']);
                 }
@@ -238,7 +238,7 @@ class MiscController extends Controller
                 if ($user_files->save()) {
                     return response()->json(['status' => 200, 'message' => 'user video uploaded successfully.']);
                 } else {
-                    return response()->json(['status' => 500, 'message' => 'Error uploading video.','error'=>"not saved in db"]);
+                    return response()->json(['status' => 500, 'message' => 'Error uploading video.', 'error' => "not saved in db"]);
                 }
             } else {
                 // Error uploading the file
@@ -271,15 +271,16 @@ class MiscController extends Controller
                 if ($user_files->save()) {
                     return response()->json(['status' => 200, 'message' => 'user video uploaded successfully.']);
                 } else {
-                    return response()->json(['status' => 500, 'message' => 'Error uploading video.','error'=>"not saved in db"]);
+                    return response()->json(['status' => 500, 'message' => 'Error uploading video.', 'error' => "not saved in db"]);
                 }
             } else {
                 // Error uploading the file
-                return response()->json(['status' => 500, 'message' => 'Error uploading video.','error'=>$_FILES['video']['error']]);
+                return response()->json(['status' => 500, 'message' => 'Error uploading video.', 'error' => $_FILES['video']['error']]);
             }
         }
     }
-    public function getSiteSettings(Request $request){
+    public function getSiteSettings(Request $request)
+    {
         return response()->json(SiteSettings::get());
     }
 
@@ -291,7 +292,7 @@ class MiscController extends Controller
             $eventUser = EventUsers::where(['event_id' => $post['event_id'], 'user_id' => $user['id']])->first();
             $event = Event::where('id', $post['event_id'])->first();
             if (!empty($eventUser)) {
-                return response()->json(["error"=>true,"message"=>"You have already registered for this event."]);
+                return response()->json(["error" => true, "message" => "You have already registered for this event."]);
             } else {
                 if ($event->event_registration_available != 0) {
                     if ($user) {
@@ -316,12 +317,12 @@ class MiscController extends Controller
 
                             $sent = Email::sendEmail($mailData);
                             if ($sent) {
-                                return response()->json(["error"=>false,"message"=>"You have successfully registered for this event. Kindly check your email for details."]);
+                                return response()->json(["error" => false, "message" => "You have successfully registered for this event. Kindly check your email for details."]);
                             } else {
-                                return response()->json(["error"=>true,"message"=>"There is some issue with email. plz check your email id and try again."]);
+                                return response()->json(["error" => true, "message" => "There is some issue with email. plz check your email id and try again."]);
                             }
                         } else {
-                            return response()->json(["error"=>true,"message"=>"There is some issue with email. plz check your email id and try again."]);
+                            return response()->json(["error" => true, "message" => "There is some issue with email. plz check your email id and try again."]);
                         }
                     } else {
                         $credentials = $request->validate([
@@ -399,18 +400,18 @@ class MiscController extends Controller
 
                                     $sent = Email::sendEmail($mailData);
                                     if ($sent) {
-                                        return response()->json(["error"=>false,"message"=>"You have successfully registered for this event. Kindly check your email for details."]);
+                                        return response()->json(["error" => false, "message" => "You have successfully registered for this event. Kindly check your email for details."]);
                                     } else {
-                                        return response()->json(["error"=>true,"message"=>"There is some issue with email. plz check your email id and try again."]);
+                                        return response()->json(["error" => true, "message" => "There is some issue with email. plz check your email id and try again."]);
                                     }
                                 } else {
-                                    return response()->json(["error"=>true,"message"=>"There is some issue with  registration process. plz try again later."]);
+                                    return response()->json(["error" => true, "message" => "There is some issue with  registration process. plz try again later."]);
                                 }
                             }
                         }
                     }
                 } else {
-                    return response()->json(["error"=>true,"message"=>"Registration process is closed for this event. Kindly check back later."]);
+                    return response()->json(["error" => true, "message" => "Registration process is closed for this event. Kindly check back later."]);
                 }
             }
         }
