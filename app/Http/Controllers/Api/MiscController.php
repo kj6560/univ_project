@@ -43,6 +43,7 @@ class MiscController extends Controller
                 $last_name = !empty($personal_details['last_name']) ? $personal_details['last_name'] : "";
                 $number = !empty($personal_details['number']) ? $personal_details['number'] : "";
                 $email = !empty($personal_details['email']) ? $personal_details['email'] : "";
+                $about = !empty($personal_details['about']) ? $personal_details['about'] : "";
                 $user = User::where('email', $email)->first();
                 $user->first_name = $first_name;
                 $user->last_name = $last_name;
@@ -64,7 +65,8 @@ class MiscController extends Controller
                         'gender' => $gender,
                         'married' => $married,
                         'height' => $height,
-                        'weight' => $weight
+                        'weight' => $weight,
+                        'about' => $about
                     ]);
                 } else {
                     UserPersonalDetails::where('user_id', $user->id)->update([
@@ -73,6 +75,7 @@ class MiscController extends Controller
                         'married' => $married,
                         'height' => $height,
                         'weight' => $weight,
+                        'about' => $about
                     ]);
                 }
                 $user_personal_details = UserPersonalDetails::where('user_id', $user->id)->first();
