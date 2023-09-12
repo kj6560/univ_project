@@ -56,11 +56,11 @@ class MiscController extends Controller
                 $married = !empty($personal_details['married']) ? $personal_details['married'] : 0;
                 $height = !empty($personal_details['height']) ? $personal_details['height'] : "";
                 $weight = !empty($personal_details['weight']) ? $personal_details['weight'] : "";
-                $birthday = !empty($birthday) ? date('Y:m:d', strtotime($birthday)) : "";
+                $birthday = !empty($birthday) ? date('Y:m:d', strtotime($birthday)) : null;
                 if (UserPersonalDetails::where('user_id', $user->id)->count() == 0) {
                     UserPersonalDetails::create([
                         'user_id' => $user->id,
-                        'birthday' => !empty($birthday)?$birthday:null,
+                        'birthday' => $birthday,
                         //'image' => $image?$image:null,
                         'gender' => $gender,
                         'married' => $married,
