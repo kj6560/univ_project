@@ -60,7 +60,7 @@ class MiscController extends Controller
                 if (UserPersonalDetails::where('user_id', $user->id)->count() == 0) {
                     UserPersonalDetails::create([
                         'user_id' => $user->id,
-                        'birthday' => $birthday,
+                        'birthday' => !empty($birthday)?$birthday:null,
                         //'image' => $image?$image:null,
                         'gender' => $gender,
                         'married' => $married,
