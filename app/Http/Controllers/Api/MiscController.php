@@ -52,12 +52,14 @@ class MiscController extends Controller
 
                 if(!empty($personal_details['birthday']))
                     $birthday = trim($personal_details['birthday']);
+                if(!isset($personal_details['birthday']))
+                    $birthday = "";
                 //$image = $image_path;
                 $gender = !empty($personal_details['gender']) ? $personal_details['gender'] : 0;
                 $married = !empty($personal_details['married']) ? $personal_details['married'] : 0;
                 $height = !empty($personal_details['height']) ? $personal_details['height'] :0.0;
                 $weight = !empty($personal_details['weight']) ? $personal_details['weight'] : 0.0;
-                $birthday = !empty($birthday) ? date('Y:m:d', strtotime($birthday)) : "";
+                $birthday = $birthday !="" ? date('Y:m:d', strtotime($birthday)) : "";
                 
 
                 $paramsData = [
@@ -69,7 +71,7 @@ class MiscController extends Controller
                 ];
                 if($birthday !="" && !empty($birthday))
                     $paramsData['birthday'] = $birthday;
-                    
+
                 if (UserPersonalDetails::where('user_id', $user->id)->count() == 0) {
                     $paramsData['user_id'] = $user->id;
                     UserPersonalDetails::create($paramsData);
