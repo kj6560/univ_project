@@ -50,33 +50,31 @@ class MiscController extends Controller
                 $user->number = $number;
                 $user->save();
 
-                $birthday = !empty($personal_details['birthday'])?trim($personal_details['birthday']):"";
+                if(!empty($personal_details['birthday']))
+                    $birthday = trim($personal_details['birthday']);
                 //$image = $image_path;
                 $gender = !empty($personal_details['gender']) ? $personal_details['gender'] : 0;
                 $married = !empty($personal_details['married']) ? $personal_details['married'] : 0;
                 $height = !empty($personal_details['height']) ? $personal_details['height'] :0.0;
                 $weight = !empty($personal_details['weight']) ? $personal_details['weight'] : 0.0;
-                $birthday = !empty($birthday) ? date('Y:m:d', strtotime($birthday)) : "0000-00-00";
+                $birthday = !empty($birthday) ? date('Y:m:d', strtotime($birthday)) : "";
+                
+
+                $paramsData = [
+                    'gender' => $gender,
+                    'married' => $married,
+                    'height' => $height,
+                    'weight' => $weight,
+                    'about' => $about
+                ];
+                if($birthday !="" && !empty($birthday))
+                    $paramsData['birthday'] = $birthday;
+                    
                 if (UserPersonalDetails::where('user_id', $user->id)->count() == 0) {
-                    UserPersonalDetails::create([
-                        'user_id' => $user->id,
-                        'birthday' => $birthday,
-                        //'image' => $image?$image:null,
-                        'gender' => $gender,
-                        'married' => $married,
-                        'height' => $height,
-                        'weight' => $weight,
-                        'about' => $about
-                    ]);
+                    $paramsData['user_id'] = $user->id;
+                    UserPersonalDetails::create($paramsData);
                 } else {
-                    UserPersonalDetails::where('user_id', $user->id)->update([
-                        'birthday' => $birthday,
-                        'gender' => $gender,
-                        'married' => $married,
-                        'height' => $height,
-                        'weight' => $weight,
-                        'about' => $about
-                    ]);
+                    UserPersonalDetails::where('user_id', $user->id)->update($paramsData);
                 }
                 $user_personal_details = UserPersonalDetails::where('user_id', $user->id)->first();
             }
