@@ -50,7 +50,7 @@ class MiscController extends Controller
                 $user->number = $number;
                 $user->save();
 
-                $birthday = trim($personal_details['birthday']);
+                $birthday = !empty($personal_details['birthday'])?trim($personal_details['birthday']):"";
                 //$image = $image_path;
                 $gender = !empty($personal_details['gender']) ? $personal_details['gender'] : 0;
                 $married = !empty($personal_details['married']) ? $personal_details['married'] : 0;
