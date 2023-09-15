@@ -22,7 +22,7 @@
                     <tbody>
                         @foreach($exceptions as $exception)
                         <tr>
-                            <td>{{$exception->user_name}}</td>
+                            <td>{{$exception->first_name ." ".$exception->last_name}}</td>
                             <td>{{$exception->exception_msg}}</td>
                             <td>{{$exception->source ==1 ? "web":"mobile"}}</td>
                             <td>{{$exception->status ==1 ? "Active":"Inactive"}}</td>

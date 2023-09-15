@@ -973,7 +973,7 @@ class AdminController extends Controller
     public function appException(Request $request)
     {
         $exceptions = DB::table('app_exceptions')
-        ->select(['app_exceptions.*','concat(users.first_name," ",users.last_name) as user_name'])
+        ->select(['app_exceptions.*','users.first_name','users.last_name'])
             ->join('users', 'users.id', '=', 'app_exceptions.exception_user')
             ->distinct()
             ->orderBy('app_exceptions.id', 'desc');
