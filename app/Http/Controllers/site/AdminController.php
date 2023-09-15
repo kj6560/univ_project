@@ -5,6 +5,7 @@ namespace App\Http\Controllers\site;
 use App\Exports\ExportEventUsers;
 use App\Http\Controllers\Controller;
 use App\Imports\EventResultsImport;
+use App\Models\AppExceptions;
 use App\Models\Email;
 use App\Models\EmailTemplates;
 use App\Models\EmergencyContactDetails;
@@ -968,5 +969,15 @@ class AdminController extends Controller
         }
         Artisan::call('schedule:run');
         return redirect()->back()->with('success', 'event results processing completed');
+    }
+    public function appException(Request $request)
+    {
+        $exceptions = DB::table('app_exceptions')
+        ->select(['app_exceptions.*','concat(users.first_name," ",users.last_name) as user_name'])
+            ->join('users', 'users.id', '=', 'app_exceptions.exception_user')
+            ->distinct()
+            ->orderBy('app_exceptions.id', 'desc');
+            $exceptions = $exceptions->paginate(50);
+        return view('site.admin.appException',['exceptions' => $exceptions]);
     }
 }

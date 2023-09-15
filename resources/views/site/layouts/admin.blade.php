@@ -117,9 +117,17 @@
                                 </a>
                             </li>
                         </ul>
+
+                        <ul class="menu-sub">
+                            <li class="menu-item">
+                                <a href="/dashboard/appException" class="menu-link">
+                                    <div data-i18n="Without menu">App Exceptions Log </div>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
 
-                    <!-- Layouts -->
+                    <!-- category -->
                     <li class="menu-item">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
                             <i class="menu-icon tf-icons bx bx-layout"></i>
@@ -140,7 +148,7 @@
 
                         </ul>
                     </li>
-
+                    <!-- Events -->
                     <li class="menu-item">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
                             <i class="menu-icon tf-icons bx bx-layout"></i>
@@ -181,7 +189,7 @@
                     </li>
 
 
-
+                    <!-- Email Settings -->
                     <li class="menu-item">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
                             <i class="menu-icon tf-icons bx bx-layout"></i>
@@ -203,7 +211,7 @@
                             </li>
                         </ul>
                     </li>
-
+                    <!-- Admin Settings -->
                     <li class="menu-item">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
                             <i class="menu-icon tf-icons bx bx-layout"></i>
@@ -218,7 +226,7 @@
                             </li>
                         </ul>
                     </li>
-
+                    <!-- Gallery -->
                     <li class="menu-item">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
                             <i class="menu-icon tf-icons bx bx-layout"></i>
@@ -233,7 +241,7 @@
                             </li>
                         </ul>
                     </li>
-
+                    <!-- Event Results -->
                     <li class="menu-item">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
                             <i class="menu-icon tf-icons bx bx-layout"></i>

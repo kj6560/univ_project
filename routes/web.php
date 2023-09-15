@@ -105,6 +105,7 @@ Route::get('/dashboard/deleteUserPersonalDetails/{id}', [AdminController::class,
 
 // user activity log for admin
 Route::get('/dashboard/userActivityLog', [AdminController::class, 'userActivityLog'])->middleware('auth:web')->name('userActivityLog');
+Route::get('/dashboard/appException', [AdminController::class, 'appException'])->middleware('auth:web')->name('appException');
 
 //user Address Details
 Route::get('/dashboard/userAddressDetails', [AdminController::class, 'userAddressDetails'])->middleware('auth:web')->name('userAddressDetails');
