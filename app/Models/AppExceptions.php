@@ -11,7 +11,7 @@ class AppExceptions extends Model
     public $table = "app_exceptions";
     protected $fillable = [
         'exception_user',
-        'exception_message',
+        'exception_msg',
         'exception_location',
         'status',
         'source'

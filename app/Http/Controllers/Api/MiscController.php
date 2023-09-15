@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\site\SiteController;
+use App\Models\AppExceptions;
 use App\Models\Email;
 use App\Models\EmailTemplates;
 use App\Models\Event;
@@ -50,17 +51,17 @@ class MiscController extends Controller
                 $user->number = $number;
                 $user->save();
 
-                if(!empty($personal_details['birthday']))
+                if (!empty($personal_details['birthday']))
                     $birthday = trim($personal_details['birthday']);
-                if(!isset($personal_details['birthday']))
+                if (!isset($personal_details['birthday']))
                     $birthday = "";
                 //$image = $image_path;
                 $gender = !empty($personal_details['gender']) ? $personal_details['gender'] : 0;
                 $married = !empty($personal_details['married']) ? $personal_details['married'] : 0;
-                $height = !empty($personal_details['height']) ? $personal_details['height'] :0.0;
+                $height = !empty($personal_details['height']) ? $personal_details['height'] : 0.0;
                 $weight = !empty($personal_details['weight']) ? $personal_details['weight'] : 0.0;
-                $birthday = $birthday !="" ? date('Y:m:d', strtotime($birthday)) : "";
-                 
+                $birthday = $birthday != "" ? date('Y:m:d', strtotime($birthday)) : "";
+
 
                 $paramsData = [
                     'birthday' => $birthday,
@@ -70,7 +71,7 @@ class MiscController extends Controller
                     'weight' => $weight,
                     'about' => $about
                 ];
-                
+
 
                 if (UserPersonalDetails::where('user_id', $user->id)->count() == 0) {
                     $paramsData['user_id'] = $user->id;
@@ -418,6 +419,26 @@ class MiscController extends Controller
                     return response()->json(["error" => true, "message" => "Registration process is closed for this event. Kindly check back later."]);
                 }
             }
+        }
+    }
+    public function logException(Request $request)
+    {
+        $post = $request->all();
+        if (!empty($post)) {
+            $appException = AppExceptions::create([
+                'exception_user'=>$post['exception_user'],
+                'exception_msg'=>$post['exception_msg'],
+                'exception_location'=>$post['exception_location'],
+                'status'=>$post['status'],
+                'source'=>$post['source'],
+            ]);
+            if(!empty($appException)){
+                return response()->json(["error" => false, "message" => "You have successfully registered an app exception."]);
+            }else{
+                return response()->json(["error" => true, "message" => "Some error creating app exception log."]);
+            }
+        }else{
+            return response()->json(["error" => true, "message" => "Invalid request"]);
         }
     }
 }
