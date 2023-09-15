@@ -60,7 +60,7 @@ class MiscController extends Controller
                 $height = !empty($personal_details['height']) ? $personal_details['height'] :0.0;
                 $weight = !empty($personal_details['weight']) ? $personal_details['weight'] : 0.0;
                 $birthday = $birthday !="" ? date('Y:m:d', strtotime($birthday)) : "";
-                
+                 
 
                 $paramsData = [
                     'gender' => $gender,
