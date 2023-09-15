@@ -63,14 +63,14 @@ class MiscController extends Controller
                  
 
                 $paramsData = [
+                    'birthday' => $birthday,
                     'gender' => $gender,
                     'married' => $married,
                     'height' => $height,
                     'weight' => $weight,
                     'about' => $about
                 ];
-                if($birthday !="" && !empty($birthday))
-                    $paramsData['birthday'] = $birthday;
+                
 
                 if (UserPersonalDetails::where('user_id', $user->id)->count() == 0) {
                     $paramsData['user_id'] = $user->id;
