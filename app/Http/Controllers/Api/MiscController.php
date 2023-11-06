@@ -161,20 +161,28 @@ class MiscController extends Controller
     public function getUserPerformance(Request $request)
     {
         $data = [];
+        $outcome = [];
         if (!empty($request->user_id)) {
             $data = DB::table('event_result')
                 ->select(['event_result.event_id', 'event_result.event_result_key', 'event_result.event_result_value', 'events.event_name', 'events.event_date', 'events.event_location'])
                 ->join('events', 'events.id', '=', 'event_result.event_id')
                 ->where('event_result.user_id', $request->user_id)
                 ->get();
-
-            $resp = [];
+            $temp_events = [];
             foreach ($data as $key => $val) {
-                $resp[$val->event_name][] = $val;
+                if (isset($temp_events[$val->event_id])) {
+                    $temp_events[$val->event_id][$val->event_result_key] = $val->event_result_value;
+                } else {
+                    $temp_events[$val->event_id] = [$val->event_result_key => $val->event_result_value];
+                }
+            }
+            
+            foreach($temp_events as $key=>$val){
+                array_push($outcome,$val);
             }
         }
 
-        return response()->json($resp);
+        return response()->json($outcome);
     }
 
     public function getEventFiles(Request $request)
