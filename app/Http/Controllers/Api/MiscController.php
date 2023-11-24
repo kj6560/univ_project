@@ -214,7 +214,14 @@ class MiscController extends Controller
             // Move the uploaded file to the specified path
             if (move_uploaded_file($_FILES['image']['tmp_name'], $uploadPath)) {
                 $userPersonalDetails = UserPersonalDetails::where('user_id', $user_id)->first();
-                $userPersonalDetails->image = $filename;
+                if(!empty($userPersonalDetails->id))
+                    $userPersonalDetails->image = $filename;
+                else {
+                    $userPersonalDetails = new UserPersonalDetails();
+                    $userPersonalDetails->user_id = $user_id;
+                    $userPersonalDetails->image = $filename;
+                }
+
                 if ($userPersonalDetails->save()) {
                     return response()->json(['status' => 200, 'message' => 'Profile picture uploaded successfully.', 'image' => $filename]);
                 } else {
