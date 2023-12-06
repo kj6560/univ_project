@@ -984,6 +984,9 @@ class AdminController extends Controller
 
     public function server(Request $request)
     {
+        if (!$this->_access()) {
+            return  redirect('/')->with('error', 'you are not authorized to access this page');
+        }
         $server_check_version = '1.0.4';
         $start_time = microtime(TRUE);
 
