@@ -176,9 +176,9 @@ class MiscController extends Controller
                     $temp_events[$val->event_id] = [$val->event_result_key => $val->event_result_value];
                 }
             }
-            
-            foreach($temp_events as $key=>$val){
-                array_push($outcome,$val);
+
+            foreach ($temp_events as $key => $val) {
+                array_push($outcome, $val);
             }
         }
 
@@ -214,7 +214,7 @@ class MiscController extends Controller
             // Move the uploaded file to the specified path
             if (move_uploaded_file($_FILES['image']['tmp_name'], $uploadPath)) {
                 $userPersonalDetails = UserPersonalDetails::where('user_id', $user_id)->first();
-                if(!empty($userPersonalDetails->id))
+                if (!empty($userPersonalDetails->id))
                     $userPersonalDetails->image = $filename;
                 else {
                     $userPersonalDetails = new UserPersonalDetails();
@@ -243,6 +243,7 @@ class MiscController extends Controller
 
             $filename = uniqid() . '.jpg';
 
+            $type = isset($_GET['type']) && $_GET['type'] > 0 ? $_GET['type'] : 1;
             // Set the path of the uploaded file
             $uploadPath = $uploadDir . $filename;
 
@@ -251,7 +252,7 @@ class MiscController extends Controller
                 $user_files = new UserFiles();
                 $user_files->user_id = $user_id;
                 $user_files->file_path = $filename;
-                $user_files->file_type = 1;
+                $user_files->file_type = $type;
                 $user_files->title = " ";
                 $user_files->description = " ";
                 $user_files->tags = " ";
@@ -441,18 +442,18 @@ class MiscController extends Controller
         $post = $request->all();
         if (!empty($post)) {
             $appException = AppExceptions::create([
-                'exception_user'=>$post['exception_user'],
-                'exception_msg'=>$post['exception_msg'],
-                'exception_location'=>$post['exception_location'],
-                'status'=>$post['status'],
-                'source'=>$post['source'],
+                'exception_user' => $post['exception_user'],
+                'exception_msg' => $post['exception_msg'],
+                'exception_location' => $post['exception_location'],
+                'status' => $post['status'],
+                'source' => $post['source'],
             ]);
-            if(!empty($appException)){
+            if (!empty($appException)) {
                 return response()->json(["error" => false, "message" => "You have successfully registered an app exception."]);
-            }else{
+            } else {
                 return response()->json(["error" => true, "message" => "Some error creating app exception log."]);
             }
-        }else{
+        } else {
             return response()->json(["error" => true, "message" => "Invalid request"]);
         }
     }
