@@ -1043,5 +1043,11 @@ class AdminController extends Controller
             echo '{"ram":' . $memusage . ',"cpu":' . $cpuload . ',"disk":' . $diskusage . ',"connections":' . $totalconnections . '}';
             exit;
         }
+
+        return view('site.admin.server', ['memusage' => $memusage,'cpuload'=>$cpuload,'diskusage'=>$diskusage,
+        'connections'=>$connections,'totalconnections'=>$totalconnections,'cpu_count'=>$cpu_count,'memtotal'=>$memtotal,
+        'memused'=>$memused,'memavailable'=>$memavailable,'diskfree'=>$diskfree,'diskused'=>$diskused,'disktotal'=>$disktotal,
+        'phpload'=>$phpload,'total_time'=>$total_time
+    ]);
     }
 }
