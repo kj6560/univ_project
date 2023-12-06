@@ -6,9 +6,7 @@
             <h5 class="card-header">Server Details</h5>
             <div class="card-body">
                 <div class="mb-3 row">
-                    <p>🌡️ RAM Usage: <span class="result big"><?php echo $memusage; ?>%
-                    <div id="growthChart"></div>
-                    </p>
+                    <p>🌡️ RAM Usage: <span class="result big"><?php echo $memusage; ?>%</p>
                     <p>🖥️ CPU Usage: <span class="result big"><?php echo $cpuload; ?>%</p>
                     <p>💽 Hard Disk Usage: <?php echo $diskusage; ?>%</p>
                     <p>🖧 Established Connections: <?php echo $connections; ?></p>
