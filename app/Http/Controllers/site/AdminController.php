@@ -1038,16 +1038,18 @@ class AdminController extends Controller
         $time_taken = $end_time - $start_time;
         $total_time = round($time_taken, 4);
 
+        $dataToSend = [
+            'memusage' => $memusage, 'cpuload' => $cpuload, 'diskusage' => $diskusage,
+            'connections' => $connections, 'totalconnections' => $totalconnections, 'cpu_count' => $cpu_count, 'memtotal' => $memtotal,
+            'memused' => $memused, 'memavailable' => $memavailable, 'diskfree' => $diskfree, 'diskused' => $diskused, 'disktotal' => $disktotal,
+            'phpload' => $phpload, 'total_time' => $total_time, 'trafficlight' => $trafficlight, 'server_check_version' => $server_check_version
+        ];
         // use servercheck.php?json=1
         if (isset($_GET['json'])) {
-            echo '{"ram":' . $memusage . ',"cpu":' . $cpuload . ',"disk":' . $diskusage . ',"connections":' . $totalconnections . '}';
+            echo json_encode($dataToSend);
             exit;
         }
 
-        return view('site.admin.server', ['memusage' => $memusage,'cpuload'=>$cpuload,'diskusage'=>$diskusage,
-        'connections'=>$connections,'totalconnections'=>$totalconnections,'cpu_count'=>$cpu_count,'memtotal'=>$memtotal,
-        'memused'=>$memused,'memavailable'=>$memavailable,'diskfree'=>$diskfree,'diskused'=>$diskused,'disktotal'=>$disktotal,
-        'phpload'=>$phpload,'total_time'=>$total_time,'trafficlight'=>$trafficlight,'server_check_version'=>$server_check_version
-    ]);
+        return view('site.admin.server', $dataToSend);
     }
 }
