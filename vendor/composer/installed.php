@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '5d80652c6bb2a6785ee313175f31111b153cbe28',
+        'reference' => '338fcd0b2e84e9da2c2a2d0c449574b49afe7254',
         'name' => 'laravel/laravel',
         'dev' => true,
     ),
@@ -517,7 +517,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '5d80652c6bb2a6785ee313175f31111b153cbe28',
+            'reference' => '338fcd0b2e84e9da2c2a2d0c449574b49afe7254',
             'dev_requirement' => false,
         ),
         'laravel/passport' => array(
@@ -701,6 +701,15 @@
             'install_path' => __DIR__ . '/../markbaker/matrix',
             'aliases' => array(),
             'reference' => '728434227fe21be27ff6d86621a1b13107a2562c',
+            'dev_requirement' => false,
+        ),
+        'mhmdomer/laravel-database-backup' => array(
+            'pretty_version' => '1.0.0',
+            'version' => '1.0.0.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../mhmdomer/laravel-database-backup',
+            'aliases' => array(),
+            'reference' => '3cc35b9bd3a7112a9ea5a99a837e6a61df078f66',
             'dev_requirement' => false,
         ),
         'mockery/mockery' => array(
