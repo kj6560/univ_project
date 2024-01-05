@@ -9,7 +9,7 @@ return [
     | The path of the folder to save backups on and retrieve backups from.
     */
 
-    'backup_folder' => base_path('public/laravel-backup'),
+    'backup_folder' => public_path('dbbackup'),
 
     /*
     |-------------------------------------------------------------------------

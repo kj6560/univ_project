@@ -14,7 +14,6 @@
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
         "maatwebsite/excel": "^3.1",
-        "mhmdomer/laravel-database-backup": "^1.0",
         "phpmailer/phpmailer": "^6.8"
     },
     "require-dev": {

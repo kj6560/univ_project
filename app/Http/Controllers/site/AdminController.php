@@ -26,6 +26,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\HeadingRowImport;
 
@@ -981,7 +982,6 @@ class AdminController extends Controller
         $exceptions = $exceptions->paginate(50);
         return view('site.admin.appException', ['exceptions' => $exceptions]);
     }
-
     public function server(Request $request)
     {
         if (!$this->_access()) {
@@ -1055,4 +1055,5 @@ class AdminController extends Controller
 
         return view('site.admin.server', $dataToSend);
     }
+    
 }
