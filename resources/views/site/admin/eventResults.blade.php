@@ -10,7 +10,7 @@
                     @csrf
 
                     <div class="card mb-4">
-                        <h5 class="card-header">Upload Event Results</h5>
+                        <pre><h5 class="card-header">Upload Event Results           ..<a href="/dashboard/downloadResultTemplate">Download Result Template</a></h5></pre>
 
                         <div class="card-body">
                             <div class="mb-3 row">
@@ -27,7 +27,7 @@
 
 
                             <div class="mb-3">
-                                <label for="formFile" class="form-label">Csv File</label>
+                                <pre><label for="formFile" class="form-label">Csv File        (Participant Name,gender,email,Phone are mandatory)</label></pre>
                                 <input type="file" name="file" id="inputImage" class="form-control">
                             </div>
 

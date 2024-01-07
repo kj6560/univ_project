@@ -131,3 +131,4 @@ Route::post('/dashboard/storeGallery', [AdminController::class, 'storeGallery'])
 Route::get('/dashboard/eventResults', [AdminController::class, 'eventResults'])->middleware('auth:web')->name('eventResults');
 Route::post('/dashboard/storeEventResults', [AdminController::class, 'storeEventResults'])->middleware('auth:web')->name('storeEventResults');
 Route::get('/dashboard/processEventResults', [AdminController::class, 'processEventResults'])->middleware('auth:web')->name('processEventResults');
+Route::get('/dashboard/downloadResultTemplate', [AdminController::class, 'downloadResultTemplate'])->middleware('auth:web')->name('downloadResultTemplate');
