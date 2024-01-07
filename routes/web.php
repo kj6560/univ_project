@@ -31,6 +31,7 @@ Route::get('/team/{id}', [SiteController::class, 'teamInfo'])->name('teamInfo');
 //admin routes
 Route::get('/dashboard', [AdminController::class, 'index'])->middleware('auth:web')->name('dashboard');
 Route::get('/server', [AdminController::class, 'server'])->middleware('auth:web')->name('server');
+
 //category
 Route::get('/dashboard/createCategory', [AdminController::class, 'createCategory'])->middleware('auth:web')->name('createCategory');
 Route::post('/dashboard/storeCategory', [AdminController::class, 'storeCategory'])->middleware('auth:web')->name('storeCategory');
@@ -130,3 +131,4 @@ Route::post('/dashboard/storeGallery', [AdminController::class, 'storeGallery'])
 Route::get('/dashboard/eventResults', [AdminController::class, 'eventResults'])->middleware('auth:web')->name('eventResults');
 Route::post('/dashboard/storeEventResults', [AdminController::class, 'storeEventResults'])->middleware('auth:web')->name('storeEventResults');
 Route::get('/dashboard/processEventResults', [AdminController::class, 'processEventResults'])->middleware('auth:web')->name('processEventResults');
+Route::get('/dashboard/downloadResultTemplate', [AdminController::class, 'downloadResultTemplate'])->middleware('auth:web')->name('downloadResultTemplate');

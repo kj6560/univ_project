@@ -304,7 +304,6 @@ class MiscController extends Controller
     {
         return response()->json(SiteSettings::get());
     }
-
     public function registerNow(Request $request)
     {
         $post = $request->all();

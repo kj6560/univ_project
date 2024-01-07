@@ -26,6 +26,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\HeadingRowImport;
 
@@ -981,7 +982,6 @@ class AdminController extends Controller
         $exceptions = $exceptions->paginate(50);
         return view('site.admin.appException', ['exceptions' => $exceptions]);
     }
-
     public function server(Request $request)
     {
         if (!$this->_access()) {
@@ -1054,5 +1054,27 @@ class AdminController extends Controller
         }
 
         return view('site.admin.server', $dataToSend);
+    }
+    public function downloadResultTemplate(Request $request)
+    {
+        if (!$this->_access()) {
+            return  redirect('/')->with('error', 'you are not authorized to access this page');
+        }
+
+        $filePath = public_path('/uploads/templates/event_result_template.csv'); // Replace this with the path to your CSV file
+
+        if (file_exists($filePath)) {
+            // Set headers to force download
+            header('Content-Type: application/csv');
+            header('Content-Disposition: attachment; filename="' . basename($filePath) . '"');
+            header('Content-Length: ' . filesize($filePath));
+
+            // Read the file and output it to the browser
+            readfile($filePath);
+            exit;
+        } else {
+            // File not found error handling
+            echo "File not found.";
+        }
     }
 }
